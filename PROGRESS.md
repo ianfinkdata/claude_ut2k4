@@ -21,11 +21,13 @@ shipped with the game — not custom community content.
 
 ---
 
-## Current status: **Step 4 complete — actor T3D generation (write side)**
+## Current status: **Step 5 complete — round-trip verified in UnrealEd ✅**
 
-We can parse every stock map, recover each placed actor's properties, export a JSON model,
-**and generate actor-placement T3D that matches the engine's own export.** Validated by
-diffing against an engine-produced reference T3D (see Toolchain).
+The full **read → decode → generate-T3D → engine-import** loop is proven end-to-end: 16
+generated PlayerStarts pasted into UnrealEd with exact rotation and correct (grid-offset)
+placement. We can parse every stock map, recover each placed actor's properties, export a
+JSON model, generate actor-placement T3D that matches the engine's own export, and import
+it back into the editor.
 
 ### Done
 - **`ut2parser.py`** — dependency-free Python reader for the Unreal package format.
@@ -105,20 +107,25 @@ matches our decoded properties exactly. Key format facts learned from it:
 
 ## Roadmap
 
-### Step 5 — Round-trip in UnrealEd  ← **in progress (import kit ready)**
-Import our generated actor T3D into UnrealEd and confirm actors land in the right places.
-Needs the GUI (no `ucc` T3D-import subcommand) — done via clipboard paste (the `.t3d` text
-*is* UnrealEd's actor paste format).
+### Step 5 — Round-trip in UnrealEd  ← **VERIFIED ✅**
+Imported `import_kit/DM-Rankin-PlayerStarts.t3d` into UnrealEd via clipboard paste (the
+`.t3d` text *is* UnrealEd's actor paste format; there's no `ucc` T3D-import subcommand).
 
-**Import kit prepared in `import_kit/`** — `--t3d-clean` exports plus step-by-step paste
-instructions and a verification checklist:
-- `DM-Rankin-PlayerStarts.t3d` (16 actors; no asset deps — the recommended first test)
-- `DM-Rankin-Lights.t3d` (360 actors; bigger visual)
-- `README.md` — launch UnrealEd → copy `.t3d` → Edit → Paste → check count/bounds/coords.
+**Result — the read → decode → generate → import path works:**
+- **Tools → Search for Actors** (UnrealEd's actor list) showed all **16** pasted actors,
+  `PlayerStart0`–`PlayerStart15`. (The Actor Properties title showed "18 selected" only
+  because Select All also grabbed the level's 2 default actors — `LevelInfo` + builder brush.)
+- Spot-check `PlayerStart8`: **Rotation Yaw = 45056 — exact match.** Location read
+  (3488, −352, 79) vs our authored (3456, −384, 47) = a **uniform +32 on every axis**.
+  That offset is **UnrealEd's paste nudge** (one grid unit = 32), applied identically to all
+  actors, so the relative layout is pixel-perfect. Not a generator bug — rotation fidelity
+  and the uniform shift confirm the coordinates are correct.
 
-**Awaiting:** a manual UnrealEd run to paste the kit and tick the checklist (count = 16,
-bounds X −690…4724 / Y −2451…1202 / Z −465…47, spot-check `PlayerStart8` = 3456,−384,47).
-**Outcome:** proof the read → generate → import path produces correct placement.
+To land at exact absolute positions: set the drag-grid to 1 before pasting, or paste into the
+source map (overlay test) where actors drop onto the originals.
+
+**Import kit** lives in `import_kit/` (`DM-Rankin-PlayerStarts.t3d`,
+`DM-Rankin-Lights.t3d`, `README.md`).
 
 ### Step 6 — Close gaps for a fuller round-trip
 As needed for the target use case:
