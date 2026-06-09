@@ -312,7 +312,14 @@ def _read_struct_value(r: Reader, struct_name: str, size: int) -> object:
     if struct_name == "Color" and size >= 4:
         b, g, rr, a = r.u8(), r.u8(), r.u8(), r.u8()
         return {"r": rr, "g": g, "b": b, "a": a}
-    # Scale, Quat, Box, and anything else: return raw bytes (caller realigns)
+    if struct_name == "Scale" and size >= 12:
+        out = {"scale": (r.f32(), r.f32(), r.f32())}
+        if size >= 16:
+            out["sheerRate"] = r.f32()
+        if size >= 17:
+            out["sheerAxis"] = r.u8()
+        return out
+    # Quat, Box, PointRegion, and anything else: raw bytes (caller realigns)
     return r.data[start : start + size]
 
 
@@ -445,15 +452,96 @@ def _actors_report(path: str, pkg: Package) -> str:
     return "\n".join(lines)
 
 
+def _jsonify(v):
+    """Make a decoded property value JSON-serializable."""
+    if isinstance(v, bytes):
+        return {"_raw_hex": v.hex()}
+    if isinstance(v, tuple):
+        return [_jsonify(x) for x in v]
+    if isinstance(v, dict):
+        return {k: _jsonify(x) for k, x in v.items()}
+    return v
+
+
+def actor_model(pkg: Package, path: str, actors_only: bool = True) -> dict:
+    """Build a machine-readable model of a map: every (actor) export with its
+    class and decoded properties. Repeated array elements collapse into a list."""
+    import os
+
+    objs = []
+    for i, e in enumerate(pkg.exports):
+        props = read_properties(pkg, e)
+        if actors_only and not any(p.name == "Location" for p in props):
+            continue
+        pd: dict = {}
+        for p in props:
+            jv = _jsonify(p.value)
+            if p.array_index or p.name in pd:  # array element
+                cur = pd.get(p.name)
+                if not isinstance(cur, list):
+                    cur = [] if cur is None else [cur]
+                    pd[p.name] = cur
+                while len(cur) <= p.array_index:
+                    cur.append(None)
+                cur[p.array_index] = jv
+            else:
+                pd[p.name] = jv
+        objs.append({"index": i + 1, "class": e.class_name,
+                     "name": e.object_name, "properties": pd})
+    return {
+        "file": os.path.basename(path),
+        "version": pkg.version,
+        "actor_count": len(objs),
+        "actors": objs,
+    }
+
+
+def _diff_report(path_a: str, pkg_a: Package, path_b: str, pkg_b: Package) -> str:
+    """Compare two maps by per-class actor counts."""
+    import os
+    from collections import Counter
+
+    a = actor_model(pkg_a, path_a)
+    b = actor_model(pkg_b, path_b)
+    ca = Counter(x["class"] for x in a["actors"])
+    cb = Counter(x["class"] for x in b["actors"])
+
+    na, nb = os.path.basename(path_a), os.path.basename(path_b)
+    lines = [f"== diff: {na}  vs  {nb} =="]
+    lines.append(f"{'class':24s} {na:>16s} {nb:>16s}   delta")
+    for cls in sorted(ca.keys() | cb.keys()):
+        x, y = ca.get(cls, 0), cb.get(cls, 0)
+        mark = "" if x == y else "  <--"
+        lines.append(f"{cls:24s} {x:16d} {y:16d}   {y - x:+d}{mark}")
+    lines.append("-" * 60)
+    lines.append(f"{'TOTAL actors':24s} {len(a['actors']):16d} {len(b['actors']):16d}   "
+                 f"{len(b['actors']) - len(a['actors']):+d}")
+    return "\n".join(lines)
+
+
 def main(argv: list) -> int:
     import argparse
+    import json
 
     ap = argparse.ArgumentParser(description="Parse and summarize UT2004 .ut2 packages")
     ap.add_argument("files", nargs="+", help=".ut2 (or other Unreal package) files")
     ap.add_argument("--top", type=int, default=25, help="how many top classes to show")
     ap.add_argument("--actors", action="store_true",
                     help="list placed actors with location/rotation instead of the summary")
+    ap.add_argument("--json", action="store_true",
+                    help="emit the actor model as JSON")
+    ap.add_argument("--all-objects", action="store_true",
+                    help="with --json, include every export (not just placed actors)")
+    ap.add_argument("--diff", action="store_true",
+                    help="compare exactly two maps by per-class actor counts")
     args = ap.parse_args(argv)
+
+    if args.diff:
+        if len(args.files) != 2:
+            ap.error("--diff requires exactly two files")
+        pkgs = [parse(open(p, "rb").read()) for p in args.files]
+        print(_diff_report(args.files[0], pkgs[0], args.files[1], pkgs[1]))
+        return 0
 
     for path in args.files:
         with open(path, "rb") as fh:
@@ -463,8 +551,15 @@ def main(argv: list) -> int:
         except ParseError as exc:
             print(f"== {path} ==\n  ERROR: {exc}\n")
             continue
-        print(_actors_report(path, pkg) if args.actors else _summary(path, pkg, args.top))
-        print()
+        if args.json:
+            model = actor_model(pkg, path, actors_only=not args.all_objects)
+            print(json.dumps(model, indent=2))
+        elif args.actors:
+            print(_actors_report(path, pkg))
+            print()
+        else:
+            print(_summary(path, pkg, args.top))
+            print()
     return 0
 
 
