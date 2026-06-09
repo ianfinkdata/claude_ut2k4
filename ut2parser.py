@@ -17,6 +17,22 @@ import struct
 from dataclasses import dataclass, field
 
 MAGIC = 0x9E2A83C1
+RF_HAS_STACK = 0x02000000  # export's serial data is prefixed with an FStateFrame
+
+# Tagged-property type ids (Unreal Engine 2)
+PROP_BYTE, PROP_INT, PROP_BOOL, PROP_FLOAT, PROP_OBJECT = 1, 2, 3, 4, 5
+PROP_NAME, PROP_STRING, PROP_CLASS, PROP_ARRAY, PROP_STRUCT = 6, 7, 8, 9, 10
+PROP_VECTOR, PROP_ROTATOR, PROP_STR, PROP_MAP, PROP_FIXEDARRAY = 11, 12, 13, 14, 15
+
+PROP_TYPE_NAMES = {
+    1: "Byte", 2: "Int", 3: "Bool", 4: "Float", 5: "Object", 6: "Name",
+    7: "String", 8: "Class", 9: "Array", 10: "Struct", 11: "Vector",
+    12: "Rotator", 13: "Str", 14: "Map", 15: "FixedArray",
+}
+
+# size descriptor (bits 4-6 of the info byte) -> fixed byte count; 5/6/7 mean
+# the size follows as a u8/u16/u32 respectively.
+_SIZE_TABLE = {0: 1, 1: 2, 2: 4, 3: 12, 4: 16}
 
 
 class ParseError(Exception):
@@ -150,6 +166,7 @@ class Package:
     names: list = field(default_factory=list)        # list[NameEntry]
     imports: list = field(default_factory=list)      # list[ImportEntry]
     exports: list = field(default_factory=list)      # list[ExportEntry]
+    raw: bytes = b""                                 # full file bytes (for serial data)
 
     # ----- reference resolution ----- #
     def name(self, idx: int) -> str:
@@ -181,6 +198,7 @@ def parse(data: bytes) -> Package:
         )
 
     pkg = Package()
+    pkg.raw = data
     pkg.version = r.u16()
     pkg.licensee_version = r.u16()
     pkg.package_flags = r.u32()
@@ -250,6 +268,124 @@ def parse(data: bytes) -> Package:
 
 
 # --------------------------------------------------------------------------- #
+# Tagged-property decoding (per-export serial data)
+# --------------------------------------------------------------------------- #
+@dataclass
+class Property:
+    name: str
+    type_id: int
+    type_name: str
+    value: object              # interpreted value, or raw bytes when undecoded
+    struct_name: str = ""      # for StructProperty
+    array_index: int = 0
+
+
+def _read_array_index(r: Reader) -> int:
+    """Array element index, present when the info byte's 0x80 bit is set on a
+    non-bool property. Variable 1/2/4-byte big-endian-ish encoding."""
+    b = r.u8()
+    if b < 0x80:
+        return b
+    if (b & 0xC0) == 0x80:
+        return ((b & 0x7F) << 8) | r.u8()
+    return ((b & 0x3F) << 24) | (r.u8() << 16) | (r.u8() << 8) | r.u8()
+
+
+def _skip_stateframe(r: Reader) -> None:
+    """Skip the FStateFrame that prefixes serial data when RF_HasStack is set:
+    Node + StateNode (object refs), ProbeMask (qword), LatentAction (dword),
+    and Offset (compact index) when Node is non-null."""
+    node = r.compact_index()
+    r.compact_index()      # StateNode
+    r.pos += 8             # ProbeMask (QWORD)
+    r.pos += 4             # LatentAction (DWORD)
+    if node != 0:
+        r.compact_index()  # Offset into the bytecode
+
+
+def _read_struct_value(r: Reader, struct_name: str, size: int) -> object:
+    start = r.pos
+    if struct_name == "Vector" and size >= 12:
+        return (r.f32(), r.f32(), r.f32())
+    if struct_name == "Rotator" and size >= 12:
+        return {"pitch": r.i32(), "yaw": r.i32(), "roll": r.i32()}
+    if struct_name == "Color" and size >= 4:
+        b, g, rr, a = r.u8(), r.u8(), r.u8(), r.u8()
+        return {"r": rr, "g": g, "b": b, "a": a}
+    # Scale, Quat, Box, and anything else: return raw bytes (caller realigns)
+    return r.data[start : start + size]
+
+
+def _read_value(r: Reader, pkg: Package, type_id: int, struct_name: str,
+                size: int, start: int) -> object:
+    if type_id == PROP_BYTE:
+        return r.u8()
+    if type_id == PROP_INT:
+        return r.i32()
+    if type_id == PROP_FLOAT:
+        return r.f32()
+    if type_id in (PROP_OBJECT, PROP_CLASS):
+        return pkg.object_name(r.compact_index())
+    if type_id == PROP_NAME:
+        return pkg.name(r.compact_index())
+    if type_id in (PROP_STR, PROP_STRING):
+        return r.fstring()
+    if type_id == PROP_STRUCT:
+        return _read_struct_value(r, struct_name, size)
+    # Array, Map, FixedArray, Bool (handled earlier), unknown -> raw bytes
+    return r.data[start : start + size]
+
+
+def read_properties(pkg: Package, export: ExportEntry) -> list:
+    """Decode the tagged-property list of one export. Returns list[Property]."""
+    if export.serial_size <= 0:
+        return []
+    r = Reader(pkg.raw, export.serial_offset)
+    if export.flags & RF_HAS_STACK:
+        _skip_stateframe(r)
+    end = export.serial_offset + export.serial_size
+    props = []
+    while r.pos < end:
+        name = pkg.name(r.compact_index())
+        if name == "None":
+            break
+        info = r.u8()
+        type_id = info & 0x0F
+
+        struct_name = ""
+        if type_id == PROP_STRUCT:
+            struct_name = pkg.name(r.compact_index())
+
+        size_field = (info >> 4) & 0x07
+        if size_field < 5:
+            size = _SIZE_TABLE[size_field]
+        elif size_field == 5:
+            size = r.u8()
+        elif size_field == 6:
+            size = r.u16()
+        else:
+            size = r.u32()
+
+        is_bool = type_id == PROP_BOOL
+        array_index = 0
+        if (info & 0x80) and not is_bool:
+            array_index = _read_array_index(r)
+
+        if is_bool:
+            value = bool(info & 0x80)
+        else:
+            value_start = r.pos
+            value = _read_value(r, pkg, type_id, struct_name, size, value_start)
+            r.pos = value_start + size  # guarantee alignment regardless of decode
+
+        props.append(
+            Property(name, type_id, PROP_TYPE_NAMES.get(type_id, str(type_id)),
+                     value, struct_name, array_index)
+        )
+    return props
+
+
+# --------------------------------------------------------------------------- #
 # CLI
 # --------------------------------------------------------------------------- #
 def _summary(path: str, pkg: Package, top: int = 25) -> str:
@@ -283,12 +419,40 @@ def _summary(path: str, pkg: Package, top: int = 25) -> str:
     return "\n".join(lines)
 
 
+def _fmt_vec(v) -> str:
+    if isinstance(v, tuple) and len(v) == 3:
+        return f"({v[0]:.1f}, {v[1]:.1f}, {v[2]:.1f})"
+    return str(v)
+
+
+def _actors_report(path: str, pkg: Package) -> str:
+    """List every placed actor (exports that carry a Location) with its class,
+    location, and rotation -- the structured per-actor data from Step 2."""
+    lines = [f"== {path} -- actors =="]
+    count = 0
+    for e in pkg.exports:
+        props = {p.name: p for p in read_properties(pkg, e) if p.array_index == 0}
+        if "Location" not in props:
+            continue
+        count += 1
+        loc = _fmt_vec(props["Location"].value)
+        rot = ""
+        if "Rotation" in props and isinstance(props["Rotation"].value, dict):
+            r = props["Rotation"].value
+            rot = f"  rot(p={r['pitch']},y={r['yaw']},r={r['roll']})"
+        lines.append(f"  {e.class_name:22s} {e.object_name:24s} {loc}{rot}")
+    lines.insert(1, f"{count} placed actors")
+    return "\n".join(lines)
+
+
 def main(argv: list) -> int:
     import argparse
 
     ap = argparse.ArgumentParser(description="Parse and summarize UT2004 .ut2 packages")
     ap.add_argument("files", nargs="+", help=".ut2 (or other Unreal package) files")
     ap.add_argument("--top", type=int, default=25, help="how many top classes to show")
+    ap.add_argument("--actors", action="store_true",
+                    help="list placed actors with location/rotation instead of the summary")
     args = ap.parse_args(argv)
 
     for path in args.files:
@@ -299,7 +463,7 @@ def main(argv: list) -> int:
         except ParseError as exc:
             print(f"== {path} ==\n  ERROR: {exc}\n")
             continue
-        print(_summary(path, pkg, args.top))
+        print(_actors_report(path, pkg) if args.actors else _summary(path, pkg, args.top))
         print()
     return 0
 
