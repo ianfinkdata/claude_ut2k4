@@ -167,6 +167,7 @@ class Package:
     imports: list = field(default_factory=list)      # list[ImportEntry]
     exports: list = field(default_factory=list)      # list[ExportEntry]
     raw: bytes = b""                                 # full file bytes (for serial data)
+    package_name: str = ""                           # the map's own package name (filename stem)
 
     # ----- reference resolution ----- #
     def name(self, idx: int) -> str:
@@ -188,8 +189,71 @@ class Package:
             return self.imports[i].object_name
         return f"<bad-import:{ref}>"
 
+    def _import_path(self, i: int) -> str:
+        """Dotted path of an import, walking its outer chain (e.g.
+        'HumanoidArchitecture.Bases.bas02HAb')."""
+        imp = self.imports[i]
+        outer = imp.outer_ref
+        if outer < 0 and -outer - 1 < len(self.imports):
+            return self._import_path(-outer - 1) + "." + imp.object_name
+        if outer > 0 and outer - 1 < len(self.exports):
+            return self.package_name + "." + self.exports[outer - 1].object_name \
+                + "." + imp.object_name
+        return imp.object_name
 
-def parse(data: bytes) -> Package:
+    def _export_path(self, i: int) -> str:
+        """Dotted path of an export, walking its outer chain and prefixing the
+        package name (e.g. 'DM-Rankin.Pipes.SC-BronzPipe', or flat
+        'DM-Rankin.LevelInfo0' for a top-level object)."""
+        e = self.exports[i]
+        outer = e.outer_ref
+        if outer > 0 and outer - 1 < len(self.exports):
+            return self._export_path(outer - 1) + "." + e.object_name
+        if outer < 0 and -outer - 1 < len(self.imports):
+            return self._import_path(-outer - 1) + "." + e.object_name
+        return (self.package_name or "Package") + "." + e.object_name
+
+    def qualified_ref(self, ref: int) -> str:
+        """T3D-style reference: Class'Package.Name'  (or None)."""
+        if ref == 0:
+            return "None"
+        if ref > 0:
+            i = ref - 1
+            if i < len(self.exports):
+                return f"{self.exports[i].class_name}'{self._export_path(i)}'"
+            return "None"
+        i = -ref - 1
+        if i < len(self.imports):
+            imp = self.imports[i]
+            return f"{imp.class_name}'{self._import_path(i)}'"
+        return "None"
+
+
+class ObjectRef:
+    """An object/class property value. Stringifies to the plain object name (keeps
+    summaries/JSON readable) but can render the qualified T3D form on demand."""
+
+    __slots__ = ("pkg", "ref")
+
+    def __init__(self, pkg: Package, ref: int):
+        self.pkg = pkg
+        self.ref = ref
+
+    @property
+    def name(self) -> str:
+        return self.pkg.object_name(self.ref)
+
+    def qualified(self) -> str:
+        return self.pkg.qualified_ref(self.ref)
+
+    def __str__(self) -> str:
+        return self.name
+
+    def __repr__(self) -> str:
+        return f"ObjectRef({self.name!r})"
+
+
+def parse(data: bytes, package_name: str = "") -> Package:
     r = Reader(data)
     magic = r.u32()
     if magic != MAGIC:
@@ -199,6 +263,7 @@ def parse(data: bytes) -> Package:
 
     pkg = Package()
     pkg.raw = data
+    pkg.package_name = package_name
     pkg.version = r.u16()
     pkg.licensee_version = r.u16()
     pkg.package_flags = r.u32()
@@ -332,7 +397,7 @@ def _read_value(r: Reader, pkg: Package, type_id: int, struct_name: str,
     if type_id == PROP_FLOAT:
         return r.f32()
     if type_id in (PROP_OBJECT, PROP_CLASS):
-        return pkg.object_name(r.compact_index())
+        return ObjectRef(pkg, r.compact_index())
     if type_id == PROP_NAME:
         return pkg.name(r.compact_index())
     if type_id in (PROP_STR, PROP_STRING):
@@ -454,6 +519,8 @@ def _actors_report(path: str, pkg: Package) -> str:
 
 def _jsonify(v):
     """Make a decoded property value JSON-serializable."""
+    if isinstance(v, ObjectRef):
+        return v.name
     if isinstance(v, bytes):
         return {"_raw_hex": v.hex()}
     if isinstance(v, tuple):
@@ -519,9 +586,102 @@ def _diff_report(path_a: str, pkg_a: Package, path_b: str, pkg_b: Package) -> st
     return "\n".join(lines)
 
 
+# --------------------------------------------------------------------------- #
+# T3D generation (write side -- Step 4)
+# --------------------------------------------------------------------------- #
+# Properties the engine recomputes on build; never emit them.
+_T3D_SKIP_PROPS = {"Region", "ColLocation"}
+
+
+def _fmt_float(v: float) -> str:
+    return f"{v:.6f}"
+
+
+def _fmt_vec_t3d(comps, keys) -> str:
+    return "(" + ",".join(f"{k}={_fmt_float(c)}" for k, c in zip(keys, comps)) + ")"
+
+
+# Vector-valued properties whose per-component default is 1.0 (scales) rather
+# than 0.0. The engine omits components equal to their default in T3D export.
+_SCALE_VECTORS = {"DrawScale3D"}
+
+
+def _fmt_vec_default(comps, keys, default: float) -> str:
+    parts = [f"{k}={_fmt_float(c)}" for k, c in zip(keys, comps) if c != default]
+    if not parts:  # all-default (shouldn't serialize) -- emit first component
+        parts = [f"{keys[0]}={_fmt_float(comps[0])}"]
+    return "(" + ",".join(parts) + ")"
+
+
+def _fmt_struct(struct_name: str, value, prop_name: str = "") -> str:
+    if struct_name == "Vector" and isinstance(value, (list, tuple)):
+        default = 1.0 if prop_name in _SCALE_VECTORS else 0.0
+        return _fmt_vec_default(value, "XYZ", default)
+    if struct_name == "Rotator" and isinstance(value, dict):
+        parts = [f"{k}={value[k.lower()]}" for k in ("Pitch", "Yaw", "Roll")
+                 if value.get(k.lower())]
+        return "(" + ",".join(parts) + ")" if parts else "(Yaw=0)"
+    if struct_name == "Color" and isinstance(value, dict):
+        return f"(R={value['r']},G={value['g']},B={value['b']},A={value['a']})"
+    if struct_name == "Scale" and isinstance(value, dict):
+        s = _fmt_vec_t3d(value["scale"], "XYZ")
+        out = f"(Scale={s}"
+        if value.get("sheerRate"):
+            out += f",SheerRate={_fmt_float(value['sheerRate'])}"
+        return out + ")"
+    return ""  # undecodable struct -> skip
+
+
+def _fmt_prop_value(p) -> str:
+    """Render one decoded Property as a T3D value, or '' to skip it."""
+    t = p.type_id
+    v = p.value
+    if t == PROP_BOOL:
+        return "True" if v else "False"
+    if t in (PROP_INT, PROP_BYTE):
+        return str(v)
+    if t == PROP_FLOAT:
+        return _fmt_float(v)
+    if t in (PROP_OBJECT, PROP_CLASS):
+        return v.qualified() if isinstance(v, ObjectRef) else "None"
+    if t == PROP_NAME:
+        return f'"{v}"'
+    if t in (PROP_STR, PROP_STRING):
+        return f'"{v}"'
+    if t == PROP_STRUCT:
+        return _fmt_struct(p.struct_name, v, p.name)
+    return ""  # Array / Map / raw -> skip for now
+
+
+def to_t3d(pkg: Package, classes=None) -> str:
+    """Generate Map T3D for the placed actors (exports with a Location). Emits
+    the properties we can faithfully represent; arrays and engine-recomputed
+    fields are skipped. Suitable for UnrealEd 'Import into level'."""
+    lines = ["Begin Map"]
+    for e in pkg.exports:
+        if classes and e.class_name not in classes:
+            continue
+        props = read_properties(pkg, e)
+        if not any(p.name == "Location" for p in props):
+            continue
+        lines.append(f"Begin Actor Class={e.class_name} Name={e.object_name}")
+        for p in props:
+            if p.name in _T3D_SKIP_PROPS:
+                continue
+            s = _fmt_prop_value(p)
+            if not s:
+                continue
+            key = f"{p.name}({p.array_index})" if p.array_index else p.name
+            lines.append(f"    {key}={s}")
+        lines.append("End Actor")
+    lines.append("End Map")
+    return "\n".join(lines)
+
+
 def main(argv: list) -> int:
     import argparse
     import json
+    import os
 
     ap = argparse.ArgumentParser(description="Parse and summarize UT2004 .ut2 packages")
     ap.add_argument("files", nargs="+", help=".ut2 (or other Unreal package) files")
@@ -534,24 +694,31 @@ def main(argv: list) -> int:
                     help="with --json, include every export (not just placed actors)")
     ap.add_argument("--diff", action="store_true",
                     help="compare exactly two maps by per-class actor counts")
+    ap.add_argument("--t3d", action="store_true",
+                    help="generate actor T3D (write side)")
+    ap.add_argument("--t3d-class", metavar="CLASS", action="append",
+                    help="restrict --t3d to these actor class(es); repeatable")
     args = ap.parse_args(argv)
+
+    def _load(p):
+        return parse(open(p, "rb").read(), os.path.splitext(os.path.basename(p))[0])
 
     if args.diff:
         if len(args.files) != 2:
             ap.error("--diff requires exactly two files")
-        pkgs = [parse(open(p, "rb").read()) for p in args.files]
+        pkgs = [_load(p) for p in args.files]
         print(_diff_report(args.files[0], pkgs[0], args.files[1], pkgs[1]))
         return 0
 
     for path in args.files:
-        with open(path, "rb") as fh:
-            data = fh.read()
         try:
-            pkg = parse(data)
+            pkg = _load(path)
         except ParseError as exc:
             print(f"== {path} ==\n  ERROR: {exc}\n")
             continue
-        if args.json:
+        if args.t3d:
+            print(to_t3d(pkg, classes=set(args.t3d_class) if args.t3d_class else None))
+        elif args.json:
             model = actor_model(pkg, path, actors_only=not args.all_objects)
             print(json.dumps(model, indent=2))
         elif args.actors:

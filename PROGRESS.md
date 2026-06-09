@@ -21,10 +21,11 @@ shipped with the game — not custom community content.
 
 ---
 
-## Current status: **Step 3 complete — structured actor model**
+## Current status: **Step 4 complete — actor T3D generation (write side)**
 
-We can parse every stock map, enumerate its objects, recover each placed actor's
-properties, **and export a machine-readable actor model (JSON) or diff two maps.**
+We can parse every stock map, recover each placed actor's properties, export a JSON model,
+**and generate actor-placement T3D that matches the engine's own export.** Validated by
+diffing against an engine-produced reference T3D (see Toolchain).
 
 ### Done
 - **`ut2parser.py`** — dependency-free Python reader for the Unreal package format.
@@ -40,12 +41,22 @@ properties, **and export a machine-readable actor model (JSON) or diff two maps.
     with exact realignment so the stream never desyncs.
   - **`actor_model(pkg, path)`** builds a JSON-serializable model — every actor with class,
     name, and decoded properties; repeated array elements collapse into lists.
-  - CLI: `--summary` (default), `--actors` (placed-actor list), `--json` (actor model;
-    `--all-objects` to include non-actors), and `--diff A B` (per-class actor-count delta).
+  - **`to_t3d(pkg)`** generates Map T3D (`Begin Actor … End Actor`) from the decoded
+    properties: scalars, strings, names, fully-qualified object refs (`Class'Pkg.Group.Name'`
+    via outer-chain walking), and `Vector`/`Rotator`/`Color`/`Scale` structs with
+    engine-style default-component omission. Engine-recomputed fields (`Region`,
+    `ColLocation`) and not-yet-decoded arrays are skipped.
+  - `ObjectRef` value type: prints the plain name in summaries/JSON, the qualified ref in T3D.
+  - CLI: `--summary` (default), `--actors`, `--json` (`--all-objects`), `--diff A B`,
+    and `--t3d` (`--t3d-class C` to restrict to a class).
 - **Verified against all 39 stock DM maps:**
   - Tables: 0 failures, every object reference resolves, one `Level` per map. Versions 18×v127, 21×v126.
   - Properties: every export in every map decoded — **0 errors, 63,981 placed actors** recovered.
   - JSON: all 39 maps emit valid, parseable JSON.
+  - T3D: all 39 maps emit well-formed T3D (balanced blocks, no unresolved refs). Diffed
+    against the engine reference for DM-Rankin: **all 664 `StaticMeshActor` blocks match
+    exactly** (ignoring deferred arrays); ~87% of non-brush actor property-lines reproduced
+    verbatim. The gap is entirely deferred categories (below).
 
 ### What parses cleanly today
 Header, name/import/export tables, the **full object inventory**, the **per-actor property
@@ -54,9 +65,17 @@ structs), and a **JSON actor model** ready for transform/diff. Output reads exac
 real DM map (`StaticMesh="houretrim"`, `Light` with `LightBrightness`, `PathNode` nav lists).
 
 ### Known limitations / not yet decoded
-- **A few struct/array values are kept raw** — `Region` (PointRegion), and `Array` properties
-  like `PathList`/`ReachSpec`/`Skins` (element type not yet decoded). Skipped correctly with
-  exact realignment; easy to extend per type as needed.
+- **Array properties** (`PathList`, `Skins`, `Actions`, emitter ranges) — read past correctly
+  but kept raw, so not yet emitted to T3D. `PathList`/`ReachSpec` is the bot-nav graph; the
+  engine can rebuild it (Build Paths), so it's optional for a first round-trip.
+- **Enum bytes** (`LightEffect`, `DetailMode`, `Physics`, …) decode to their numeric index;
+  we don't have the enum name tables, so T3D shows the number instead of e.g. `LE_NonIncidence`.
+  Plain bytes (`SoundVolume`) are fine.
+- **`Region` (PointRegion)** kept raw and omitted from T3D — the engine recomputes it on build.
+- **Brush/BSP geometry** (`Begin Brush … Begin Polygon …`, `CsgOper`, `MainScale`) is not
+  emitted: Brush actors appear with their transform but without their polygon definitions.
+  This is the deferred geometry work and the main thing standing between us and a *complete*
+  map rebuild (vs. an actor-placement rebuild).
 - **Geometry blobs** (BSP tree, brush polys, lightmaps, terrain heightmaps) remain opaque.
   Per CLAUDE.md these aren't fully public; we read their metadata, not their contents — and
   the T3D pipeline means we never need to hand-decode them for the write side.
@@ -86,20 +105,18 @@ matches our decoded properties exactly. Key format facts learned from it:
 
 ## Roadmap
 
-### Step 4 — T3D generation (write side)  ← **next**
-Generate **T3D** text from the parsed/transformed actor data. Start with actor-only T3D
-(placement of existing meshes/lights/pathnodes), since brush geometry is the hard part.
-The JSON actor model from Step 3 is the natural input. Map T3D's `Begin Actor Class=…
-Name=… / Location=(X=..,Y=..,Z=..) / Rotation=(Pitch=..,Yaw=..,Roll=..) / End Actor`
-back from the decoded properties.
-**Outcome:** a T3D file UnrealEd can import.
+### Step 5 — Round-trip in UnrealEd  ← **next**
+Import our generated actor T3D into UnrealEd (File → Import, or a fresh level), confirm the
+actors land in the right places, then Build → save `.ut2` and load it. This needs the GUI
+(no `ucc` T3D-import subcommand). First milestone: a small subset (e.g. all `Light`s or
+`StaticMeshActor`s) imported into an empty level and visually verified.
+**Outcome:** proof the read → generate → import path produces a loadable result.
 
-### Step 5 — Round-trip in UnrealEd
-Import generated T3D, Build Geometry → Build Lighting → save `.ut2`, and confirm the map
-loads. Establishes the full read → transform → write → finalize loop.
-
-### Later
-- Brush/BSP T3D (full polygon defs) for actual level geometry.
+### Step 6 — Close gaps for a fuller round-trip
+As needed for the target use case:
+- Decode **array** properties (esp. `PathList`/`ReachSpec`) and **enum-byte** name tables.
+- Emit **brush/BSP** geometry (`Begin Brush … Begin Polygon …`) — the big one for rebuilding
+  actual level geometry rather than just actor placement.
 - Programmatic generation/modification beyond reshuffling existing actors.
 
 ---
@@ -114,7 +131,7 @@ loads. Establishes the full read → transform → write → finalize loop.
 
 ## Repo map
 - `Maps/` — 39 stock UT2004 DM maps (`.ut2`, binary Unreal packages).
-- `ut2parser.py` — binary reader, property decoder, JSON model + diff, CLI (Steps 1–3).
+- `ut2parser.py` — binary reader, property decoder, JSON model, diff, T3D generator, CLI (Steps 1–4).
 - `CLAUDE.md` — durable project context & format notes (in main repo root).
 - `PROGRESS.md` — this file: status + roadmap.
 
@@ -125,4 +142,9 @@ python ut2parser.py Maps/*.ut2 --top 10            # summarize many
 python ut2parser.py Maps/DM-Gael.ut2 --actors      # placed actors w/ location+rotation
 python ut2parser.py Maps/DM-Gael.ut2 --json        # actor model as JSON
 python ut2parser.py --diff Maps/DM-Rankin.ut2 Maps/DM-Gael.ut2   # per-class delta
+python ut2parser.py Maps/DM-Rankin.ut2 --t3d > out.t3d           # generate actor T3D
+python ut2parser.py Maps/DM-Rankin.ut2 --t3d --t3d-class Light   # one class only
+
+# Regenerate the engine reference T3D (needs the install) for diffing:
+#   cd C:\UT2004\System && ./UCC.exe batchexport DM-Rankin.ut2 Level T3D <outdir>
 ```

@@ -3,3 +3,5 @@ __pycache__/
 
 # Engine-generated reference exports (regenerable via ucc batchexport; see PROGRESS.md)
 reference_t3d/
+# Our generated T3D output (regenerable via --t3d)
+out_t3d/
