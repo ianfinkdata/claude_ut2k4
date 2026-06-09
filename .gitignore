@@ -1,2 +1,5 @@
 __pycache__/
 *.pyc
+
+# Engine-generated reference exports (regenerable via ucc batchexport; see PROGRESS.md)
+reference_t3d/

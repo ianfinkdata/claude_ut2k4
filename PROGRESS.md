@@ -63,6 +63,27 @@ real DM map (`StaticMesh="houretrim"`, `Light` with `LightBrightness`, `PathNode
 
 ---
 
+## Toolchain — UT2004 + UnrealEd is installed ✅
+
+A full retail install is present at **`C:\UT2004\System`**, which **unblocks Steps 4–5**:
+- **`UCC.exe`** — command-line tool. Verified working. Useful subcommands:
+  - `ucc batchexport <map.ut2> Level T3D <outdir>` — export a map's `Level` to **T3D**
+    (our reference for the write format). `ucc analyzecontent <map>` loads/validates a map.
+- **`UnrealEd.exe`** — GUI editor for the finalize step (Build Geometry → Build Lighting → Save).
+- The install's `Maps/` has all 44 stock maps, so `ucc` resolves them by name (no copying needed).
+
+**Reference T3D:** `ucc batchexport DM-Rankin.ut2 Level T3D <dir>` produced `myLevel.T3D`
+(~3.2 MB). It's git-ignored (regenerable) but is the format spec for Step 4. Confirmed it
+matches our decoded properties exactly. Key format facts learned from it:
+- Blocks: `Begin Actor Class=<C> Name=<N>` … indented `Prop=Value` … `End Actor`.
+- `Location=(X=..,Y=..,Z=..)`, `Rotation=(Pitch=..,Yaw=..,Roll=..)` — **default/zero
+  components are omitted** (e.g. `Rotation=(Yaw=-35840)`, `DrawScale3D=(Y=2.000000)`).
+- Object refs are fully qualified: `StaticMesh'DM-Rankin.houreventthing'`.
+- `Region=(Zone=ZoneInfo'…',iLeaf=647,ZoneNumber=9)` — confirms the `PointRegion` struct
+  layout (Zone objref + iLeaf int + ZoneNumber byte) we currently keep raw.
+
+---
+
 ## Roadmap
 
 ### Step 4 — T3D generation (write side)  ← **next**
