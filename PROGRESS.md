@@ -105,12 +105,20 @@ matches our decoded properties exactly. Key format facts learned from it:
 
 ## Roadmap
 
-### Step 5 — Round-trip in UnrealEd  ← **next**
-Import our generated actor T3D into UnrealEd (File → Import, or a fresh level), confirm the
-actors land in the right places, then Build → save `.ut2` and load it. This needs the GUI
-(no `ucc` T3D-import subcommand). First milestone: a small subset (e.g. all `Light`s or
-`StaticMeshActor`s) imported into an empty level and visually verified.
-**Outcome:** proof the read → generate → import path produces a loadable result.
+### Step 5 — Round-trip in UnrealEd  ← **in progress (import kit ready)**
+Import our generated actor T3D into UnrealEd and confirm actors land in the right places.
+Needs the GUI (no `ucc` T3D-import subcommand) — done via clipboard paste (the `.t3d` text
+*is* UnrealEd's actor paste format).
+
+**Import kit prepared in `import_kit/`** — `--t3d-clean` exports plus step-by-step paste
+instructions and a verification checklist:
+- `DM-Rankin-PlayerStarts.t3d` (16 actors; no asset deps — the recommended first test)
+- `DM-Rankin-Lights.t3d` (360 actors; bigger visual)
+- `README.md` — launch UnrealEd → copy `.t3d` → Edit → Paste → check count/bounds/coords.
+
+**Awaiting:** a manual UnrealEd run to paste the kit and tick the checklist (count = 16,
+bounds X −690…4724 / Y −2451…1202 / Z −465…47, spot-check `PlayerStart8` = 3456,−384,47).
+**Outcome:** proof the read → generate → import path produces correct placement.
 
 ### Step 6 — Close gaps for a fuller round-trip
 As needed for the target use case:
@@ -132,6 +140,7 @@ As needed for the target use case:
 ## Repo map
 - `Maps/` — 39 stock UT2004 DM maps (`.ut2`, binary Unreal packages).
 - `ut2parser.py` — binary reader, property decoder, JSON model, diff, T3D generator, CLI (Steps 1–4).
+- `import_kit/` — Step-5 UnrealEd import kit (clean T3D subsets + paste instructions).
 - `CLAUDE.md` — durable project context & format notes (in main repo root).
 - `PROGRESS.md` — this file: status + roadmap.
 

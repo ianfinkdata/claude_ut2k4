@@ -1,0 +1,82 @@
+Begin Map
+Begin Actor Class=PlayerStart Name=PlayerStart1
+    Tag="PlayerStart"
+    Location=(X=-32.000000,Y=-640.000000,Z=-273.000000)
+    Rotation=(Yaw=7420)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart8
+    Tag="PlayerStart"
+    Location=(X=3456.000000,Y=-384.000000,Z=47.000000)
+    Rotation=(Yaw=45056)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart6
+    Tag="PlayerStart"
+    Location=(X=3488.000000,Y=-384.000000,Z=-369.000000)
+    Rotation=(Yaw=-42324)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart5
+    Tag="PlayerStart"
+    Location=(X=2220.000000,Y=-2316.000000,Z=47.000000)
+    Rotation=(Yaw=22164)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart2
+    Tag="PlayerStart"
+    Location=(X=674.000000,Y=-2451.000000,Z=-145.000000)
+    Rotation=(Yaw=8020)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart9
+    Tag="PlayerStart"
+    Location=(X=-622.000000,Y=1202.000000,Z=-273.000000)
+    Rotation=(Yaw=-2912)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart3
+    Tag="PlayerStart"
+    Location=(X=2237.000000,Y=-70.000000,Z=-145.000000)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart11
+    Tag="PlayerStart"
+    Location=(X=2444.000000,Y=1104.000000,Z=-273.000000)
+    Rotation=(Yaw=-22120)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart7
+    Tag="PlayerStart"
+    Location=(X=780.000000,Y=96.000000,Z=47.000000)
+    Rotation=(Yaw=32568)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart0
+    Tag="PlayerStart"
+    Location=(X=-580.000000,Y=-596.000000,Z=47.000000)
+    Rotation=(Yaw=4484)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart13
+    Tag="PlayerStart"
+    Location=(X=4724.301758,Y=448.000000,Z=-369.000000)
+    Rotation=(Yaw=32720)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart15
+    Tag="PlayerStart"
+    Location=(X=-690.183289,Y=-1923.354370,Z=-145.000000)
+    Rotation=(Yaw=9256)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart10
+    Tag="PlayerStart"
+    Location=(X=4098.000000,Y=1192.000000,Z=-327.097565)
+    Rotation=(Yaw=-32160)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart14
+    Tag="PlayerStart"
+    Location=(X=272.000000,Y=-1888.000000,Z=-465.000000)
+    Rotation=(Yaw=112)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart12
+    visitedWeight=118
+    Tag="PlayerStart"
+    Location=(X=4240.000000,Y=-1552.000000,Z=47.000000)
+    Rotation=(Yaw=32792)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart4
+    Tag="PlayerStart"
+    Location=(X=2716.000000,Y=-1680.000000,Z=-465.000000)
+    Rotation=(Yaw=24820)
+End Actor
+End Map

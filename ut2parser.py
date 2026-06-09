@@ -592,6 +592,12 @@ def _diff_report(path_a: str, pkg_a: Package, path_b: str, pkg_b: Package) -> st
 # Properties the engine recomputes on build; never emit them.
 _T3D_SKIP_PROPS = {"Region", "ColLocation"}
 
+# Additionally dropped in "clean" mode: level-binding refs that point at objects
+# of the source map (LevelInfo, PhysicsVolume, the nav chain). Meaningless when
+# pasting into a different/empty level, where they'd just raise "object not found".
+_T3D_CLEAN_EXTRA = {"Level", "PhysicsVolume", "Base", "nextNavigationPoint",
+                    "PendingTouch", "Owner"}
+
 
 def _fmt_float(v: float) -> str:
     return f"{v:.6f}"
@@ -653,10 +659,12 @@ def _fmt_prop_value(p) -> str:
     return ""  # Array / Map / raw -> skip for now
 
 
-def to_t3d(pkg: Package, classes=None) -> str:
+def to_t3d(pkg: Package, classes=None, clean: bool = False) -> str:
     """Generate Map T3D for the placed actors (exports with a Location). Emits
     the properties we can faithfully represent; arrays and engine-recomputed
-    fields are skipped. Suitable for UnrealEd 'Import into level'."""
+    fields are skipped. With clean=True, also drops level-binding refs so the
+    actors paste cleanly into an empty/other level. Suitable for UnrealEd paste."""
+    skip = _T3D_SKIP_PROPS | _T3D_CLEAN_EXTRA if clean else _T3D_SKIP_PROPS
     lines = ["Begin Map"]
     for e in pkg.exports:
         if classes and e.class_name not in classes:
@@ -666,7 +674,7 @@ def to_t3d(pkg: Package, classes=None) -> str:
             continue
         lines.append(f"Begin Actor Class={e.class_name} Name={e.object_name}")
         for p in props:
-            if p.name in _T3D_SKIP_PROPS:
+            if p.name in skip:
                 continue
             s = _fmt_prop_value(p)
             if not s:
@@ -698,6 +706,8 @@ def main(argv: list) -> int:
                     help="generate actor T3D (write side)")
     ap.add_argument("--t3d-class", metavar="CLASS", action="append",
                     help="restrict --t3d to these actor class(es); repeatable")
+    ap.add_argument("--t3d-clean", action="store_true",
+                    help="with --t3d, drop level-binding refs for clean paste into a new level")
     args = ap.parse_args(argv)
 
     def _load(p):
@@ -717,7 +727,8 @@ def main(argv: list) -> int:
             print(f"== {path} ==\n  ERROR: {exc}\n")
             continue
         if args.t3d:
-            print(to_t3d(pkg, classes=set(args.t3d_class) if args.t3d_class else None))
+            print(to_t3d(pkg, classes=set(args.t3d_class) if args.t3d_class else None,
+                         clean=args.t3d_clean))
         elif args.json:
             model = actor_model(pkg, path, actors_only=not args.all_objects)
             print(json.dumps(model, indent=2))
