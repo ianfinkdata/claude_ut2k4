@@ -21,13 +21,14 @@ shipped with the game — not custom community content.
 
 ---
 
-## Current status: **Step 6 in progress — schema-driven enums & arrays ✅**
+## Current status: **Step 6 — brush/BSP geometry decoded ✅**
 
-The full **read → decode → generate-T3D → engine-import** loop is proven end-to-end (Step 5).
-Actor fidelity is now near-complete: enum bytes resolve to names and dynamic arrays decode,
-via a class schema extracted from the engine's UnrealScript. T3D non-brush actor coverage
-vs. the engine reference rose from **87% → 96%**. Remaining gap is mostly Emitter
-particle-system structs and brush/BSP geometry.
+The full **read → decode → generate-T3D → engine-import** loop is proven (Step 5), and we now
+reconstruct **brush geometry** — the part CLAUDE.md flagged as "hard / not fully public".
+Editor-brush polygons decode from the binary `Model → Polys → FPoly` chain and emit as
+`Begin Brush … Begin Polygon …` blocks that are **byte-identical to the engine's own T3D
+export** (523/523 brush models in DM-Rankin; 81k polygons across all 39 maps). Combined with
+schema-driven enums/arrays, overall T3D line coverage vs. the engine reference is **~92%**.
 
 ### Done
 - **`ut2parser.py`** — dependency-free Python reader for the Unreal package format.
@@ -53,6 +54,12 @@ particle-system structs and brush/BSP geometry.
     to names (`LightEffect=LE_NonIncidence`, `DetailMode=DM_Low`) and decodes **dynamic
     arrays** to typed elements (`PathList`→`ReachSpec` refs, `Skins`→`Material` refs), emitted
     in T3D as `Prop(i)=value` with null entries omitted. Degrades gracefully if schema absent.
+  - **Brush geometry** (Step 6): `model_polys_ref()` walks a Brush/Volume actor's
+    `Brush`→`Model` and deterministically parses the UModel header to find its `Polys` object;
+    `decode_polys()` reads the native `FPoly` array (NumVerts byte, Base/Normal/TextureU/
+    TextureV + vertex vectors, flags, Texture/Item refs, iLink). `to_t3d` emits the
+    `Begin Brush / Begin PolyList / Begin Polygon …` block — **byte-identical to the engine**
+    (Item/Texture/Flags/Link ordering, `+013.6f` coords, omitted `Link=-1`, `-0.0`→`+0.0`).
   - CLI: `--summary` (default), `--actors`, `--json` (`--all-objects`), `--diff A B`,
     and `--t3d` (`--t3d-class C`, `--t3d-clean`).
 - **`schema_extractor.py`** — parses UnrealScript exported by `ucc batchexport <pkg>.u Class
@@ -62,11 +69,11 @@ particle-system structs and brush/BSP geometry.
   - Tables: 0 failures, every object reference resolves, one `Level` per map. Versions 18×v127, 21×v126.
   - Properties: every export in every map decoded — **0 errors, 63,981 placed actors** recovered.
   - JSON: all 39 maps emit valid, parseable JSON.
-  - T3D: all 39 maps emit well-formed T3D (balanced blocks, no unresolved refs). Diffed
-    against the engine reference for DM-Rankin: **96% of non-brush actor property-lines
-    reproduced verbatim** (was 87% before the schema). `LightEffect` 173/173, `PathList`
-    891/891, `Skins` 177/177, `Style`/`DetailMode` exact. Remaining gap = Emitter structs +
-    brush geometry (below).
+  - T3D: all 39 maps emit well-formed, balanced T3D with no unresolved refs (81,168 polygons
+    total). Diffed against the engine reference for DM-Rankin: **~92% of all property+geometry
+    lines reproduced verbatim**. Non-brush: `LightEffect` 173/173, `PathList` 891/891, `Skins`
+    177/177 exact. Brush: **523/523 editor-brush models byte-identical**. StaticMeshActor 664/664.
+    Remaining gap = Emitter structs + built-BSP volume models (below).
 
 ### What parses cleanly today
 Header, name/import/export tables, the **full object inventory**, the **per-actor property
@@ -78,16 +85,17 @@ real DM map (`StaticMesh="houretrim"`, `Light` with `LightBrightness`, `PathNode
 - **Emitter particle-system properties** (`ColorScale`, `MainScale`, `PostScale`,
   `StartSizeRange`, `LifetimeRange`, …) — arrays of ranges/structs not yet decoded. These are
   the bulk of the remaining 4% and only matter for particle effects.
-- ~~**Array properties** / **enum bytes**~~ — **done in Step 6** via the class schema
-  (`schema.json`). Enum bytes now resolve to names; dynamic arrays decode to typed elements.
+- ~~**Array properties** / **enum bytes**~~ — done in Step 6 via the class schema (`schema.json`).
+- ~~**Editor-brush geometry**~~ — **done in Step 6**: `Model → Polys → FPoly` decodes to
+  byte-identical `Begin Brush` blocks.
+- **Built-BSP volume models** (~31/554 in DM-Rankin) — Volume actors whose `Model` carries a
+  *built* BSP (non-empty `Nodes`/`Surfs`/`Verts`), not a simple editor brush. We emit the
+  actor but skip its polygon block (parsing `FBspNode`/`FBspSurf`/`FVert` is a larger job and
+  the engine rebuilds volumes anyway).
 - **`Region` (PointRegion)** kept raw and omitted from T3D — the engine recomputes it on build.
-- **Brush/BSP geometry** (`Begin Brush … Begin Polygon …`, `CsgOper`) is not emitted: Brush
-  actors appear with their transform but without their polygon definitions. This is the
-  deferred geometry work and the main thing between us and a *complete* map rebuild
-  (vs. an actor-placement rebuild).
-- **Geometry blobs** (BSP tree, brush polys, lightmaps, terrain heightmaps) remain opaque.
-  Per CLAUDE.md these aren't fully public; we read their metadata, not their contents — and
-  the T3D pipeline means we never need to hand-decode them for the write side.
+- **Emitter particle-system** structs/ranges — niche, the bulk of the remaining non-brush gap.
+- **Level BSP / lightmaps / terrain heightmaps** remain opaque (per CLAUDE.md) — the T3D
+  pipeline rebuilds these in-engine, so we never need to hand-decode them for the write side.
 
 ---
 
@@ -134,13 +142,21 @@ source map (overlay test) where actors drop onto the originals.
 **Import kit** lives in `import_kit/` (`DM-Rankin-PlayerStarts.t3d`,
 `DM-Rankin-Lights.t3d`, `README.md`).
 
-### Step 6 — Close gaps for a fuller round-trip  ← **in progress**
+### Step 6 — Close gaps for a fuller round-trip  ← **mostly done**
 - ✅ Decode **array** properties (`PathList`/`ReachSpec`, `Skins`) and resolve **enum-byte**
-  names — done via `schema_extractor.py` + `schema.json` (87% → 96% non-brush T3D coverage).
-- ☐ **Emitter particle-system** structs/ranges (the bulk of the remaining 4%) — low priority.
-- ☐ Emit **brush/BSP** geometry (`Begin Brush … Begin Polygon …`) — the big one for rebuilding
-  actual level geometry rather than just actor placement.
-- ☐ Programmatic generation/modification beyond reshuffling existing actors.
+  names — via `schema_extractor.py` + `schema.json` (87% → 96% non-brush T3D coverage).
+- ✅ Emit **editor-brush geometry** (`Begin Brush … Begin Polygon …`) — byte-identical to the
+  engine; the big one for rebuilding actual level geometry, not just actor placement.
+- ☐ **Built-BSP volume models** (`FBspNode`/`FBspSurf`/`FVert`) — ~31/554 models; low priority.
+- ☐ **Emitter particle-system** structs/ranges — niche.
+- ☐ Programmatic generation/modification beyond reshuffling existing actors (the original
+  end-goal). With read + faithful T3D write in place, this is now the natural next direction:
+  e.g. round-trip a whole map's brushes through UnrealEd, or procedurally edit actor/brush data.
+
+### Step 7 — Whole-map brush round-trip (suggested next)
+Generate full-map T3D (actors + brushes), import into a fresh UnrealEd level, **Build
+Geometry → Build Lighting**, and confirm the rebuilt level matches the original. This
+exercises the brush pipeline end-to-end (vs. the actor-only Step-5 verification).
 
 ---
 

@@ -480,6 +480,87 @@ def _read_value(r: Reader, pkg: Package, type_id: int, struct_name: str,
     return r.data[start : start + size]
 
 
+@dataclass
+class FPoly:
+    """One brush polygon, decoded from a Polys object's native serialization."""
+    base: tuple
+    normal: tuple
+    texture_u: tuple
+    texture_v: tuple
+    vertices: list
+    texture: ObjectRef
+    item: str
+    flags: int
+    link: int
+
+
+def model_polys_ref(pkg: Package, model_ref: int):
+    """Given an editor-brush Model object reference, return the index of its
+    Polys export (or None). Deterministically parses the UModel header:
+    None-terminator, UPrimitive bounds, 5 empty BSP arrays, NumSharedSides,
+    NumZones, then the Polys object reference."""
+    if model_ref <= 0 or model_ref > len(pkg.exports):
+        return None
+    m = pkg.exports[model_ref - 1]
+    if m.class_name != "Model":
+        return None
+    try:
+        r = Reader(pkg.raw, m.serial_offset)
+        if r.compact_index() != 0:       # empty tagged-property list
+            return None
+        r.pos += 24 + 1 + 16             # FBox(24) + IsValid(1) + FSphere(16)
+        for i in range(5):               # Vectors, Points, Nodes, Surfs, Verts
+            cnt = r.compact_index()
+            if cnt:
+                if i < 2:                # Vectors/Points: FVector = 12 bytes each
+                    r.pos += cnt * 12
+                else:                    # built BSP (Nodes/Surfs/Verts) -> not an editor brush
+                    return None
+        r.i32()                          # NumSharedSides
+        if r.i32() != 0:                 # NumZones (editor brushes: 0)
+            return None
+        ref = r.compact_index()          # Polys object reference
+        if 0 < ref <= len(pkg.exports) and pkg.exports[ref - 1].class_name == "Polys":
+            return ref
+    except (IndexError, struct.error):
+        pass
+    return None
+
+
+def decode_polys(pkg: Package, polys_ref: int) -> list:
+    """Decode a Polys object into a list of FPoly. Serial layout: None-terminator,
+    int32 Num, int32 Max, then Num FPolys (NumVerts byte, Base/Normal/TextureU/
+    TextureV vectors, NumVerts vertex vectors, flags, Actor/Texture/Item refs,
+    iLink, iBrushPoly, trailing int32)."""
+    e = pkg.exports[polys_ref - 1]
+    r = Reader(pkg.raw, e.serial_offset)
+    end = e.serial_offset + e.serial_size
+    if r.compact_index() != 0:
+        return []
+    num = r.i32()
+    r.i32()  # Max
+    vec = lambda: (r.f32(), r.f32(), r.f32())
+    polys = []
+    try:
+        for _ in range(num):
+            nv = r.u8()
+            base, normal, tu, tv = vec(), vec(), vec(), vec()
+            verts = [vec() for _ in range(nv)]
+            flags = r.i32()
+            r.compact_index()                       # Actor (brush back-ref)
+            texture = ObjectRef(pkg, r.compact_index())
+            item = pkg.name(r.compact_index())
+            link = r.compact_index()
+            r.compact_index()                       # iBrushPoly
+            r.i32()                                 # PanU/PanV/ShadowMapScale slot
+            if r.pos > end:
+                break
+            polys.append(FPoly(base, normal, tu, tv, verts, texture, item, flags, link))
+    except (IndexError, struct.error):
+        pass
+    return polys
+
+
 def read_properties(pkg: Package, export: ExportEntry) -> list:
     """Decode the tagged-property list of one export. Returns list[Property]."""
     if export.serial_size <= 0:
@@ -759,6 +840,54 @@ def _fmt_prop_value(p) -> str:
     return ""  # Map / undecoded array / raw -> skip
 
 
+def _bnum(v: float) -> str:
+    if v == 0.0:
+        v = 0.0  # normalize -0.0 -> +0.0 (matches the engine's T3D output)
+    return f"{v:+013.6f}"
+
+
+def _bvec(v) -> str:
+    return ",".join(_bnum(c) for c in v)
+
+
+def _brush_lines(pkg: Package, brush_export: ExportEntry, props: list) -> list:
+    """Emit the `Begin Brush … End Brush` polygon block for a Brush actor, or []
+    if its Model/Polys can't be resolved (falls back to actor-only)."""
+    model_ref = next((p.value.ref for p in props
+                      if p.name == "Brush" and isinstance(p.value, ObjectRef)), 0)
+    polys_ref = model_polys_ref(pkg, model_ref)
+    if not polys_ref:
+        return []
+    polys = decode_polys(pkg, polys_ref)
+    if not polys:
+        return []
+    model_name = pkg.exports[model_ref - 1].object_name
+    out = [f"    Begin Brush Name={model_name}", "       Begin PolyList"]
+    for fp in polys:
+        head = "          Begin Polygon"      # attribute order: Item, Texture, Flags, Link
+        if fp.item and fp.item != "None":
+            head += f" Item={fp.item}"
+        if fp.texture.ref != 0:
+            q = fp.texture.qualified()
+            tex = q.split("'", 2)[1] if "'" in q else None
+            if tex:
+                head += f" Texture={tex}"
+        if fp.flags:                      # engine emits Flags only when non-zero
+            head += f" Flags={fp.flags & 0xFFFFFFFF}"
+        if fp.link >= 0:                  # engine omits Link when -1 (unlinked)
+            head += f" Link={fp.link}"
+        out.append(head)
+        out.append(f"             Origin   {_bvec(fp.base)}")
+        out.append(f"             Normal   {_bvec(fp.normal)}")
+        out.append(f"             TextureU {_bvec(fp.texture_u)}")
+        out.append(f"             TextureV {_bvec(fp.texture_v)}")
+        for v in fp.vertices:
+            out.append(f"             Vertex   {_bvec(v)}")
+        out.append("          End Polygon")
+    out += ["       End PolyList", "    End Brush"]
+    return out
+
+
 def to_t3d(pkg: Package, classes=None, clean: bool = False) -> str:
     """Generate Map T3D for the placed actors (exports with a Location). Emits
     the properties we can faithfully represent; arrays and engine-recomputed
@@ -787,6 +916,8 @@ def to_t3d(pkg: Package, classes=None, clean: bool = False) -> str:
                 continue
             key = f"{p.name}({p.array_index})" if p.array_index else p.name
             lines.append(f"    {key}={s}")
+        if not clean and any(p.name == "Brush" for p in props):
+            lines.extend(_brush_lines(pkg, e, props))  # Brush + Volume subclasses
         lines.append("End Actor")
     lines.append("End Map")
     return "\n".join(lines)
