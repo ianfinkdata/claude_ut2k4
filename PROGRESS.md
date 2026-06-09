@@ -21,13 +21,13 @@ shipped with the game — not custom community content.
 
 ---
 
-## Current status: **Step 5 complete — round-trip verified in UnrealEd ✅**
+## Current status: **Step 6 in progress — schema-driven enums & arrays ✅**
 
-The full **read → decode → generate-T3D → engine-import** loop is proven end-to-end: 16
-generated PlayerStarts pasted into UnrealEd with exact rotation and correct (grid-offset)
-placement. We can parse every stock map, recover each placed actor's properties, export a
-JSON model, generate actor-placement T3D that matches the engine's own export, and import
-it back into the editor.
+The full **read → decode → generate-T3D → engine-import** loop is proven end-to-end (Step 5).
+Actor fidelity is now near-complete: enum bytes resolve to names and dynamic arrays decode,
+via a class schema extracted from the engine's UnrealScript. T3D non-brush actor coverage
+vs. the engine reference rose from **87% → 96%**. Remaining gap is mostly Emitter
+particle-system structs and brush/BSP geometry.
 
 ### Done
 - **`ut2parser.py`** — dependency-free Python reader for the Unreal package format.
@@ -49,16 +49,24 @@ it back into the editor.
     engine-style default-component omission. Engine-recomputed fields (`Region`,
     `ColLocation`) and not-yet-decoded arrays are skipped.
   - `ObjectRef` value type: prints the plain name in summaries/JSON, the qualified ref in T3D.
+  - **Schema-driven refinement** (Step 6): loads `schema.json` and resolves **enum bytes**
+    to names (`LightEffect=LE_NonIncidence`, `DetailMode=DM_Low`) and decodes **dynamic
+    arrays** to typed elements (`PathList`→`ReachSpec` refs, `Skins`→`Material` refs), emitted
+    in T3D as `Prop(i)=value` with null entries omitted. Degrades gracefully if schema absent.
   - CLI: `--summary` (default), `--actors`, `--json` (`--all-objects`), `--diff A B`,
-    and `--t3d` (`--t3d-class C` to restrict to a class).
+    and `--t3d` (`--t3d-class C`, `--t3d-clean`).
+- **`schema_extractor.py`** — parses UnrealScript exported by `ucc batchexport <pkg>.u Class
+  UC <dir>` into `schema.json` (enum value lists + array inner-types). Built from Core, Engine,
+  UnrealGame, XGame, Gameplay, XPickups, XWeapons, XEffects (100 enum props, 192 array props).
 - **Verified against all 39 stock DM maps:**
   - Tables: 0 failures, every object reference resolves, one `Level` per map. Versions 18×v127, 21×v126.
   - Properties: every export in every map decoded — **0 errors, 63,981 placed actors** recovered.
   - JSON: all 39 maps emit valid, parseable JSON.
   - T3D: all 39 maps emit well-formed T3D (balanced blocks, no unresolved refs). Diffed
-    against the engine reference for DM-Rankin: **all 664 `StaticMeshActor` blocks match
-    exactly** (ignoring deferred arrays); ~87% of non-brush actor property-lines reproduced
-    verbatim. The gap is entirely deferred categories (below).
+    against the engine reference for DM-Rankin: **96% of non-brush actor property-lines
+    reproduced verbatim** (was 87% before the schema). `LightEffect` 173/173, `PathList`
+    891/891, `Skins` 177/177, `Style`/`DetailMode` exact. Remaining gap = Emitter structs +
+    brush geometry (below).
 
 ### What parses cleanly today
 Header, name/import/export tables, the **full object inventory**, the **per-actor property
@@ -67,17 +75,16 @@ structs), and a **JSON actor model** ready for transform/diff. Output reads exac
 real DM map (`StaticMesh="houretrim"`, `Light` with `LightBrightness`, `PathNode` nav lists).
 
 ### Known limitations / not yet decoded
-- **Array properties** (`PathList`, `Skins`, `Actions`, emitter ranges) — read past correctly
-  but kept raw, so not yet emitted to T3D. `PathList`/`ReachSpec` is the bot-nav graph; the
-  engine can rebuild it (Build Paths), so it's optional for a first round-trip.
-- **Enum bytes** (`LightEffect`, `DetailMode`, `Physics`, …) decode to their numeric index;
-  we don't have the enum name tables, so T3D shows the number instead of e.g. `LE_NonIncidence`.
-  Plain bytes (`SoundVolume`) are fine.
+- **Emitter particle-system properties** (`ColorScale`, `MainScale`, `PostScale`,
+  `StartSizeRange`, `LifetimeRange`, …) — arrays of ranges/structs not yet decoded. These are
+  the bulk of the remaining 4% and only matter for particle effects.
+- ~~**Array properties** / **enum bytes**~~ — **done in Step 6** via the class schema
+  (`schema.json`). Enum bytes now resolve to names; dynamic arrays decode to typed elements.
 - **`Region` (PointRegion)** kept raw and omitted from T3D — the engine recomputes it on build.
-- **Brush/BSP geometry** (`Begin Brush … Begin Polygon …`, `CsgOper`, `MainScale`) is not
-  emitted: Brush actors appear with their transform but without their polygon definitions.
-  This is the deferred geometry work and the main thing standing between us and a *complete*
-  map rebuild (vs. an actor-placement rebuild).
+- **Brush/BSP geometry** (`Begin Brush … Begin Polygon …`, `CsgOper`) is not emitted: Brush
+  actors appear with their transform but without their polygon definitions. This is the
+  deferred geometry work and the main thing between us and a *complete* map rebuild
+  (vs. an actor-placement rebuild).
 - **Geometry blobs** (BSP tree, brush polys, lightmaps, terrain heightmaps) remain opaque.
   Per CLAUDE.md these aren't fully public; we read their metadata, not their contents — and
   the T3D pipeline means we never need to hand-decode them for the write side.
@@ -127,12 +134,13 @@ source map (overlay test) where actors drop onto the originals.
 **Import kit** lives in `import_kit/` (`DM-Rankin-PlayerStarts.t3d`,
 `DM-Rankin-Lights.t3d`, `README.md`).
 
-### Step 6 — Close gaps for a fuller round-trip
-As needed for the target use case:
-- Decode **array** properties (esp. `PathList`/`ReachSpec`) and **enum-byte** name tables.
-- Emit **brush/BSP** geometry (`Begin Brush … Begin Polygon …`) — the big one for rebuilding
+### Step 6 — Close gaps for a fuller round-trip  ← **in progress**
+- ✅ Decode **array** properties (`PathList`/`ReachSpec`, `Skins`) and resolve **enum-byte**
+  names — done via `schema_extractor.py` + `schema.json` (87% → 96% non-brush T3D coverage).
+- ☐ **Emitter particle-system** structs/ranges (the bulk of the remaining 4%) — low priority.
+- ☐ Emit **brush/BSP** geometry (`Begin Brush … Begin Polygon …`) — the big one for rebuilding
   actual level geometry rather than just actor placement.
-- Programmatic generation/modification beyond reshuffling existing actors.
+- ☐ Programmatic generation/modification beyond reshuffling existing actors.
 
 ---
 
@@ -146,10 +154,12 @@ As needed for the target use case:
 
 ## Repo map
 - `Maps/` — 39 stock UT2004 DM maps (`.ut2`, binary Unreal packages).
-- `ut2parser.py` — binary reader, property decoder, JSON model, diff, T3D generator, CLI (Steps 1–4).
+- `ut2parser.py` — binary reader, property decoder, JSON model, diff, T3D generator, CLI (Steps 1–6).
+- `schema_extractor.py` + `schema.json` — class schema (enum/array types) from UnrealScript (Step 6).
 - `import_kit/` — Step-5 UnrealEd import kit (clean T3D subsets + paste instructions).
 - `CLAUDE.md` — durable project context & format notes (in main repo root).
 - `PROGRESS.md` — this file: status + roadmap.
+- `uc_export/` — raw UnrealScript from the game (git-ignored; regenerate via `ucc batchexport`).
 
 ## How to run
 ```sh
@@ -163,4 +173,10 @@ python ut2parser.py Maps/DM-Rankin.ut2 --t3d --t3d-class Light   # one class onl
 
 # Regenerate the engine reference T3D (needs the install) for diffing:
 #   cd C:\UT2004\System && ./UCC.exe batchexport DM-Rankin.ut2 Level T3D <outdir>
+
+# Rebuild schema.json from the game's UnrealScript (needs the install):
+#   cd C:\UT2004\System
+#   for p in Core Engine UnrealGame XGame Gameplay XPickups XWeapons XEffects; do
+#     ./UCC.exe batchexport $p.u Class UC <repo>\uc_export ; done
+#   python schema_extractor.py uc_export -o schema.json
 ```

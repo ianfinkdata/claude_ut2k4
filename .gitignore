@@ -5,3 +5,6 @@ __pycache__/
 reference_t3d/
 # Our generated T3D output (regenerable via --t3d)
 out_t3d/
+# Raw UnrealScript exported from the game (Epic's source) -- not ours to commit.
+# schema.json is the derived metadata we keep; regenerate via schema_extractor.py.
+uc_export/

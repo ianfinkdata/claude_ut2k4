@@ -13,6 +13,8 @@ shrimpza/unreal-package-lib Java implementation.
 
 from __future__ import annotations
 
+import json
+import os
 import struct
 from dataclasses import dataclass, field
 
@@ -253,6 +255,76 @@ class ObjectRef:
         return f"ObjectRef({self.name!r})"
 
 
+class EnumValue:
+    """A byte property resolved to its enum name via the class schema. Prints the
+    bare enum identifier (which is also the T3D form, e.g. LE_NonIncidence)."""
+
+    __slots__ = ("name", "index")
+
+    def __init__(self, name: str, index: int):
+        self.name = name
+        self.index = index
+
+    def __str__(self) -> str:
+        return self.name
+
+    def __repr__(self) -> str:
+        return f"EnumValue({self.name!r})"
+
+
+# --------------------------------------------------------------------------- #
+# Class schema (enum value lists + array inner-types), built by schema_extractor
+# from the engine's UnrealScript. Optional: parsing still works without it,
+# arrays/enum-bytes just stay as raw bytes / numbers.
+# --------------------------------------------------------------------------- #
+_SCHEMA = None
+# Array inner types serialized inline as struct bytes -> leave raw (not object refs).
+_STRUCT_INNERS = {"Vector", "Rotator", "Color", "Plane", "Quat", "Box", "Coords",
+                  "Matrix", "Range", "RangeVector", "IntBox", "FloatBox"}
+_PRIM_INNERS = {"int", "float", "byte", "bool", "name", "string", "str"}
+
+
+def schema() -> dict:
+    global _SCHEMA
+    if _SCHEMA is None:
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "schema.json")
+        try:
+            with open(path) as fh:
+                _SCHEMA = json.load(fh)
+        except (OSError, ValueError):
+            _SCHEMA = {"enum_props": {}, "array_props": {}}
+    return _SCHEMA
+
+
+def _decode_array(pkg: Package, raw: bytes, inner: str):
+    """Decode a dynamic-array property value (compact count + N elements) using
+    the inner element type from the schema. Returns a list, or None to keep raw."""
+    if inner in _STRUCT_INNERS:
+        return None
+    try:
+        r = Reader(raw, 0)
+        count = r.compact_index()
+        if count < 0 or count > len(raw):
+            return None
+        out = []
+        for _ in range(count):
+            if inner == "int":
+                out.append(r.i32())
+            elif inner == "float":
+                out.append(r.f32())
+            elif inner in ("byte", "bool"):
+                out.append(r.u8())
+            elif inner == "name":
+                out.append(pkg.name(r.compact_index()))
+            elif inner in ("string", "str"):
+                out.append(r.fstring())
+            else:  # a class name -> element is an object reference
+                out.append(ObjectRef(pkg, r.compact_index()))
+        return out
+    except (IndexError, struct.error, UnicodeDecodeError):
+        return None
+
+
 def parse(data: bytes, package_name: str = "") -> Package:
     r = Reader(data)
     magic = r.u32()
@@ -450,6 +522,17 @@ def read_properties(pkg: Package, export: ExportEntry) -> list:
             value = _read_value(r, pkg, type_id, struct_name, size, value_start)
             r.pos = value_start + size  # guarantee alignment regardless of decode
 
+            # schema-driven refinement: name enum bytes, decode known arrays
+            sch = schema()
+            if type_id == PROP_BYTE and name in sch["enum_props"]:
+                vals = sch["enum_props"][name]
+                if 0 <= value < len(vals):
+                    value = EnumValue(vals[value], value)
+            elif type_id == PROP_ARRAY and name in sch["array_props"]:
+                decoded = _decode_array(pkg, value, sch["array_props"][name])
+                if decoded is not None:
+                    value = decoded
+
         props.append(
             Property(name, type_id, PROP_TYPE_NAMES.get(type_id, str(type_id)),
                      value, struct_name, array_index)
@@ -521,6 +604,10 @@ def _jsonify(v):
     """Make a decoded property value JSON-serializable."""
     if isinstance(v, ObjectRef):
         return v.name
+    if isinstance(v, EnumValue):
+        return v.name
+    if isinstance(v, list):
+        return [_jsonify(x) for x in v]
     if isinstance(v, bytes):
         return {"_raw_hex": v.hex()}
     if isinstance(v, tuple):
@@ -638,6 +725,19 @@ def _fmt_struct(struct_name: str, value, prop_name: str = "") -> str:
     return ""  # undecodable struct -> skip
 
 
+def _fmt_element(el) -> str:
+    """Format a single array element as a T3D value ('' to omit it)."""
+    if isinstance(el, ObjectRef):
+        return "" if el.ref == 0 else el.qualified()  # engine omits null entries
+    if isinstance(el, EnumValue):
+        return el.name
+    if isinstance(el, str):
+        return f'"{el}"'
+    if isinstance(el, float):
+        return _fmt_float(el)
+    return str(el)
+
+
 def _fmt_prop_value(p) -> str:
     """Render one decoded Property as a T3D value, or '' to skip it."""
     t = p.type_id
@@ -645,7 +745,7 @@ def _fmt_prop_value(p) -> str:
     if t == PROP_BOOL:
         return "True" if v else "False"
     if t in (PROP_INT, PROP_BYTE):
-        return str(v)
+        return str(v)  # EnumValue stringifies to its bare identifier
     if t == PROP_FLOAT:
         return _fmt_float(v)
     if t in (PROP_OBJECT, PROP_CLASS):
@@ -656,7 +756,7 @@ def _fmt_prop_value(p) -> str:
         return f'"{v}"'
     if t == PROP_STRUCT:
         return _fmt_struct(p.struct_name, v, p.name)
-    return ""  # Array / Map / raw -> skip for now
+    return ""  # Map / undecoded array / raw -> skip
 
 
 def to_t3d(pkg: Package, classes=None, clean: bool = False) -> str:
@@ -675,6 +775,12 @@ def to_t3d(pkg: Package, classes=None, clean: bool = False) -> str:
         lines.append(f"Begin Actor Class={e.class_name} Name={e.object_name}")
         for p in props:
             if p.name in skip:
+                continue
+            if p.type_id == PROP_ARRAY and isinstance(p.value, list):
+                for idx, el in enumerate(p.value):  # dynamic array -> one line/element
+                    es = _fmt_element(el)
+                    if es:
+                        lines.append(f"    {p.name}({idx})={es}")
                 continue
             s = _fmt_prop_value(p)
             if not s:
