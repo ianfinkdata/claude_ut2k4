@@ -41,10 +41,16 @@ legitimate shared-asset imports (`StaticMesh`/`Shader`/`Texture`). The engine re
 omitted objects on Build Geometry/Lighting/Paths. Trade-off: diverges from byte-identical
 (intentionally) to produce a re-importable, saveable map.
 
-## Step 8 — Map-inventory pattern analysis (NOT STARTED, unblocked)
-Goal-part 2: mine the 39 maps for repeatable patterns, esp. **bot pathing** (PathNode /
-ReachSpec / InventorySpot / JumpSpot networks). This is pure offline analysis with our
-parser — no blocker.
+## Step 8 — Map-inventory pattern analysis (DONE ✅)
+Goal-part 2: mine the 39 maps for repeatable bot-pathing / inventory patterns.
+- **`navanalysis.py`** — decodes the nav graph (NavigationPoint nodes + ReachSpec edges with
+  reachFlags semantics) and inventory placement; prints per-map + cross-map reports (`--json`).
+- **`NAV_PATTERNS.md`** — findings. Key invariants across all 39 maps: **1.00 InventorySpot per
+  pickup**, **out-degree ~4.2**, edge mix **82% walk / 14% jump / 1% forced / 1% special**,
+  ~16 PlayerStarts/map. Distilled repeatable sub-structures: pickup anchoring, PathNode mesh,
+  jump links, and the parametric **lift template** (Mover + LiftCenter + LiftExit×floors tied
+  by LiftTag, bidirectional R_SPECIAL edges). The engine rebuilds ReachSpecs via Build AI Paths
+  — which is why omitting them from our T3D (Step 7 fix) is safe.
 
 ---
 
