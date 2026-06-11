@@ -320,7 +320,27 @@ def _decode_array(pkg: Package, raw: bytes, inner: str):
                 out.append(r.fstring())
             else:  # a class name -> element is an object reference
                 out.append(ObjectRef(pkg, r.compact_index()))
-        return out
+        if inner in _PRIM_INNERS or all(
+                not isinstance(el, ObjectRef)
+                or -len(pkg.imports) <= el.ref <= len(pkg.exports)
+                for el in out):
+            if r.pos == len(raw):
+                return out
+        # didn't consume exactly as refs/prims: try array-of-tagged-structs
+        # (e.g. Emitter ColorScale/SizeScale: each element is a nested
+        # tagged-property stream terminated by 'None')
+        r = Reader(raw, 0)
+        count = r.compact_index()
+        out = []
+        for _ in range(count):
+            sub = _parse_tagged(pkg, r, len(raw))
+            out.append(TaggedStruct(inner,
+                                    {(p.name if not p.array_index
+                                      else f"{p.name}({p.array_index})"): p.value
+                                     for p in sub}))
+        if r.pos == len(raw):
+            return out
+        return None
     except (IndexError, struct.error, UnicodeDecodeError):
         return None
 
@@ -440,7 +460,16 @@ def _skip_stateframe(r: Reader) -> None:
         r.compact_index()  # Offset into the bytecode
 
 
-def _read_struct_value(r: Reader, struct_name: str, size: int) -> object:
+class TaggedStruct(dict):
+    """A non-native struct decoded from its nested tagged-property stream
+    (e.g. Scale, PointRegion). Behaves as a dict of subprop name -> value."""
+
+    def __init__(self, struct_name: str, values: dict):
+        super().__init__(values)
+        self.struct_name = struct_name
+
+
+def _read_struct_value(r: Reader, pkg: Package, struct_name: str, size: int) -> object:
     start = r.pos
     if struct_name == "Vector" and size >= 12:
         return (r.f32(), r.f32(), r.f32())
@@ -449,14 +478,18 @@ def _read_struct_value(r: Reader, struct_name: str, size: int) -> object:
     if struct_name == "Color" and size >= 4:
         b, g, rr, a = r.u8(), r.u8(), r.u8(), r.u8()
         return {"r": rr, "g": g, "b": b, "a": a}
-    if struct_name == "Scale" and size >= 12:
-        out = {"scale": (r.f32(), r.f32(), r.f32())}
-        if size >= 16:
-            out["sheerRate"] = r.f32()
-        if size >= 17:
-            out["sheerAxis"] = r.u8()
-        return out
-    # Quat, Box, PointRegion, and anything else: raw bytes (caller realigns)
+    # Non-native structs (Scale, PointRegion, ...) serialize as a NESTED
+    # tagged-property stream terminated by 'None'. Parse it; fall back to raw
+    # bytes if it doesn't consume the value exactly.
+    try:
+        sub = _parse_tagged(pkg, r, start + size)
+        if r.pos == start + size:
+            return TaggedStruct(struct_name,
+                                {(p.name if not p.array_index
+                                  else f"{p.name}({p.array_index})"): p.value
+                                 for p in sub})
+    except (IndexError, struct.error, UnicodeDecodeError):
+        pass
     return r.data[start : start + size]
 
 
@@ -475,7 +508,7 @@ def _read_value(r: Reader, pkg: Package, type_id: int, struct_name: str,
     if type_id in (PROP_STR, PROP_STRING):
         return r.fstring()
     if type_id == PROP_STRUCT:
-        return _read_struct_value(r, struct_name, size)
+        return _read_struct_value(r, pkg, struct_name, size)
     # Array, Map, FixedArray, Bool (handled earlier), unknown -> raw bytes
     return r.data[start : start + size]
 
@@ -527,6 +560,43 @@ def model_polys_ref(pkg: Package, model_ref: int):
     return None
 
 
+def brush_polys_ref(pkg: Package, model_ref: int):
+    """Resolve a Model to its Polys export, including volume Models that carry
+    built BSP (where the deterministic header parse bails). Fallback: scan the
+    Model's serial bytes for compact indices resolving to Polys exports not
+    claimed by any deterministic parse; tie-break by serial-offset proximity."""
+    ref = model_polys_ref(pkg, model_ref)
+    if ref:
+        return ref
+    if model_ref <= 0 or model_ref > len(pkg.exports):
+        return None
+    m = pkg.exports[model_ref - 1]
+    if m.class_name != "Model":
+        return None
+    claimed = getattr(pkg, "_claimed_polys", None)
+    if claimed is None:
+        claimed = set()
+        for e in pkg.exports:
+            if e.class_name == "Model":
+                r = model_polys_ref(pkg, pkg.exports.index(e) + 1)
+                if r:
+                    claimed.add(r)
+        pkg._claimed_polys = claimed
+    cands = set()
+    for off in range(m.serial_size):
+        try:
+            v = Reader(pkg.raw, m.serial_offset + off).compact_index()
+        except (IndexError, struct.error):
+            continue
+        if (0 < v <= len(pkg.exports) and v not in claimed
+                and pkg.exports[v - 1].class_name == "Polys"):
+            cands.add(v)
+    if not cands:
+        return None
+    return min(cands, key=lambda v: abs(pkg.exports[v - 1].serial_offset
+                                        - m.serial_offset))
+
+
 def decode_polys(pkg: Package, polys_ref: int) -> list:
     """Decode a Polys object into a list of FPoly. Serial layout: None-terminator,
     int32 Num, int32 Max, then Num FPolys (NumVerts byte, Base/Normal/TextureU/
@@ -568,7 +638,12 @@ def read_properties(pkg: Package, export: ExportEntry) -> list:
     r = Reader(pkg.raw, export.serial_offset)
     if export.flags & RF_HAS_STACK:
         _skip_stateframe(r)
-    end = export.serial_offset + export.serial_size
+    return _parse_tagged(pkg, r, export.serial_offset + export.serial_size)
+
+
+def _parse_tagged(pkg: Package, r: Reader, end: int) -> list:
+    """Parse a tagged-property stream (used for export serial data AND for
+    nested non-native structs). Returns list[Property]."""
     props = []
     while r.pos < end:
         name = pkg.name(r.compact_index())
@@ -757,8 +832,9 @@ def _diff_report(path_a: str, pkg_a: Package, path_b: str, pkg_b: Package) -> st
 # --------------------------------------------------------------------------- #
 # T3D generation (write side -- Step 4)
 # --------------------------------------------------------------------------- #
-# Properties the engine recomputes on build; never emit them.
-_T3D_SKIP_PROPS = {"Region", "ColLocation"}
+# Properties the engine recomputes on build. Now decodable (nested tagged
+# structs), so they ARE emitted -- the engine's own exporter emits them too.
+_T3D_SKIP_PROPS = set()
 
 # Additionally dropped in "clean" mode: level-binding refs that point at objects
 # of the source map (LevelInfo, PhysicsVolume, the nav chain). Meaningless when
@@ -767,8 +843,21 @@ _T3D_CLEAN_EXTRA = {"Level", "PhysicsVolume", "Base", "nextNavigationPoint",
                     "PendingTouch", "Owner"}
 
 
+_DEC6 = None
+
+
 def _fmt_float(v: float) -> str:
-    return f"{v:.6f}"
+    """%f with C-style rounding (half away from zero); Python's format() rounds
+    half-to-even, which diverges from the engine on exact .xxxxx5 float values."""
+    global _DEC6
+    import decimal
+    import math
+    if not math.isfinite(v):
+        return f"{v:.6f}"
+    if _DEC6 is None:
+        _DEC6 = decimal.Decimal("0.000001")
+    d = decimal.Decimal(v).quantize(_DEC6, rounding=decimal.ROUND_HALF_UP)
+    return f"{d:.6f}"
 
 
 def _fmt_vec_t3d(comps, keys) -> str:
@@ -787,22 +876,64 @@ def _fmt_vec_default(comps, keys, default: float) -> str:
     return "(" + ",".join(parts) + ")"
 
 
+def _fmt_color(value: dict) -> str:
+    """Engine prints colors in storage order B,G,R,A and omits zero channels."""
+    parts = [f"{k}={value[k.lower()]}" for k in ("B", "G", "R", "A")
+             if value.get(k.lower())]
+    return "(" + ",".join(parts) + ")" if parts else ""
+
+
+def _fmt_subvalue(sub: str, v) -> str:
+    """Format one nested-struct member value, '' to omit (default-zero)."""
+    if isinstance(v, tuple) and len(v) == 3:           # vector member
+        dflt = 1.0 if sub == "Scale" else 0.0
+        if all(c == dflt for c in v):
+            return ""
+        return _fmt_vec_default(v, "XYZ", dflt)
+    if isinstance(v, TaggedStruct):                    # nested struct member
+        return _fmt_struct(v.struct_name, v, sub)
+    if isinstance(v, dict):                            # Rotator or Color member
+        if "pitch" in v:
+            parts = [f"{k}={v[k.lower()]}" for k in ("Pitch", "Yaw", "Roll")
+                     if v.get(k.lower())]
+            return "(" + ",".join(parts) + ")" if parts else ""
+        if "r" in v:
+            return _fmt_color(v)
+        return ""
+    if isinstance(v, EnumValue):
+        return v.name if v.index else ""
+    if isinstance(v, ObjectRef):
+        return v.qualified()
+    if isinstance(v, bool):
+        return "True" if v else ""
+    if isinstance(v, float):
+        return _fmt_float(v) if v != 0.0 else ""
+    if isinstance(v, int):
+        return str(v) if v else ""                     # omit default-zero
+    if isinstance(v, str):
+        return v
+    return ""
+
+
 def _fmt_struct(struct_name: str, value, prop_name: str = "") -> str:
     if struct_name == "Vector" and isinstance(value, (list, tuple)):
         default = 1.0 if prop_name in _SCALE_VECTORS else 0.0
         return _fmt_vec_default(value, "XYZ", default)
+    if isinstance(value, TaggedStruct):
+        # nested tagged struct (Scale, PointRegion, emitter ranges, ...):
+        # emit serialized members, omitting default-zero values like the engine
+        parts = []
+        for sub, v in value.items():
+            s = _fmt_subvalue(sub, v)
+            if s:
+                parts.append(f"{sub}={s}")
+        return "(" + ",".join(parts) + ")" if parts else ""
     if struct_name == "Rotator" and isinstance(value, dict):
         parts = [f"{k}={value[k.lower()]}" for k in ("Pitch", "Yaw", "Roll")
                  if value.get(k.lower())]
         return "(" + ",".join(parts) + ")" if parts else "(Yaw=0)"
     if struct_name == "Color" and isinstance(value, dict):
-        return f"(R={value['r']},G={value['g']},B={value['b']},A={value['a']})"
-    if struct_name == "Scale" and isinstance(value, dict):
-        s = _fmt_vec_t3d(value["scale"], "XYZ")
-        out = f"(Scale={s}"
-        if value.get("sheerRate"):
-            out += f",SheerRate={_fmt_float(value['sheerRate'])}"
-        return out + ")"
+        return _fmt_color(value)
     return ""  # undecodable struct -> skip
 
 
@@ -810,6 +941,8 @@ def _fmt_element(el) -> str:
     """Format a single array element as a T3D value ('' to omit it)."""
     if isinstance(el, ObjectRef):
         return "" if el.ref == 0 else el.qualified()  # engine omits null entries
+    if isinstance(el, TaggedStruct):
+        return _fmt_struct(el.struct_name, el)
     if isinstance(el, EnumValue):
         return el.name
     if isinstance(el, str):
@@ -843,7 +976,13 @@ def _fmt_prop_value(p) -> str:
 def _bnum(v: float) -> str:
     if v == 0.0:
         v = 0.0  # normalize -0.0 -> +0.0 (matches the engine's T3D output)
-    return f"{v:+013.6f}"
+    import decimal
+    import math
+    if not math.isfinite(v):
+        return f"{v:+013.6f}"
+    d = decimal.Decimal(v).quantize(decimal.Decimal("0.000001"),
+                                    rounding=decimal.ROUND_HALF_UP)
+    return f"{d:+013.6f}"
 
 
 def _bvec(v) -> str:
@@ -855,7 +994,7 @@ def _brush_lines(pkg: Package, brush_export: ExportEntry, props: list) -> list:
     if its Model/Polys can't be resolved (falls back to actor-only)."""
     model_ref = next((p.value.ref for p in props
                       if p.name == "Brush" and isinstance(p.value, ObjectRef)), 0)
-    polys_ref = model_polys_ref(pkg, model_ref)
+    polys_ref = brush_polys_ref(pkg, model_ref)
     if not polys_ref:
         return []
     polys = decode_polys(pkg, polys_ref)
@@ -888,39 +1027,118 @@ def _brush_lines(pkg: Package, brush_export: ExportEntry, props: list) -> list:
     return out
 
 
+def level_actor_order(pkg: Package):
+    """Decode the Level ('myLevel') object's actor list: the authoritative actor
+    ORDER for the map (CSG depends on brush sequence). Returns a list of export
+    references (1-based), or None if unavailable."""
+    lvl = next((e for e in pkg.exports if e.class_name == "Level"), None)
+    if lvl is None or lvl.serial_size <= 0:
+        return None
+    try:
+        r = Reader(pkg.raw, lvl.serial_offset)
+        if r.compact_index() != 0:        # empty tagged-property list
+            return None
+        num = r.i32()
+        r.i32()                           # Max
+        if num < 0 or num > len(pkg.exports) * 2:
+            return None
+        refs = []
+        for _ in range(num):
+            v = r.compact_index()
+            if 0 < v <= len(pkg.exports):
+                refs.append(v)
+        return refs or None
+    except (IndexError, struct.error):
+        return None
+
+
 def to_t3d(pkg: Package, classes=None, clean: bool = False) -> str:
-    """Generate Map T3D for the placed actors (exports with a Location). Emits
-    the properties we can faithfully represent; arrays and engine-recomputed
-    fields are skipped. With clean=True, also drops level-binding refs so the
-    actors paste cleanly into an empty/other level. Suitable for UnrealEd paste."""
+    """Generate Map T3D. Whole-map output follows the Level object's actor list
+    (the engine's CSG-relevant order, including no-Location actors like
+    LevelInfo); class-filtered output falls back to placed-actor scanning.
+    Emits the properties we can faithfully represent; engine-recomputed fields
+    are skipped. With clean=True, also drops level-binding refs so the actors
+    paste cleanly into an empty/other level."""
     skip = _T3D_SKIP_PROPS | _T3D_CLEAN_EXTRA if clean else _T3D_SKIP_PROPS
+    order = None if classes else level_actor_order(pkg)
+    if order is not None:
+        # skip non-transactional (transient) actors, e.g. editor Cameras --
+        # the engine's own T3D exporter omits them too
+        actors = [pkg.exports[ref - 1] for ref in order
+                  if pkg.exports[ref - 1].flags & 0x00000001]
+    else:
+        actors = pkg.exports
     lines = ["Begin Map"]
-    for e in pkg.exports:
+    for e in actors:
         if classes and e.class_name not in classes:
             continue
         props = read_properties(pkg, e)
-        if not any(p.name == "Location" for p in props):
+        if order is None and not any(p.name == "Location" for p in props):
             continue
         lines.append(f"Begin Actor Class={e.class_name} Name={e.object_name}")
-        for p in props:
-            if p.name in skip:
-                continue
-            if p.type_id == PROP_ARRAY and isinstance(p.value, list):
-                for idx, el in enumerate(p.value):  # dynamic array -> one line/element
-                    es = _fmt_element(el)
-                    if es:
-                        lines.append(f"    {p.name}({idx})={es}")
-                continue
-            s = _fmt_prop_value(p)
-            if not s:
-                continue
-            key = f"{p.name}({p.array_index})" if p.array_index else p.name
-            lines.append(f"    {key}={s}")
-        if not clean and any(p.name == "Brush" for p in props):
-            lines.extend(_brush_lines(pkg, e, props))  # Brush + Volume subclasses
+        _emit_props(pkg, e, props, lines, 4, skip, clean)
         lines.append("End Actor")
     lines.append("End Map")
     return "\n".join(lines)
+
+
+def _emit_props(pkg: Package, e: ExportEntry, props: list, lines: list,
+                indent: int, skip, clean: bool) -> None:
+    """Emit one object's properties as T3D lines (recurses into sub-objects)."""
+    pad = " " * indent
+    owner_ref = pkg.exports.index(e) + 1
+    for p in props:
+        if p.name in skip:
+            continue
+        if p.type_id == PROP_ARRAY and isinstance(p.value, list):
+            # arrays declared with the 'export' modifier (e.g. Emitter.Emitters)
+            # inline their Begin Object blocks first, then the array lines,
+            # then a blank line
+            inline = (not clean and p.name in schema().get("export_arrays", ()))
+            for idx, el in enumerate(p.value):  # one line per element
+                if (inline and isinstance(el, ObjectRef) and el.ref > 0
+                        and pkg.exports[el.ref - 1].outer_ref in (owner_ref, 0)):
+                    # interleave: Begin Object block, the array line, blank
+                    se = pkg.exports[el.ref - 1]
+                    lines.append(f"{pad}Begin Object Class={se.class_name} "
+                                 f"Name={se.object_name}")
+                    _emit_props(pkg, se, read_properties(pkg, se), lines,
+                                indent + 4, skip, clean)
+                    lines.append(f"{pad}End Object")
+                    lines.append(f"{pad}{p.name}({idx})={_fmt_element(el)}")
+                    lines.append("")
+                    continue
+                es = _fmt_element(el)
+                if es:
+                    lines.append(f"{pad}{p.name}({idx})={es}")
+            continue
+        if p.name == "Brush" and not clean:
+            # engine layout: inline polygon block, then the Brush= line,
+            # then a blank line
+            geo = _brush_lines(pkg, e, props)
+            if geo:
+                lines.extend(geo)
+                lines.append(f"{pad}Brush={_fmt_prop_value(p)}")
+                lines.append("")
+                continue
+        s = _fmt_prop_value(p)
+        if not s:
+            continue
+        if p.array_index or p.name in schema().get("static_arrays", ()):
+            key = f"{p.name}({p.array_index})"   # static arrays always indexed
+        else:
+            key = p.name
+        lines.append(f"{pad}{key}={s}")
+        if e.class_name == "Mover":
+            # the engine prints these native sentinels on every Mover, in
+            # class-declaration order: BasePos, SavedPos, ..., BaseRot, SavedRot
+            if p.name == "BasePos":
+                lines.append(f"{pad}SavedPos=(X=-12345.000000,Y=-12345.000000,"
+                             f"Z=-12345.000000)")
+                if not any(q.name == "BaseRot" for q in props):
+                    lines.append(f"{pad}SavedRot=(Pitch=123,Yaw=456,Roll=789)")
+            elif p.name == "BaseRot":
+                lines.append(f"{pad}SavedRot=(Pitch=123,Yaw=456,Roll=789)")
 
 
 def main(argv: list) -> int:

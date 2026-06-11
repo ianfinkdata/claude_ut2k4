@@ -27,6 +27,8 @@ from pathlib import Path
 _ENUM_RE = re.compile(r"\benum\s+(\w+)\s*\{([^}]*)\}\s*(\w*)\s*;", re.DOTALL)
 # var(...) <modifiers> array<Inner>  Name ;
 _ARRAY_RE = re.compile(r"\bvar\b[^;{}]*?\barray\s*<\s*(\w+)\s*>\s*(\w+)\s*;")
+# var(...) <modifiers> Type  Name[N] ;   (static/fixed-size array)
+_STATIC_ARRAY_RE = re.compile(r"\bvar\b[^;{}]*?\s(\w+)\s*\[\s*\d+\s*\]\s*;")
 # var(...) <modifiers> TypeName Name ;   (for vars typed by a standalone enum)
 _SIMPLEVAR_RE = re.compile(r"\bvar\b(?:\s*\([^)]*\))?\s+([\w ]+?)\s+(\w+)\s*;")
 
@@ -45,6 +47,9 @@ def extract(uc_dir: str) -> dict:
     enum_defs: dict = {}     # EnumName -> [values]
     enum_props: dict = {}    # propName -> EnumName
     array_props: dict = {}   # propName -> inner type
+    export_arrays: set = set()  # array props declared with the 'export' modifier
+                                # (their elements are inlined sub-objects in T3D)
+    static_arrays: set = set()  # fixed-size array props (T3D always prints index)
 
     files = sorted(Path(uc_dir).glob("*.UC")) + sorted(Path(uc_dir).glob("*.uc"))
     for fp in files:
@@ -61,6 +66,11 @@ def extract(uc_dir: str) -> dict:
         for m in _ARRAY_RE.finditer(text):
             inner, name = m.group(1), m.group(2)
             array_props.setdefault(name, inner)
+            if re.search(r"\bexport\b", m.group(0)):
+                export_arrays.add(name)
+
+        for m in _STATIC_ARRAY_RE.finditer(text):
+            static_arrays.add(m.group(1))
 
         # vars typed by an enum *name* (e.g. `var ECsgOper CsgOper;`)
         for m in _SIMPLEVAR_RE.finditer(text):
@@ -76,6 +86,8 @@ def extract(uc_dir: str) -> dict:
     return {
         "enum_props": dict(sorted(resolved_enum_props.items())),
         "array_props": dict(sorted(array_props.items())),
+        "export_arrays": sorted(export_arrays),
+        "static_arrays": sorted(static_arrays),
         "_enum_defs_count": len(enum_defs),
     }
 
@@ -94,12 +106,17 @@ def main(argv: list) -> int:
         else:
             dirs.append(a)
 
-    merged = {"enum_props": {}, "array_props": {}}
+    merged = {"enum_props": {}, "array_props": {}, "export_arrays": [],
+              "static_arrays": []}
     total_enums = 0
     for d in dirs:
         s = extract(d)
         merged["enum_props"].update(s["enum_props"])
         merged["array_props"].update(s["array_props"])
+        merged["export_arrays"] = sorted(set(merged["export_arrays"])
+                                         | set(s["export_arrays"]))
+        merged["static_arrays"] = sorted(set(merged["static_arrays"])
+                                         | set(s["static_arrays"]))
         total_enums += s["_enum_defs_count"]
 
     Path(out).write_text(json.dumps(merged, indent=1))
