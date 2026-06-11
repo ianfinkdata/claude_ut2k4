@@ -111,8 +111,8 @@ shipped with the game — not custom community content.
 
 ## Component detail — Steps 1–6 (read/decode/T3D foundation)
 
-*(Live status is at the top: Step 7 replication is blocked on the `.ut2` save; Step 8 pattern
-analysis is done. The sections below document the foundation those build on.)*
+*(Live status is at the top: Step 7 replication and Step 8 pattern analysis are both DONE.
+The sections below document the foundation those build on.)*
 
 ### Step 6 — brush/BSP geometry decoded ✅
 
