@@ -4,7 +4,47 @@ A living "save state" for the project. Read this together with [CLAUDE.md](CLAUD
 which holds the durable context (goal, file-format essentials, architecture decision).
 This document tracks **where we are and what's next**.
 
-Last updated: 2026-06-08
+Last updated: 2026-06-10
+
+---
+
+## Step 7 — Full-map replication (IN PROGRESS, blocked on final save)
+
+**Goal:** replicate `DM-Rankin.ut2` end-to-end through our pipeline.
+
+**Done:**
+- Whole-map T3D now follows the Level object's actor list (CSG-critical brush order),
+  decodes non-native structs (Scale/PointRegion/emitter ranges) as nested tagged streams,
+  emits sub-objects (`Begin Object` for `export` arrays like Emitters/Actions), and matches
+  the engine's own `myLevel.T3D` export at **99.95% byte-identical** (27 differing lines of
+  62,685, all class-default verbosity). All 39 maps emit clean balanced T3D.
+- **Imported our generated T3D into UnrealEd → Build Geometry → the ENTIRE map reconstructs**:
+  BSP rebuilt from our decoded brushes, textures applied, actors placed. Visually confirmed in
+  the editor (textured 3D view of the real Rankin interior). This proves the decode→T3D→engine
+  reconstruction works for full level geometry, not just actor placement.
+
+**BLOCKER — cannot write the replica `.ut2` to disk.** `MAP SAVE` fails with "Couldn't save
+package - maybe file is read-only" (reproduced to two writable folders; not a filesystem perm
+issue — verified `C:\UT2004\Maps` is writable). Editor.log root cause: our faithful T3D
+references the original map's **private/regenerable objects** by their `DM-Rankin.*` path —
+`StaticMeshInstance` (680, regenerated on Build), `ReachSpec` via `PathList`/`UpstreamPaths`
+(909, rebuilt by Build Paths), the explicit `Brush=Model'DM-Rankin.ModelN'` names (554),
+`Screenshot`/`Summary`/`ZoneEffect`/`AntiPortal`. Because the original `DM-Rankin.ut2` must
+stay loaded to supply its *embedded* meshes/textures (shared-asset refs like `StaticMesh`/
+`Shader`/`Texture`, which are legitimately fine), these private refs bind cross-package and
+UnrealEd refuses to save a map that references another package's private objects.
+
+**Proposed fix (needs user go-ahead):** add a "portable/saveable" T3D mode that omits refs to
+engine-regenerated/private map-local objects (`StaticMeshInstance`, `PathList`/`UpstreamPaths`,
+the `Brush=Model` line, `Screenshot`/`Summary`/`ZoneEffect`/`AntiPortal`) while keeping
+legitimate shared-asset imports (`StaticMesh`/`Shader`/`Texture`). The engine regenerates the
+omitted objects on Build Geometry/Lighting/Paths. Trade-off: diverges from byte-identical
+(intentionally) to produce a re-importable, saveable map.
+
+## Step 8 — Map-inventory pattern analysis (NOT STARTED, unblocked)
+Goal-part 2: mine the 39 maps for repeatable patterns, esp. **bot pathing** (PathNode /
+ReachSpec / InventorySpot / JumpSpot networks). This is pure offline analysis with our
+parser — no blocker.
 
 ---
 
