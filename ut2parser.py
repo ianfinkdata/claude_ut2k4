@@ -1052,22 +1052,30 @@ def level_actor_order(pkg: Package):
         return None
 
 
-def to_t3d(pkg: Package, classes=None, clean: bool = False) -> str:
+def to_t3d(pkg: Package, classes=None, clean: bool = False,
+           saveable: bool = False, manifest: list = None) -> str:
     """Generate Map T3D. Whole-map output follows the Level object's actor list
     (the engine's CSG-relevant order, including no-Location actors like
     LevelInfo); class-filtered output falls back to placed-actor scanning.
     Emits the properties we can faithfully represent; engine-recomputed fields
     are skipped. With clean=True, also drops level-binding refs so the actors
-    paste cleanly into an empty/other level."""
+    paste cleanly into an empty/other level. With saveable=True, omits refs to
+    the source package's private/regenerable objects so the imported map can be
+    SAVED as a new .ut2 (each omission is appended to `manifest`)."""
     skip = _T3D_SKIP_PROPS | _T3D_CLEAN_EXTRA if clean else _T3D_SKIP_PROPS
     order = None if classes else level_actor_order(pkg)
     if order is not None:
         # skip non-transactional (transient) actors, e.g. editor Cameras --
         # the engine's own T3D exporter omits them too
-        actors = [pkg.exports[ref - 1] for ref in order
-                  if pkg.exports[ref - 1].flags & 0x00000001]
+        kept = [ref for ref in order if pkg.exports[ref - 1].flags & 0x00000001]
+        actors = [pkg.exports[ref - 1] for ref in kept]
     else:
+        kept = []
         actors = pkg.exports
+    ctx = None
+    if saveable:
+        ctx = {"actors": set(kept),
+               "manifest": manifest if manifest is not None else []}
     lines = ["Begin Map"]
     for e in actors:
         if classes and e.class_name not in classes:
@@ -1076,19 +1084,63 @@ def to_t3d(pkg: Package, classes=None, clean: bool = False) -> str:
         if order is None and not any(p.name == "Location" for p in props):
             continue
         lines.append(f"Begin Actor Class={e.class_name} Name={e.object_name}")
-        _emit_props(pkg, e, props, lines, 4, skip, clean)
+        _emit_props(pkg, e, props, lines, 4, skip, clean, ctx)
         lines.append("End Actor")
     lines.append("End Map")
     return "\n".join(lines)
 
 
+RF_PUBLIC = 0x00000004
+
+# LevelInfo metadata referencing the source map's private screenshot/summary
+# objects; meaningless in a replica and re-set by hand in the editor if wanted.
+_SAVEABLE_DROP_PROPS = {"Screenshot": "manual/cosmetic (LevelInfo screenshot)",
+                        "Summary": "manual/cosmetic (LevelInfo summary)"}
+
+
+def _saveable_drop(pkg: Package, ctx, ref: int):
+    """In saveable mode: disposition string if a map-local object reference must
+    be omitted so the saved map doesn't bind the source package's private or
+    regenerable objects; None to keep (emitted actors and public assets)."""
+    if ctx is None or ref <= 0:
+        return None
+    if ref in ctx["actors"]:
+        return None                       # re-created actor: resolves locally
+    e = pkg.exports[ref - 1]
+    if e.class_name == "ReachSpec":
+        return "auto-regenerated (Build AI Paths)"
+    if not (e.flags & RF_PUBLIC):         # private map-local object
+        if e.class_name == "StaticMeshInstance":
+            return "auto-regenerated (Build Geometry/Lighting)"
+        if e.class_name == "Model":
+            return "auto-regenerated (CSG rebuild from inline brush polygons)"
+        if e.class_name == "ConvexVolume":
+            return "auto-regenerated (antiportal rebuild on Build Geometry)"
+        return "manual/review (private map-local object)"
+    return None                           # public asset (StaticMesh/Texture/...)
+
+
+def _log_omission(ctx, e: ExportEntry, prop: str, target: ExportEntry,
+                  disposition: str) -> None:
+    ctx["manifest"].append({
+        "actor": e.object_name, "actor_class": e.class_name,
+        "property": prop, "omitted": target.object_name,
+        "omitted_class": target.class_name, "disposition": disposition,
+    })
+
+
 def _emit_props(pkg: Package, e: ExportEntry, props: list, lines: list,
-                indent: int, skip, clean: bool) -> None:
+                indent: int, skip, clean: bool, ctx=None) -> None:
     """Emit one object's properties as T3D lines (recurses into sub-objects)."""
     pad = " " * indent
     owner_ref = pkg.exports.index(e) + 1
     for p in props:
         if p.name in skip:
+            continue
+        if ctx is not None and p.name in _SAVEABLE_DROP_PROPS \
+                and isinstance(p.value, ObjectRef) and p.value.ref > 0:
+            _log_omission(ctx, e, p.name, pkg.exports[p.value.ref - 1],
+                          _SAVEABLE_DROP_PROPS[p.name])
             continue
         if p.type_id == PROP_ARRAY and isinstance(p.value, list):
             # arrays declared with the 'export' modifier (e.g. Emitter.Emitters)
@@ -1103,11 +1155,17 @@ def _emit_props(pkg: Package, e: ExportEntry, props: list, lines: list,
                     lines.append(f"{pad}Begin Object Class={se.class_name} "
                                  f"Name={se.object_name}")
                     _emit_props(pkg, se, read_properties(pkg, se), lines,
-                                indent + 4, skip, clean)
+                                indent + 4, skip, clean, ctx)
                     lines.append(f"{pad}End Object")
                     lines.append(f"{pad}{p.name}({idx})={_fmt_element(el)}")
                     lines.append("")
                     continue
+                if isinstance(el, ObjectRef):
+                    disp = _saveable_drop(pkg, ctx, el.ref)
+                    if disp:
+                        _log_omission(ctx, e, f"{p.name}({idx})",
+                                      pkg.exports[el.ref - 1], disp)
+                        continue
                 es = _fmt_element(el)
                 if es:
                     lines.append(f"{pad}{p.name}({idx})={es}")
@@ -1118,8 +1176,20 @@ def _emit_props(pkg: Package, e: ExportEntry, props: list, lines: list,
             geo = _brush_lines(pkg, e, props)
             if geo:
                 lines.extend(geo)
+                if ctx is not None and isinstance(p.value, ObjectRef):
+                    disp = _saveable_drop(pkg, ctx, p.value.ref)
+                    if disp:  # drop only the Brush= ref; keep inline polygons
+                        _log_omission(ctx, e, "Brush",
+                                      pkg.exports[p.value.ref - 1], disp)
+                        lines.append("")
+                        continue
                 lines.append(f"{pad}Brush={_fmt_prop_value(p)}")
                 lines.append("")
+                continue
+        if isinstance(p.value, ObjectRef):
+            disp = _saveable_drop(pkg, ctx, p.value.ref)
+            if disp:
+                _log_omission(ctx, e, p.name, pkg.exports[p.value.ref - 1], disp)
                 continue
         s = _fmt_prop_value(p)
         if not s:
@@ -1163,6 +1233,9 @@ def main(argv: list) -> int:
                     help="restrict --t3d to these actor class(es); repeatable")
     ap.add_argument("--t3d-clean", action="store_true",
                     help="with --t3d, drop level-binding refs for clean paste into a new level")
+    ap.add_argument("--t3d-saveable", action="store_true",
+                    help="with --t3d, omit private/regenerable source-package refs so the "
+                         "imported map can be saved; writes <map>_omissions.json/.log")
     args = ap.parse_args(argv)
 
     def _load(p):
@@ -1182,8 +1255,30 @@ def main(argv: list) -> int:
             print(f"== {path} ==\n  ERROR: {exc}\n")
             continue
         if args.t3d:
+            manifest = []
             print(to_t3d(pkg, classes=set(args.t3d_class) if args.t3d_class else None,
-                         clean=args.t3d_clean))
+                         clean=args.t3d_clean, saveable=args.t3d_saveable,
+                         manifest=manifest))
+            if args.t3d_saveable:
+                stem = os.path.splitext(os.path.basename(path))[0] + "_omissions"
+                with open(stem + ".json", "w") as fh:
+                    json.dump(manifest, fh, indent=1)
+                with open(stem + ".log", "w") as fh:
+                    fh.write(f"Omissions manifest for {path} (saveable T3D mode)\n")
+                    fh.write(f"{len(manifest)} references omitted\n\n")
+                    bycat = {}
+                    for m in manifest:
+                        bycat.setdefault(m["disposition"], []).append(m)
+                    for disp, items in sorted(bycat.items()):
+                        fh.write(f"== {disp} == ({len(items)})\n")
+                        for m in items:
+                            fh.write(f"  {m['actor_class']} {m['actor']}."
+                                     f"{m['property']} -> {m['omitted_class']}"
+                                     f"'{m['omitted']}'\n")
+                        fh.write("\n")
+                import sys as _sys
+                print(f"[saveable] {len(manifest)} omissions -> {stem}.json/.log",
+                      file=_sys.stderr)
         elif args.json:
             model = actor_model(pkg, path, actors_only=not args.all_objects)
             print(json.dumps(model, indent=2))
