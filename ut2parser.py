@@ -852,7 +852,7 @@ def _fmt_float(v: float) -> str:
     global _DEC6
     import decimal
     import math
-    if not math.isfinite(v):
+    if not math.isfinite(v) or abs(v) >= 1e15:
         return f"{v:.6f}"
     if _DEC6 is None:
         _DEC6 = decimal.Decimal("0.000001")
@@ -978,7 +978,7 @@ def _bnum(v: float) -> str:
         v = 0.0  # normalize -0.0 -> +0.0 (matches the engine's T3D output)
     import decimal
     import math
-    if not math.isfinite(v):
+    if not math.isfinite(v) or abs(v) >= 1e15:
         return f"{v:+013.6f}"
     d = decimal.Decimal(v).quantize(decimal.Decimal("0.000001"),
                                     rounding=decimal.ROUND_HALF_UP)
