@@ -34,12 +34,25 @@ stay loaded to supply its *embedded* meshes/textures (shared-asset refs like `St
 `Shader`/`Texture`, which are legitimately fine), these private refs bind cross-package and
 UnrealEd refuses to save a map that references another package's private objects.
 
-**Proposed fix (needs user go-ahead):** add a "portable/saveable" T3D mode that omits refs to
-engine-regenerated/private map-local objects (`StaticMeshInstance`, `PathList`/`UpstreamPaths`,
-the `Brush=Model` line, `Screenshot`/`Summary`/`ZoneEffect`/`AntiPortal`) while keeping
-legitimate shared-asset imports (`StaticMesh`/`Shader`/`Texture`). The engine regenerates the
-omitted objects on Build Geometry/Lighting/Paths. Trade-off: diverges from byte-identical
-(intentionally) to produce a re-importable, saveable map.
+**Fix — APPROVED by user, NOT yet implemented (immediate next task):** add a
+"portable/saveable" T3D mode that omits refs to engine-regenerated/private map-local objects
+(`StaticMeshInstance`, `PathList`/`UpstreamPaths`, the `Brush=Model` line,
+`Screenshot`/`Summary`/`ZoneEffect`/`AntiPortal`) while keeping legitimate shared-asset imports
+(`StaticMesh`/`Shader`/`Texture`). The engine regenerates the omitted objects on Build
+Geometry/Lighting/Paths. Trade-off: diverges from byte-identical (intentionally) to produce a
+re-importable, saveable map.
+
+  - **User also requested:** emit an **omissions manifest** (JSON + readable log) listing every
+    dropped reference — actor, property, omitted object + class, and a **disposition**:
+    `auto-regenerated` (StaticMeshInstance→Build Geometry, ReachSpec/PathList→Build Paths,
+    Model→CSG) vs `manual/cosmetic` (Screenshot, Summary, ZoneEffect) — so anything needing
+    manual re-placement is explicit.
+  - **Then:** re-run the UnrealEd round-trip (Import → Build Geometry → Save As) to produce the
+    actual `DM-Rankin-Replica.ut2`. NOTE the GUI save path: the long hidden-`.claude` worktree
+    path may trip UnrealEd's old file code — save to a short path like `C:\UT2004\Maps\`.
+  - **Tooling note for the round-trip:** computer-use clicks worked for menus/dialogs, but
+    modal popups occasionally needed a Win32 `BM_CLICK` (via PowerShell) to dismiss; two
+    UnrealEd instances can spawn if `open_application` is called twice — kill the extra.
 
 ## Step 8 — Map-inventory pattern analysis (DONE ✅)
 Goal-part 2: mine the 39 maps for repeatable bot-pathing / inventory patterns.
@@ -67,7 +80,12 @@ shipped with the game — not custom community content.
 
 ---
 
-## Current status: **Step 6 — brush/BSP geometry decoded ✅**
+## Component detail — Steps 1–6 (read/decode/T3D foundation)
+
+*(Live status is at the top: Step 7 replication is blocked on the `.ut2` save; Step 8 pattern
+analysis is done. The sections below document the foundation those build on.)*
+
+### Step 6 — brush/BSP geometry decoded ✅
 
 The full **read → decode → generate-T3D → engine-import** loop is proven (Step 5), and we now
 reconstruct **brush geometry** — the part CLAUDE.md flagged as "hard / not fully public".
@@ -216,12 +234,17 @@ exercises the brush pipeline end-to-end (vs. the actor-only Step-5 verification)
 
 ## Repo map
 - `Maps/` — 39 stock UT2004 DM maps (`.ut2`, binary Unreal packages).
-- `ut2parser.py` — binary reader, property decoder, JSON model, diff, T3D generator, CLI (Steps 1–6).
-- `schema_extractor.py` + `schema.json` — class schema (enum/array types) from UnrealScript (Step 6).
+- `ut2parser.py` — binary reader, property decoder, JSON model, diff, full-map T3D generator,
+  brush/BSP decoder, CLI (Steps 1–7).
+- `schema_extractor.py` + `schema.json` — class schema (enum/array/export/static types) from
+  UnrealScript (Steps 6–7).
+- `navanalysis.py` — bot-pathing / inventory pattern analysis across all maps (Step 8).
+- `NAV_PATTERNS.md` — bot-pathing & inventory findings (Step 8).
 - `import_kit/` — Step-5 UnrealEd import kit (clean T3D subsets + paste instructions).
 - `CLAUDE.md` — durable project context & format notes (in main repo root).
 - `PROGRESS.md` — this file: status + roadmap.
-- `uc_export/` — raw UnrealScript from the game (git-ignored; regenerate via `ucc batchexport`).
+- `uc_export/`, `reference_t3d/`, `out_t3d/` — git-ignored generated/derived data
+  (regenerate via `ucc batchexport` / `--t3d`; see commands below).
 
 ## How to run
 ```sh
@@ -230,8 +253,11 @@ python ut2parser.py Maps/*.ut2 --top 10            # summarize many
 python ut2parser.py Maps/DM-Gael.ut2 --actors      # placed actors w/ location+rotation
 python ut2parser.py Maps/DM-Gael.ut2 --json        # actor model as JSON
 python ut2parser.py --diff Maps/DM-Rankin.ut2 Maps/DM-Gael.ut2   # per-class delta
-python ut2parser.py Maps/DM-Rankin.ut2 --t3d > out.t3d           # generate actor T3D
+python ut2parser.py Maps/DM-Rankin.ut2 --t3d > out.t3d           # generate full-map T3D
 python ut2parser.py Maps/DM-Rankin.ut2 --t3d --t3d-class Light   # one class only
+
+python navanalysis.py Maps/*.ut2                                 # bot-path/inventory report
+python navanalysis.py Maps/*.ut2 --json                          # per-map data
 
 # Regenerate the engine reference T3D (needs the install) for diffing:
 #   cd C:\UT2004\System && ./UCC.exe batchexport DM-Rankin.ut2 Level T3D <outdir>
