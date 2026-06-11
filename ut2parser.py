@@ -1120,6 +1120,19 @@ def _saveable_drop(pkg: Package, ctx, ref: int):
     return None                           # public asset (StaticMesh/Texture/...)
 
 
+def _ref_str(pkg: Package, el: ObjectRef, ctx, inlined: bool = False) -> str:
+    """Render an object reference. In saveable mode, refs to actors we emit (or
+    sub-objects we inline) are qualified as MyLevel.<name> so the importer binds
+    the locally created object instead of the loaded source package's private
+    one (which would block saving)."""
+    if el.ref == 0:
+        return "None"
+    if ctx is not None and el.ref > 0 and (el.ref in ctx["actors"] or inlined):
+        e = pkg.exports[el.ref - 1]
+        return f"{e.class_name}'MyLevel.{e.object_name}'"
+    return el.qualified()
+
+
 def _log_omission(ctx, e: ExportEntry, prop: str, target: ExportEntry,
                   disposition: str) -> None:
     ctx["manifest"].append({
@@ -1142,6 +1155,15 @@ def _emit_props(pkg: Package, e: ExportEntry, props: list, lines: list,
             _log_omission(ctx, e, p.name, pkg.exports[p.value.ref - 1],
                           _SAVEABLE_DROP_PROPS[p.name])
             continue
+        if ctx is not None and p.name == "Region":
+            # derived zone binding (Zone=ZoneInfo'<source-pkg>...'); recomputed
+            # on Build Geometry -- dropping avoids cross-package actor refs
+            zone = p.value.get("Zone") if isinstance(p.value, dict) else None
+            tgt = pkg.exports[zone.ref - 1] if isinstance(zone, ObjectRef) \
+                and zone.ref > 0 else e
+            _log_omission(ctx, e, "Region", tgt,
+                          "auto-regenerated (zones recomputed on Build Geometry)")
+            continue
         if p.type_id == PROP_ARRAY and isinstance(p.value, list):
             # arrays declared with the 'export' modifier (e.g. Emitter.Emitters)
             # inline their Begin Object blocks first, then the array lines,
@@ -1157,7 +1179,8 @@ def _emit_props(pkg: Package, e: ExportEntry, props: list, lines: list,
                     _emit_props(pkg, se, read_properties(pkg, se), lines,
                                 indent + 4, skip, clean, ctx)
                     lines.append(f"{pad}End Object")
-                    lines.append(f"{pad}{p.name}({idx})={_fmt_element(el)}")
+                    lines.append(f"{pad}{p.name}({idx})="
+                                 f"{_ref_str(pkg, el, ctx, inlined=True)}")
                     lines.append("")
                     continue
                 if isinstance(el, ObjectRef):
@@ -1166,7 +1189,9 @@ def _emit_props(pkg: Package, e: ExportEntry, props: list, lines: list,
                         _log_omission(ctx, e, f"{p.name}({idx})",
                                       pkg.exports[el.ref - 1], disp)
                         continue
-                es = _fmt_element(el)
+                    es = "" if el.ref == 0 else _ref_str(pkg, el, ctx)
+                else:
+                    es = _fmt_element(el)
                 if es:
                     lines.append(f"{pad}{p.name}({idx})={es}")
             continue
@@ -1176,13 +1201,20 @@ def _emit_props(pkg: Package, e: ExportEntry, props: list, lines: list,
             geo = _brush_lines(pkg, e, props)
             if geo:
                 lines.extend(geo)
-                if ctx is not None and isinstance(p.value, ObjectRef):
-                    disp = _saveable_drop(pkg, ctx, p.value.ref)
-                    if disp:  # drop only the Brush= ref; keep inline polygons
-                        _log_omission(ctx, e, "Brush",
-                                      pkg.exports[p.value.ref - 1], disp)
-                        lines.append("")
-                        continue
+                if ctx is not None and isinstance(p.value, ObjectRef) \
+                        and p.value.ref > 0:
+                    # bind to the inline model in the LOCAL level package (what
+                    # UnrealEd's own copy/paste emits) instead of the source
+                    # package -- the Brush= line is what attaches the model,
+                    # so it must not be dropped (Actors(1)->Brush!=NULL assert)
+                    target = pkg.exports[p.value.ref - 1]
+                    _log_omission(ctx, e, "Brush", target,
+                                  "rewritten -> Model'MyLevel."
+                                  f"{target.object_name}' (binds inline model; "
+                                  "no action needed)")
+                    lines.append(f"{pad}Brush=Model'MyLevel.{target.object_name}'")
+                    lines.append("")
+                    continue
                 lines.append(f"{pad}Brush={_fmt_prop_value(p)}")
                 lines.append("")
                 continue
@@ -1191,7 +1223,10 @@ def _emit_props(pkg: Package, e: ExportEntry, props: list, lines: list,
             if disp:
                 _log_omission(ctx, e, p.name, pkg.exports[p.value.ref - 1], disp)
                 continue
-        s = _fmt_prop_value(p)
+            s = _ref_str(pkg, p.value, ctx) if ctx is not None \
+                else _fmt_prop_value(p)
+        else:
+            s = _fmt_prop_value(p)
         if not s:
             continue
         if p.array_index or p.name in schema().get("static_arrays", ()):

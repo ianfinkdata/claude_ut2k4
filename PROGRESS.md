@@ -4,11 +4,40 @@ A living "save state" for the project. Read this together with [CLAUDE.md](CLAUD
 which holds the durable context (goal, file-format essentials, architecture decision).
 This document tracks **where we are and what's next**.
 
-Last updated: 2026-06-10
+Last updated: 2026-06-11
 
 ---
 
-## Step 7 — Full-map replication (IN PROGRESS, blocked on final save)
+## Step 7 — Full-map replication (DONE ✅✅✅)
+
+**`replica/DM-Rankin-Replica.ut2` exists (5.7 MB), saved from UnrealEd, validated.**
+
+The full pipeline ran end-to-end: binary decode → saveable T3D → UnrealEd Import → Build All
+→ Save As. Verification:
+- **Actor diff vs original: every class count identical** except 4 transient editor Cameras
+  (deliberately skipped, as the engine's own exporter does). 1947 vs 1951 actors.
+- **Bot graph regenerated IDENTICALLY by Build AI Paths:** 207 nav nodes, **891 ReachSpecs
+  (exact original count)**, same flag mix (869 walk/172 jump/18 forced/4 special), same
+  avg/max edge distance (456/1198), same collision sizes.
+- **680 StaticMeshInstances and 555 Models regenerated** by Build Geometry/Lighting.
+- **`ucc analyzecontent DM-Rankin-Replica.ut2` → Success, 0 errors, 0 warnings.**
+- Omissions manifest shipped alongside: `replica/DM-Rankin_omissions.json/.log`
+  (4,104 entries; all `auto-regenerated` or `rewritten`, only 2 `manual/cosmetic`:
+  LevelInfo Screenshot + Summary).
+
+**Saveable-mode lessons (now encoded in `--t3d-saveable`):**
+1. RF_Public separates assets (keep: StaticMesh/Texture/Shader) from private instances
+   (drop: StaticMeshInstance/ConvexVolume; ReachSpec + Screenshot/Summary by name).
+2. The `Brush=` line must NOT be dropped (Actors(1)->Brush!=NULL assert) — rewrite it to
+   `Model'MyLevel.<name>'` so it binds the inline polygon block locally.
+3. ALL kept refs to emitted actors / inlined sub-objects must be qualified `MyLevel.<name>`
+   (the importer binds source-package-qualified names to the LOADED original — `MyLift`,
+   `Base`, `Touching` leaked this way and blocked the save).
+4. `Region=` is dropped (zones recomputed on Build Geometry).
+The replica legitimately imports the original package's PUBLIC embedded assets
+(StaticMesh/Shader/Texture/Sound) — same dependency model the community uses.
+
+### Original Step-7 record (for history)
 
 **Goal:** replicate `DM-Rankin.ut2` end-to-end through our pipeline.
 
