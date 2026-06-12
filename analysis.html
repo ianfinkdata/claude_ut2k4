@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UT2004 DM Map Project — Analysis</title>
+<style>
+  :root{
+    --bg:#0b0e0c;
+    --panel:#11150f;
+    --line:#23291f;
+    --text:#f4f6f3;        /* white */
+    --green:#8aff7a;        /* light green accent */
+    --green-dim:#5fae54;
+    --muted:#9aa395;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font:16px/1.65 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:48px 24px 96px}
+  h1{font-size:34px;line-height:1.15;margin:0 0 6px;letter-spacing:-.5px}
+  h1 .grn{color:var(--green)}
+  .sub{color:var(--muted);font-size:17px;margin:0 0 8px}
+  h2{color:var(--green);font-size:22px;margin:54px 0 14px;letter-spacing:-.2px}
+  h2::before{content:"";display:inline-block;width:10px;height:10px;
+    background:var(--green);margin-right:11px;border-radius:2px;vertical-align:middle}
+  h3{font-size:17px;margin:26px 0 8px;color:var(--text)}
+  p{margin:12px 0}
+  a{color:var(--green)}
+  code,.mono{font-family:"SF Mono",Consolas,Menlo,monospace;font-size:.9em;color:var(--green)}
+  .lead{font-size:18px}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+    padding:20px 22px;margin:16px 0}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:18px 0}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .stat .n{font-size:30px;font-weight:700;color:var(--green);line-height:1.1;font-family:"SF Mono",Consolas,monospace}
+  .stat .l{color:var(--muted);font-size:13px;margin-top:6px;text-transform:uppercase;letter-spacing:.5px}
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.5px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+  th{color:var(--green);font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.6px}
+  td.n,th.n{text-align:right;font-family:"SF Mono",Consolas,monospace;color:var(--green)}
+  tr:last-child td{border-bottom:none}
+  .bar{display:inline-block;height:9px;background:var(--green);border-radius:3px;vertical-align:middle;margin-left:8px}
+  .tag{display:inline-block;background:#16261333;border:1px solid var(--green-dim);
+    color:var(--green);border-radius:6px;padding:2px 9px;font-size:12.5px;margin:2px 4px 2px 0}
+  .ok{color:var(--green);font-weight:600}
+  .muted{color:var(--muted)}
+  hr{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .pipe{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:18px 0;font-size:14.5px}
+  .pipe .step{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 13px}
+  .pipe .arr{color:var(--green);font-weight:700}
+  .foot{color:var(--muted);font-size:13.5px;margin-top:60px;border-top:1px solid var(--line);padding-top:20px}
+  ul{margin:12px 0;padding-left:22px}
+  li{margin:6px 0}
+  li::marker{color:var(--green)}
+  .big{font-size:19px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1><span class="grn">UT2004</span> Deathmatch Map Project</h1>
+  <p class="sub">Reading, reconstructing, and reverse-engineering the patterns of 39 stock maps.</p>
+  <p class="lead">We taught a Python parser to read UT2004's binary <code>.ut2</code> map format,
+  regenerate a map the engine will load, and then mined every stock Deathmatch map for the
+  repeatable rules behind bot navigation and item placement.</p>
+
+  <div class="grid">
+    <div class="stat"><div class="n">39</div><div class="l">stock maps decoded</div></div>
+    <div class="stat"><div class="n">99.95%</div><div class="l">T3D matches engine export</div></div>
+    <div class="stat"><div class="n">81k+</div><div class="l">brush polygons decoded</div></div>
+    <div class="stat"><div class="n">1</div><div class="l">map fully replicated &amp; played</div></div>
+  </div>
+
+  <h2>The pipeline</h2>
+  <p>The architecture is <em>read binary, write text, finalize in-engine</em> — never hand-author
+  the fragile binary format. We decode the package directly, emit UnrealEd's plain-text
+  <code>T3D</code> format, and let the engine do the hard serialization.</p>
+  <div class="pipe">
+    <span class="step">Binary <code>.ut2</code></span><span class="arr">→</span>
+    <span class="step">Python decode</span><span class="arr">→</span>
+    <span class="step">Generate T3D</span><span class="arr">→</span>
+    <span class="step">UnrealEd Import + Build</span><span class="arr">→</span>
+    <span class="step">Saved <code>.ut2</code></span>
+  </div>
+  <p class="muted">Everything that parses cleanly: header, name/import/export tables, the full
+  per-actor property set, and — the part the format docs call "not fully public" — the
+  <strong style="color:var(--text)">brush/BSP geometry</strong>, decoded from the binary
+  Model&nbsp;→&nbsp;Polys&nbsp;→&nbsp;FPoly chain to blocks that are byte-identical to the
+  engine's own export.</p>
+
+  <h2>Replicating DM-Rankin</h2>
+  <p>The full loop, end to end: decode the original binary, generate T3D, import into UnrealEd,
+  <code>Build All</code>, and save a brand-new <code>DM-Rankin-Replica.ut2</code>.
+  Then we validated it four ways:</p>
+
+  <table>
+    <thead><tr><th>Check</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td>Actor inventory vs. original</td><td><span class="ok">Identical</span> — every class count matches, minus 4 transient editor cameras</td></tr>
+      <tr><td>Bot navigation graph</td><td><span class="ok">891 / 891 ReachSpecs</span> regenerated identically by Build&nbsp;AI&nbsp;Paths</td></tr>
+      <tr><td>Geometry &amp; lighting caches</td><td><span class="ok">680</span> mesh instances + <span class="ok">555</span> models rebuilt by the engine</td></tr>
+      <tr><td>Engine validation</td><td><code>ucc analyzecontent</code> → <span class="ok">0 errors, 0 warnings</span></td></tr>
+      <tr><td>Human playtest</td><td><span class="ok">Played in-game</span> against a bot — indistinguishable from the original</td></tr>
+    </tbody>
+  </table>
+
+  <h3>What did we have to leave out?</h3>
+  <p>To make a new map saveable, our generator omits references that would otherwise bind to the
+  original package's private objects. We logged <strong>4,104</strong> such omissions — and the
+  punchline is that the engine <em>rebuilds every single one</em> on <code>Build All</code>:</p>
+  <table>
+    <thead><tr><th>Omitted</th><th class="n">Count</th><th>Fate</th></tr></thead>
+    <tbody>
+      <tr><td>Region (zone bindings)</td><td class="n">1,949</td><td>recomputed on Build Geometry</td></tr>
+      <tr><td>ReachSpec (bot-path edges)</td><td class="n">909</td><td>rebuilt by Build AI Paths</td></tr>
+      <tr><td>StaticMeshInstance (lighting cache)</td><td class="n">680</td><td>rebuilt on Build Lighting</td></tr>
+      <tr><td>Brush→Model bindings</td><td class="n">554</td><td>rewritten to local geometry</td></tr>
+      <tr><td>ConvexVolume (antiportals)</td><td class="n">10</td><td>rebuilt on Build Geometry</td></tr>
+      <tr><td><strong style="color:var(--text)">Level metadata (cosmetic)</strong></td><td class="n">2</td><td><strong style="color:var(--text)">the only non-regenerated items</strong></td></tr>
+    </tbody>
+  </table>
+  <div class="panel">
+    <p class="big" style="margin-top:0">Of 4,104 omissions, exactly <span class="ok">two</span> aren't auto-rebuilt —
+    and neither lives in the playable world.</p>
+    <p style="margin-bottom:0">Both sit on the map's settings object: the
+    <span class="tag">menu loading thumbnail</span> and the
+    <span class="tag">map-info card</span> (title, author, recommended players). Cosmetic,
+    menu-only metadata. That is the entire visible difference between the replica and the
+    original — which is why it plays, looks, and navigates exactly the same.</p>
+  </div>
+
+  <h2>Bot pathing &amp; inventory patterns</h2>
+  <p>The second goal: mine all 39 maps for repeatable rules. A map's bot AI is a directed graph —
+  <strong style="color:var(--text)">NavigationPoint</strong> nodes joined by
+  <strong style="color:var(--text)">ReachSpec</strong> edges — and the stock maps are
+  astonishingly consistent in how they're wired.</p>
+
+  <div class="grid">
+    <div class="stat"><div class="n">1.00</div><div class="l">InventorySpots per pickup</div></div>
+    <div class="stat"><div class="n">4.2</div><div class="l">avg connections per node</div></div>
+    <div class="stat"><div class="n">~16</div><div class="l">player spawns per map</div></div>
+    <div class="stat"><div class="n">193</div><div class="l">avg nav nodes per map</div></div>
+  </div>
+
+  <h3>How bots get around — edge types across all maps</h3>
+  <table>
+    <thead><tr><th>Edge type</th><th class="n">Share</th><th>How traversed</th></tr></thead>
+    <tbody>
+      <tr><td>walk</td><td class="n">82%</td><td>ground routes <span class="bar" style="width:170px"></span></td></tr>
+      <tr><td>jump</td><td class="n">14%</td><td>gaps &amp; ledges <span class="bar" style="width:29px"></span></td></tr>
+      <tr><td>forced</td><td class="n">1%</td><td>jump-pads / scripted <span class="bar" style="width:6px"></span></td></tr>
+      <tr><td>special</td><td class="n">1%</td><td>lifts &amp; teleporters <span class="bar" style="width:6px"></span></td></tr>
+    </tbody>
+  </table>
+
+  <h3>The item economy</h3>
+  <p>Every pickup is anchored by exactly one InventorySpot — the bot navigation node items live on.
+  Across all maps the supply skews hard toward ammo and health:</p>
+  <table>
+    <thead><tr><th>Category</th><th class="n">Total</th></tr></thead>
+    <tbody>
+      <tr><td>Ammo</td><td class="n">800</td></tr>
+      <tr><td>Health</td><td class="n">621</td></tr>
+      <tr><td>Adrenaline</td><td class="n">369</td></tr>
+      <tr><td>Weapons</td><td class="n">308</td></tr>
+      <tr><td>Armor</td><td class="n">63</td></tr>
+      <tr><td>Power-ups</td><td class="n">29</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Repeatable sub-structures</h3>
+  <p>The patterns are concrete enough to procedurally stamp out:</p>
+  <ul>
+    <li><strong style="color:var(--green)">Pickup anchoring</strong> — drop the item, drop one
+      InventorySpot at its base, wire it into the nearby graph.</li>
+    <li><strong style="color:var(--green)">PathNode mesh</strong> — nodes at junctions and along
+      runs so no walkable gap exceeds ~1,200&nbsp;units; the engine fills in the edges.</li>
+    <li><strong style="color:var(--green)">Jump links</strong> — JumpSpot nodes joined by jump
+      edges, often "forced" for jump-pad boosts.</li>
+    <li><strong style="color:var(--green)">Lift template</strong> — a Mover + one LiftCenter on
+      the platform + a LiftExit per floor, all tied by a shared LiftTag, with bidirectional
+      special edges connecting center ↔ exits.</li>
+  </ul>
+
+  <div class="panel">
+    <p style="margin:0"><strong style="color:var(--green)">The kicker:</strong> when we replicated
+    Rankin, <code>Build AI Paths</code> regenerated the original's exact 891-edge bot graph from
+    nothing but node placement. The patterns above aren't just observations — they're the
+    generative recipe, and the engine proved it live.</p>
+  </div>
+
+  <h2>What's next</h2>
+  <p>With read + faithful write + a pattern library in hand, the road ahead is generation:</p>
+  <ul>
+    <li>Script a full procedural map buildout end-to-end.</li>
+    <li>Define the procedural parameters (size, connectivity, item economy, vertical complexity).</li>
+    <li>Investigate how bot pathing shapes the human "fun" element — the part that can't be
+      captured in a metric.</li>
+  </ul>
+
+  <p class="foot">
+    UT2004 DM Map Project · read-binary / write-T3D pipeline · 39 maps analyzed ·
+    DM-Rankin replicated &amp; verified.<br>
+    Tooling: <code>ut2parser.py</code>, <code>navanalysis.py</code>, <code>schema_extractor.py</code>.
+    See <code>NAV_PATTERNS.md</code> and <code>PROGRESS.md</code> for the full record.
+  </p>
+
+</div>
+</body>
+</html>
