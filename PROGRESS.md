@@ -94,7 +94,7 @@ Goal-part 2: mine the 39 maps for repeatable bot-pathing / inventory patterns.
   by LiftTag, bidirectional R_SPECIAL edges). The engine rebuilds ReachSpecs via Build AI Paths
   — which is why omitting them from our T3D (Step 7 fix) is safe.
 
-## Step 9 — Procedural test-map skeleton (in progress — v1 and v2 paste attempts both crashed UnrealEd; v3 diagnostic kit awaiting test)
+## Step 9 — Procedural test-map skeleton (paste confirmed working — proceeding to Build Geometry/Lighting/Paths)
 First **from-scratch** generation (not decoded from a stock map): `gen_testmap.py` emits a
 paste-ready T3D — one `CSG_Subtract` room shell, a `CSG_Add` centre platform, 5 ceiling
 `Light`s, 4 `PlayerStart`s, 4 `PathNode`s, and 4 pickup/`InventorySpot` pairs (health, ammo,
@@ -116,25 +116,19 @@ stock map places weapons this way.
 (confirmed via DM-Rankin's `xWeaponBase1`). Its `InventorySpot` links back via
 `myPickupBase` instead of `markedItem`.
 
-**v2 pasted -> the IDENTICAL GPF recurred**, byte-for-byte same history string. Since
-swapping the weapon actor class didn't change the outcome, the cause is no longer assumed
-to be the weapon pickup specifically. Two open hypotheses:
-1. Another pasted actor's class defaults still reference a skeletal mesh (e.g.
-   `xWeaponBase`'s default `Mesh` regardless of `StaticMesh`, or one of the
-   `*Pickup`/`InventorySpot` classes).
-2. A general UnrealEd-on-this-hardware redraw issue (reporter's setup: Windows NT 6.2/
-   Windows 8, Intel UHD Graphics device 9168 — a known-flaky combo with this engine's 2004
-   skeletal-mesh renderer), independent of pasted content.
+**v2 was initially reported to crash identically**, which prompted a diagnostic
+`--minimal` variant of `gen_testmap.py` (`import_kit/TestMap-Skeleton-Minimal.t3d` — same
+brushes/lights/`PlayerStart`s/`PathNode`s, but zero pickups/`InventorySpot`s/weapon
+charger, 15 actors vs. 23) for staged repro testing.
 
-**Diagnostic added (v3, awaiting test):** `gen_testmap.py --minimal` emits
-`import_kit/TestMap-Skeleton-Minimal.t3d` — the same room/platform brushes, 5 lights, 4
-`PlayerStart`s and 4 `PathNode`s, but **zero** pickups/`InventorySpot`s/weapon charger (15
-actors vs. 23). `TestMap-Skeleton-README.md` now has a "Known issue" section with staged
-repro steps: (1) confirm a brand-new blank level redraws without a GPF at all (rules
-hypothesis 2 in/out), then (2) paste the minimal kit and confirm it pastes/redraws cleanly
-(isolates hypothesis 1 to the pickup/weapon actors, to be re-added one category at a time).
-**Next step:** run both diagnostic steps, report which (if any) reproduces the GPF, then
-apply the v3 fix accordingly.
+**Resolution (confirmed):** re-testing in UnrealEd, **both**
+`TestMap-Skeleton-Minimal.t3d` (15 actors) **and** the full `TestMap-Skeleton.t3d` (23
+actors, including the v2 `xWeaponBase` charger) **paste and redraw with no GPF**. The v2
+fix is confirmed correct; the second crash report did not reproduce. Tracked in issue #7
+(closed). The `--minimal` variant is kept as a reusable diagnostic tool for any future
+paste-crash triage. **Next step:** Build Geometry -> Build Lighting -> Build Paths -> Play,
+per the verification checklist in `TestMap-Skeleton-README.md` (same as Step 5/7 validated
+the decode-side T3D).
 
 ---
 
