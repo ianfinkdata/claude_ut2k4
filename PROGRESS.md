@@ -94,6 +94,18 @@ Goal-part 2: mine the 39 maps for repeatable bot-pathing / inventory patterns.
   by LiftTag, bidirectional R_SPECIAL edges). The engine rebuilds ReachSpecs via Build AI Paths
   — which is why omitting them from our T3D (Step 7 fix) is safe.
 
+## Step 9 — Procedural test-map skeleton (NEW, awaiting UnrealEd verification)
+First **from-scratch** generation (not decoded from a stock map): `gen_testmap.py` emits a
+paste-ready T3D — one `CSG_Subtract` room shell, a `CSG_Add` centre platform, 5 ceiling
+`Light`s, 4 `PlayerStart`s, 4 `PathNode`s, and 4 pickup/`InventorySpot` pairs (health, ammo,
+adrenaline, weapon) following the Step-8 anchoring rules. Output:
+`import_kit/TestMap-Skeleton.t3d` + `import_kit/TestMap-Skeleton-README.md` (import/build/
+verification steps). The box-brush polygon template (face order, normals, winding, texture
+axes) was reverse-engineered from two real working brushes (DM-Gael Brush9, DM-Rankin
+Brush340) and confirmed identical for `CSG_Add`/`CSG_Subtract`. **Not yet run through
+UnrealEd** — next step is Build Geometry/Lighting/Paths + Play to validate the skeleton, the
+same way Step 5/7 validated the decode-side T3D.
+
 ---
 
 ## The goal (recap)
@@ -269,7 +281,9 @@ exercises the brush pipeline end-to-end (vs. the actor-only Step-5 verification)
   UnrealScript (Steps 6–7).
 - `navanalysis.py` — bot-pathing / inventory pattern analysis across all maps (Step 8).
 - `NAV_PATTERNS.md` — bot-pathing & inventory findings (Step 8).
-- `import_kit/` — Step-5 UnrealEd import kit (clean T3D subsets + paste instructions).
+- `gen_testmap.py` — from-scratch procedural test-map T3D generator (Step 9).
+- `import_kit/` — Step-5 UnrealEd import kit (clean T3D subsets + paste instructions), plus
+  the Step-9 procedural skeleton (`TestMap-Skeleton.t3d` + README).
 - `CLAUDE.md` — durable project context & format notes (in main repo root).
 - `PROGRESS.md` — this file: status + roadmap.
 - `uc_export/`, `reference_t3d/`, `out_t3d/` — git-ignored generated/derived data
