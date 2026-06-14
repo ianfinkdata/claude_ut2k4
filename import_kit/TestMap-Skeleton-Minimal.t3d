@@ -209,47 +209,4 @@ Begin Actor Class=PathNode Name=PathNode3
     Tag="PathNode"
     Location=(X=-650.000000,Z=16.000000)
 End Actor
-Begin Actor Class=MiniHealthPack Name=MiniHealthPack0
-    Tag="MiniHealthPack"
-    myMarker=InventorySpot'MyLevel.InventorySpot0'
-    Location=(Y=300.000000,Z=16.000000)
-End Actor
-Begin Actor Class=InventorySpot Name=InventorySpot0
-    Tag="InventorySpot"
-    markedItem=MiniHealthPack'MyLevel.MiniHealthPack0'
-    Location=(Y=300.000000)
-End Actor
-Begin Actor Class=ShockAmmoPickup Name=ShockAmmoPickup0
-    Tag="ShockAmmoPickup"
-    myMarker=InventorySpot'MyLevel.InventorySpot1'
-    Location=(Y=-300.000000,Z=16.000000)
-End Actor
-Begin Actor Class=InventorySpot Name=InventorySpot1
-    Tag="InventorySpot"
-    markedItem=ShockAmmoPickup'MyLevel.ShockAmmoPickup0'
-    Location=(Y=-300.000000)
-End Actor
-Begin Actor Class=AdrenalinePickup Name=AdrenalinePickup0
-    Tag="AdrenalinePickup"
-    myMarker=InventorySpot'MyLevel.InventorySpot2'
-    Location=(X=-300.000000,Z=16.000000)
-End Actor
-Begin Actor Class=InventorySpot Name=InventorySpot2
-    Tag="InventorySpot"
-    markedItem=AdrenalinePickup'MyLevel.AdrenalinePickup0'
-    Location=(X=-300.000000)
-End Actor
-Begin Actor Class=xWeaponBase Name=xWeaponBase0
-    WeaponType=Class'XWeapons.ShockRifle'
-    myMarker=InventorySpot'MyLevel.InventorySpot3'
-    StaticMesh=StaticMesh'2k4ChargerMeshes.ChargerMeshes.WeaponChargerMesh-DS'
-    Tag="xWeaponBase"
-    Location=(X=300.000000,Z=16.000000)
-    PrePivot=(Z=3.700000)
-End Actor
-Begin Actor Class=InventorySpot Name=InventorySpot3
-    Tag="InventorySpot"
-    myPickupBase=xWeaponBase'MyLevel.xWeaponBase0'
-    Location=(X=300.000000)
-End Actor
 End Map

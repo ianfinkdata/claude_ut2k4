@@ -19,7 +19,7 @@ A single square room, 1536x1536x384uu (floor at Z=0, ceiling at Z=384), plus:
 | `MiniHealthPack` + `InventorySpot` | 1 pair | Health |
 | `ShockAmmoPickup` + `InventorySpot` | 1 pair | Ammo |
 | `AdrenalinePickup` + `InventorySpot` | 1 pair | Adrenaline |
-| `ShockRifle` + `InventorySpot` | 1 pair | Weapon |
+| `xWeaponBase` + `InventorySpot` | 1 pair | Weapon (ShockRifle charger) |
 
 Each pickup has its own `InventorySpot` floor-anchored ~16uu below it
 (the 1:1 pickup<->InventorySpot rule from `NAV_PATTERNS.md`). All
@@ -27,8 +27,43 @@ brush/pickup-to-spot cross references use `MyLevel.<Name>` qualification —
 the convention an unsaved level's package uses (see PROGRESS.md Step 7
 lessons).
 
+The weapon is placed as an `xWeaponBase` "charger" (`StaticMesh`-driven,
+`WeaponType=Class'XWeapons.ShockRifle'`) — the same pattern every stock DM map
+uses, and the `InventorySpot` links back via `myPickupBase` (not
+`markedItem`, which is for plain `Pickup` subclasses). **Do not** place a bare
+`Weapon` subclass (e.g. `ShockRifle`) directly: its skeletal view-mesh crashes
+UnrealEd's viewport renderer (`USkeletalMeshInstance::Render` GPF) when
+rendered outside of normal pawn-spawn initialization — this was caught when
+v1 of this kit was pasted into UnrealEd.
+
 No `Texture=` is set on any brush face, so surfaces come in with the default
 checker texture — easy to spot and to retexture by hand afterwards.
+
+## Resolved issue: GPF on paste (`USkeletalMeshInstance::Render`)
+
+v1 (bare `ShockRifle`) crashed UnrealEd with the following signature
+immediately after **Edit -> Paste**:
+
+```
+General protection fault!
+History: USkeletalMeshInstance::Render <- FDynamicActor::Render <- RenderLevel
+<- myLevel.myLevel <- FLevelSceneNode::Render <- FPlayerSceneNode::Render
+<- UUnrealEdEngine::Draw <- ... <- UWindowsViewport::Repaint
+<- UEditorEngine::RedrawLevel <- UUnrealEdEngine::Exec_Edit <- ... <- MainLoop
+```
+
+The v2 fix (switching the weapon pickup to a `StaticMesh`-driven
+`xWeaponBase` charger, described above) was initially re-reported as
+crashing identically, which prompted the `TestMap-Skeleton-Minimal.t3d`
+diagnostic variant below (room/platform brushes + lights + `PlayerStart`s +
+`PathNode`s only — 15 actors, no pickups/weapon/`InventorySpot`s).
+
+**Confirmed fixed**: re-testing in UnrealEd, both the minimal kit (15 actors)
+and the full v2 kit (23 actors, `TestMap-Skeleton.t3d`) paste and redraw with
+no GPF. The second crash report did not reproduce; the v2 `xWeaponBase`
+charger pattern is correct. Tracked in issue #7 (closed).
+`TestMap-Skeleton-Minimal.t3d` is kept as a reusable diagnostic kit for any
+future paste-crash triage — see "Regenerate / customize" below.
 
 ## Import steps
 
@@ -54,7 +89,8 @@ Run these from the **Build** menu (or **Build All**), in order:
 
 ## Verification checklist
 
-- [ ] **Paste**: 23 actors, no red error lines.
+- [x] **Paste**: 23 actors, no red error lines (confirmed -- see "Resolved
+      issue" above).
 - [ ] **Build Geometry**: room is hollow (walk inside it in a 3D viewport);
       the centre platform is a solid 256x256x64 box you can walk onto.
 - [ ] **Build Lighting**: room is lit (not pitch black) after the bake.
@@ -73,11 +109,14 @@ Run these from the **Build** menu (or **Build All**), in order:
 ```sh
 python3 gen_testmap.py -o import_kit/TestMap-Skeleton.t3d
 python3 gen_testmap.py --room-xy 1024 --room-h 512 -o import_kit/TestMap-Skeleton.t3d
+python3 gen_testmap.py --minimal -o import_kit/TestMap-Skeleton-Minimal.t3d
 ```
 
 `--room-xy` is the room's half-extent on X/Y (default 768 -> 1536x1536);
 `--room-h` is its height (default 384). Everything else (platform, lights,
 spawns, pickups, path nodes) scales/repositions relative to the room size.
+`--minimal` drops the pickups/`InventorySpot`s/weapon charger entirely (see
+"Resolved issue" above) -- 15 actors instead of 23.
 
 ## What this does NOT cover yet
 

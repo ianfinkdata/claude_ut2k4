@@ -94,7 +94,7 @@ Goal-part 2: mine the 39 maps for repeatable bot-pathing / inventory patterns.
   by LiftTag, bidirectional R_SPECIAL edges). The engine rebuilds ReachSpecs via Build AI Paths
   — which is why omitting them from our T3D (Step 7 fix) is safe.
 
-## Step 9 — Procedural test-map skeleton (NEW, awaiting UnrealEd verification)
+## Step 9 — Procedural test-map skeleton (paste confirmed working — proceeding to Build Geometry/Lighting/Paths)
 First **from-scratch** generation (not decoded from a stock map): `gen_testmap.py` emits a
 paste-ready T3D — one `CSG_Subtract` room shell, a `CSG_Add` centre platform, 5 ceiling
 `Light`s, 4 `PlayerStart`s, 4 `PathNode`s, and 4 pickup/`InventorySpot` pairs (health, ammo,
@@ -102,9 +102,33 @@ adrenaline, weapon) following the Step-8 anchoring rules. Output:
 `import_kit/TestMap-Skeleton.t3d` + `import_kit/TestMap-Skeleton-README.md` (import/build/
 verification steps). The box-brush polygon template (face order, normals, winding, texture
 axes) was reverse-engineered from two real working brushes (DM-Gael Brush9, DM-Rankin
-Brush340) and confirmed identical for `CSG_Add`/`CSG_Subtract`. **Not yet run through
-UnrealEd** — next step is Build Geometry/Lighting/Paths + Play to validate the skeleton, the
-same way Step 5/7 validated the decode-side T3D.
+Brush340) and confirmed identical for `CSG_Add`/`CSG_Subtract`.
+
+**v1 pasted into UnrealEd -> immediate GPF** (`USkeletalMeshInstance::Render <-
+FDynamicActor::Render <- RenderLevel`). Root cause: v1 placed the weapon pickup as a bare
+`Begin Actor Class=ShockRifle` (a `Weapon`, which carries a skeletal view-mesh) — rendering
+that mesh in the editor viewport outside normal pawn-spawn init crashes the renderer. No
+stock map places weapons this way.
+
+**Fix (v2):** weapon pickup is now an `xWeaponBase` "charger"
+(`StaticMesh'2k4ChargerMeshes.ChargerMeshes.WeaponChargerMesh-DS'`,
+`WeaponType=Class'XWeapons.ShockRifle'`) — the pattern every stock DM map actually uses
+(confirmed via DM-Rankin's `xWeaponBase1`). Its `InventorySpot` links back via
+`myPickupBase` instead of `markedItem`.
+
+**v2 was initially reported to crash identically**, which prompted a diagnostic
+`--minimal` variant of `gen_testmap.py` (`import_kit/TestMap-Skeleton-Minimal.t3d` — same
+brushes/lights/`PlayerStart`s/`PathNode`s, but zero pickups/`InventorySpot`s/weapon
+charger, 15 actors vs. 23) for staged repro testing.
+
+**Resolution (confirmed):** re-testing in UnrealEd, **both**
+`TestMap-Skeleton-Minimal.t3d` (15 actors) **and** the full `TestMap-Skeleton.t3d` (23
+actors, including the v2 `xWeaponBase` charger) **paste and redraw with no GPF**. The v2
+fix is confirmed correct; the second crash report did not reproduce. Tracked in issue #7
+(closed). The `--minimal` variant is kept as a reusable diagnostic tool for any future
+paste-crash triage. **Next step:** Build Geometry -> Build Lighting -> Build Paths -> Play,
+per the verification checklist in `TestMap-Skeleton-README.md` (same as Step 5/7 validated
+the decode-side T3D).
 
 ---
 
@@ -283,7 +307,8 @@ exercises the brush pipeline end-to-end (vs. the actor-only Step-5 verification)
 - `NAV_PATTERNS.md` — bot-pathing & inventory findings (Step 8).
 - `gen_testmap.py` — from-scratch procedural test-map T3D generator (Step 9).
 - `import_kit/` — Step-5 UnrealEd import kit (clean T3D subsets + paste instructions), plus
-  the Step-9 procedural skeleton (`TestMap-Skeleton.t3d` + README).
+  the Step-9 procedural skeleton (`TestMap-Skeleton.t3d`, `TestMap-Skeleton-Minimal.t3d`
+  diagnostic variant, + README).
 - `CLAUDE.md` — durable project context & format notes (in main repo root).
 - `PROGRESS.md` — this file: status + roadmap.
 - `uc_export/`, `reference_t3d/`, `out_t3d/` — git-ignored generated/derived data
