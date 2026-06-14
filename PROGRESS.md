@@ -94,7 +94,7 @@ Goal-part 2: mine the 39 maps for repeatable bot-pathing / inventory patterns.
   by LiftTag, bidirectional R_SPECIAL edges). The engine rebuilds ReachSpecs via Build AI Paths
   — which is why omitting them from our T3D (Step 7 fix) is safe.
 
-## Step 9 — Procedural test-map skeleton (NEW, awaiting UnrealEd verification)
+## Step 9 — Procedural test-map skeleton (in progress — first paste attempt crashed UnrealEd)
 First **from-scratch** generation (not decoded from a stock map): `gen_testmap.py` emits a
 paste-ready T3D — one `CSG_Subtract` room shell, a `CSG_Add` centre platform, 5 ceiling
 `Light`s, 4 `PlayerStart`s, 4 `PathNode`s, and 4 pickup/`InventorySpot` pairs (health, ammo,
@@ -102,9 +102,20 @@ adrenaline, weapon) following the Step-8 anchoring rules. Output:
 `import_kit/TestMap-Skeleton.t3d` + `import_kit/TestMap-Skeleton-README.md` (import/build/
 verification steps). The box-brush polygon template (face order, normals, winding, texture
 axes) was reverse-engineered from two real working brushes (DM-Gael Brush9, DM-Rankin
-Brush340) and confirmed identical for `CSG_Add`/`CSG_Subtract`. **Not yet run through
-UnrealEd** — next step is Build Geometry/Lighting/Paths + Play to validate the skeleton, the
-same way Step 5/7 validated the decode-side T3D.
+Brush340) and confirmed identical for `CSG_Add`/`CSG_Subtract`.
+
+**v1 pasted into UnrealEd -> immediate GPF** (`USkeletalMeshInstance::Render <-
+FDynamicActor::Render <- RenderLevel`). Root cause: v1 placed the weapon pickup as a bare
+`Begin Actor Class=ShockRifle` (a `Weapon`, which carries a skeletal view-mesh) — rendering
+that mesh in the editor viewport outside normal pawn-spawn init crashes the renderer. No
+stock map places weapons this way.
+
+**Fix (v2, applied, awaiting re-test):** weapon pickup is now an `xWeaponBase` "charger"
+(`StaticMesh'2k4ChargerMeshes.ChargerMeshes.WeaponChargerMesh-DS'`,
+`WeaponType=Class'XWeapons.ShockRifle'`) — the pattern every stock DM map actually uses
+(confirmed via DM-Rankin's `xWeaponBase1`). Its `InventorySpot` links back via
+`myPickupBase` instead of `markedItem`. **Next step:** re-paste v2, confirm no crash, then
+Build Geometry/Lighting/Paths + Play, same as Step 5/7 validated the decode-side T3D.
 
 ---
 

@@ -19,13 +19,22 @@ A single square room, 1536x1536x384uu (floor at Z=0, ceiling at Z=384), plus:
 | `MiniHealthPack` + `InventorySpot` | 1 pair | Health |
 | `ShockAmmoPickup` + `InventorySpot` | 1 pair | Ammo |
 | `AdrenalinePickup` + `InventorySpot` | 1 pair | Adrenaline |
-| `ShockRifle` + `InventorySpot` | 1 pair | Weapon |
+| `xWeaponBase` + `InventorySpot` | 1 pair | Weapon (ShockRifle charger) |
 
 Each pickup has its own `InventorySpot` floor-anchored ~16uu below it
 (the 1:1 pickup<->InventorySpot rule from `NAV_PATTERNS.md`). All
 brush/pickup-to-spot cross references use `MyLevel.<Name>` qualification —
 the convention an unsaved level's package uses (see PROGRESS.md Step 7
 lessons).
+
+The weapon is placed as an `xWeaponBase` "charger" (`StaticMesh`-driven,
+`WeaponType=Class'XWeapons.ShockRifle'`) — the same pattern every stock DM map
+uses, and the `InventorySpot` links back via `myPickupBase` (not
+`markedItem`, which is for plain `Pickup` subclasses). **Do not** place a bare
+`Weapon` subclass (e.g. `ShockRifle`) directly: its skeletal view-mesh crashes
+UnrealEd's viewport renderer (`USkeletalMeshInstance::Render` GPF) when
+rendered outside of normal pawn-spawn initialization — this was caught when
+v1 of this kit was pasted into UnrealEd.
 
 No `Texture=` is set on any brush face, so surfaces come in with the default
 checker texture — easy to spot and to retexture by hand afterwards.

@@ -239,14 +239,17 @@ Begin Actor Class=InventorySpot Name=InventorySpot2
     markedItem=AdrenalinePickup'MyLevel.AdrenalinePickup0'
     Location=(X=-300.000000)
 End Actor
-Begin Actor Class=ShockRifle Name=ShockRifle0
-    Tag="ShockRifle"
+Begin Actor Class=xWeaponBase Name=xWeaponBase0
+    WeaponType=Class'XWeapons.ShockRifle'
     myMarker=InventorySpot'MyLevel.InventorySpot3'
+    StaticMesh=StaticMesh'2k4ChargerMeshes.ChargerMeshes.WeaponChargerMesh-DS'
+    Tag="xWeaponBase"
     Location=(X=300.000000,Z=16.000000)
+    PrePivot=(Z=3.700000)
 End Actor
 Begin Actor Class=InventorySpot Name=InventorySpot3
     Tag="InventorySpot"
-    markedItem=ShockRifle'MyLevel.ShockRifle0'
+    myPickupBase=xWeaponBase'MyLevel.xWeaponBase0'
     Location=(X=300.000000)
 End Actor
 End Map

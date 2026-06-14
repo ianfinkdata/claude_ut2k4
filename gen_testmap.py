@@ -174,11 +174,32 @@ def pickup_actor(cls: str, name: str, location, marker_name: str) -> list:
     ]
 
 
-def inventory_spot_actor(name: str, location, item_cls: str, item_name: str) -> list:
+def weapon_charger_actor(name: str, weapon_class: str, location, marker_name: str,
+                          static_mesh: str = "2k4ChargerMeshes.ChargerMeshes.WeaponChargerMesh-DS",
+                          pre_pivot_z: float = 3.7) -> list:
+    """xWeaponBase 'weapon charger' pickup -- the stock-map pattern for placing
+    a weapon (StaticMesh-driven). A bare Weapon-class actor (e.g. ShockRifle)
+    has a skeletal view-mesh that crashes UnrealEd's editor-viewport renderer
+    (USkeletalMeshInstance::Render GPF) when placed directly, so we always use
+    the charger wrapper instead."""
+    return [
+        f"Begin Actor Class=xWeaponBase Name={name}",
+        f"    WeaponType=Class'{weapon_class}'",
+        f"    myMarker=InventorySpot'MyLevel.{marker_name}'",
+        f"    StaticMesh=StaticMesh'{static_mesh}'",
+        '    Tag="xWeaponBase"',
+        f"    Location={fmt_vec(*location)}",
+        f"    PrePivot={fmt_vec(0.0, 0.0, pre_pivot_z)}",
+        "End Actor",
+    ]
+
+
+def inventory_spot_actor(name: str, location, item_cls: str, item_name: str,
+                          link_prop: str = "markedItem") -> list:
     return [
         f"Begin Actor Class=InventorySpot Name={name}",
         '    Tag="InventorySpot"',
-        f"    markedItem={item_cls}'MyLevel.{item_name}'",
+        f"    {link_prop}={item_cls}'MyLevel.{item_name}'",
         f"    Location={fmt_vec(*location)}",
         "End Actor",
     ]
@@ -228,13 +249,20 @@ def build_map(room_xy: float = 768.0, room_h: float = 384.0) -> list:
         ("MiniHealthPack", (0, 300)),
         ("ShockAmmoPickup", (0, -300)),
         ("AdrenalinePickup", (-300, 0)),
-        ("ShockRifle", (300, 0)),
     ]
     for i, (cls, (x, y)) in enumerate(pickups):
         pickup_name = f"{cls}0"
         spot_name = f"InventorySpot{i}"
         lines += pickup_actor(cls, pickup_name, (x, y, 16.0), spot_name)
         lines += inventory_spot_actor(spot_name, (x, y, 0.0), cls, pickup_name)
+
+    # Weapon: xWeaponBase charger (StaticMesh-driven) rather than a bare
+    # Weapon actor -- see weapon_charger_actor() docstring.
+    weapon_name = "xWeaponBase0"
+    weapon_spot = f"InventorySpot{len(pickups)}"
+    lines += weapon_charger_actor(weapon_name, "XWeapons.ShockRifle", (300, 0, 16.0), weapon_spot)
+    lines += inventory_spot_actor(weapon_spot, (300, 0, 0.0), "xWeaponBase", weapon_name,
+                                   link_prop="myPickupBase")
 
     lines.append("End Map")
     return lines
