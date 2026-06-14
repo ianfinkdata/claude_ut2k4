@@ -39,6 +39,50 @@ v1 of this kit was pasted into UnrealEd.
 No `Texture=` is set on any brush face, so surfaces come in with the default
 checker texture — easy to spot and to retexture by hand afterwards.
 
+## Known issue: GPF on paste (`USkeletalMeshInstance::Render`)
+
+Both v1 (bare `ShockRifle`) **and** v2 (`xWeaponBase` charger, above) have
+been reported to crash UnrealEd with the identical signature immediately
+after **Edit -> Paste**:
+
+```
+General protection fault!
+History: USkeletalMeshInstance::Render <- FDynamicActor::Render <- RenderLevel
+<- myLevel.myLevel <- FLevelSceneNode::Render <- FPlayerSceneNode::Render
+<- UUnrealEdEngine::Draw <- ... <- UWindowsViewport::Repaint
+<- UEditorEngine::RedrawLevel <- UUnrealEdEngine::Exec_Edit <- ... <- MainLoop
+```
+
+Since the v2 fix (switching the weapon pickup to a `StaticMesh`-driven
+`xWeaponBase` charger) did **not** change the outcome, the cause is not yet
+confirmed. Two hypotheses, in order of how we're isolating them:
+
+1. **A pasted actor's class defaults still reference a skeletal mesh**
+   (e.g. `xWeaponBase`'s default `Mesh` regardless of the `StaticMesh`
+   override, or one of the pickup classes). `TestMap-Skeleton-Minimal.t3d`
+   (below) removes every pickup/weapon/`InventorySpot` actor to test this.
+2. **A general UnrealEd-on-this-hardware issue**, independent of pasted
+   content (reported hardware: Windows NT 6.2 / Windows 8, Intel UHD
+   Graphics device 9168 — a combo known to be flaky with this engine's 2004
+   skeletal-mesh renderer on *any* redraw). Test this by opening a brand-new
+   **File -> New** level and checking whether the viewport redraws/crashes
+   with **nothing pasted at all**.
+
+### Diagnostic steps
+
+1. **Baseline**: `File -> New` a blank level, do *not* paste anything, and
+   confirm the viewport redraws without a GPF. If this alone crashes, the
+   issue is hardware/driver-level and unrelated to this kit's content.
+2. **Minimal paste**: paste `TestMap-Skeleton-Minimal.t3d` (15 actors: room +
+   platform brushes, 5 lights, 4 `PlayerStart`s, 4 `PathNode`s — **no**
+   pickups, `InventorySpot`s, or weapon charger). If this pastes and redraws
+   cleanly, the crash is isolated to one of the pickup/weapon actor classes;
+   re-add them one category at a time (health, ammo, adrenaline, weapon) to
+   find the culprit.
+3. Report back which step (if any) reproduces the GPF — that determines the
+   v3 fix (e.g. dropping/replacing the offending actor class, or an
+   editor/driver-side workaround if step 1 alone crashes).
+
 ## Import steps
 
 1. **Launch UnrealEd** (`C:\UT2004\System\UnrealEd.exe` or `UT2004.exe editor`)
@@ -82,11 +126,14 @@ Run these from the **Build** menu (or **Build All**), in order:
 ```sh
 python3 gen_testmap.py -o import_kit/TestMap-Skeleton.t3d
 python3 gen_testmap.py --room-xy 1024 --room-h 512 -o import_kit/TestMap-Skeleton.t3d
+python3 gen_testmap.py --minimal -o import_kit/TestMap-Skeleton-Minimal.t3d
 ```
 
 `--room-xy` is the room's half-extent on X/Y (default 768 -> 1536x1536);
 `--room-h` is its height (default 384). Everything else (platform, lights,
 spawns, pickups, path nodes) scales/repositions relative to the room size.
+`--minimal` drops the pickups/`InventorySpot`s/weapon charger entirely (see
+"Known issue" above) -- 15 actors instead of 23.
 
 ## What this does NOT cover yet
 

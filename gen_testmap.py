@@ -209,9 +209,14 @@ def inventory_spot_actor(name: str, location, item_cls: str, item_name: str,
 # Map assembly
 # ---------------------------------------------------------------------------
 
-def build_map(room_xy: float = 768.0, room_h: float = 384.0) -> list:
+def build_map(room_xy: float = 768.0, room_h: float = 384.0, minimal: bool = False) -> list:
     """A single square room, floor at Z=0, ceiling at Z=room_h, spanning
-    [-room_xy, +room_xy] on X and Y."""
+    [-room_xy, +room_xy] on X and Y.
+
+    If ``minimal`` is True, omit all pickups/InventorySpots/the weapon charger
+    -- brushes, lights, PlayerStarts and PathNodes only. Used to isolate
+    whether a UnrealEd paste crash comes from the pickup/weapon actors or is
+    unrelated to map content (see import_kit/TestMap-Skeleton-README.md)."""
     lines = ["Begin Map"]
 
     # Room shell: hollow it out of the (empty) level with one big Subtract box.
@@ -243,26 +248,27 @@ def build_map(room_xy: float = 768.0, room_h: float = 384.0) -> list:
     for i, (x, y) in enumerate([(0, mid), (0, -mid), (mid, 0), (-mid, 0)]):
         lines += path_node_actor(f"PathNode{i}", (x, y, 16.0))
 
-    # Pickups + their InventorySpots (1:1 anchoring, spot floor-snapped below
-    # the pickup), one per major category, ringed around the centre platform.
-    pickups = [
-        ("MiniHealthPack", (0, 300)),
-        ("ShockAmmoPickup", (0, -300)),
-        ("AdrenalinePickup", (-300, 0)),
-    ]
-    for i, (cls, (x, y)) in enumerate(pickups):
-        pickup_name = f"{cls}0"
-        spot_name = f"InventorySpot{i}"
-        lines += pickup_actor(cls, pickup_name, (x, y, 16.0), spot_name)
-        lines += inventory_spot_actor(spot_name, (x, y, 0.0), cls, pickup_name)
+    if not minimal:
+        # Pickups + their InventorySpots (1:1 anchoring, spot floor-snapped below
+        # the pickup), one per major category, ringed around the centre platform.
+        pickups = [
+            ("MiniHealthPack", (0, 300)),
+            ("ShockAmmoPickup", (0, -300)),
+            ("AdrenalinePickup", (-300, 0)),
+        ]
+        for i, (cls, (x, y)) in enumerate(pickups):
+            pickup_name = f"{cls}0"
+            spot_name = f"InventorySpot{i}"
+            lines += pickup_actor(cls, pickup_name, (x, y, 16.0), spot_name)
+            lines += inventory_spot_actor(spot_name, (x, y, 0.0), cls, pickup_name)
 
-    # Weapon: xWeaponBase charger (StaticMesh-driven) rather than a bare
-    # Weapon actor -- see weapon_charger_actor() docstring.
-    weapon_name = "xWeaponBase0"
-    weapon_spot = f"InventorySpot{len(pickups)}"
-    lines += weapon_charger_actor(weapon_name, "XWeapons.ShockRifle", (300, 0, 16.0), weapon_spot)
-    lines += inventory_spot_actor(weapon_spot, (300, 0, 0.0), "xWeaponBase", weapon_name,
-                                   link_prop="myPickupBase")
+        # Weapon: xWeaponBase charger (StaticMesh-driven) rather than a bare
+        # Weapon actor -- see weapon_charger_actor() docstring.
+        weapon_name = "xWeaponBase0"
+        weapon_spot = f"InventorySpot{len(pickups)}"
+        lines += weapon_charger_actor(weapon_name, "XWeapons.ShockRifle", (300, 0, 16.0), weapon_spot)
+        lines += inventory_spot_actor(weapon_spot, (300, 0, 0.0), "xWeaponBase", weapon_name,
+                                       link_prop="myPickupBase")
 
     lines.append("End Map")
     return lines
@@ -275,9 +281,13 @@ def main():
                     help="room half-extent on X/Y (default 768 -> 1536x1536 room)")
     ap.add_argument("--room-h", type=float, default=384.0,
                     help="room height (default 384)")
+    ap.add_argument("--minimal", action="store_true",
+                    help="omit pickups/InventorySpots/weapon charger -- "
+                         "brushes, lights, PlayerStarts and PathNodes only "
+                         "(diagnostic variant for isolating paste crashes)")
     args = ap.parse_args()
 
-    text = "\n".join(build_map(args.room_xy, args.room_h)) + "\n"
+    text = "\n".join(build_map(args.room_xy, args.room_h, minimal=args.minimal)) + "\n"
     if args.output:
         with open(args.output, "w") as f:
             f.write(text)
