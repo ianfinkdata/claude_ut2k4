@@ -1,0 +1,252 @@
+Begin Map
+Begin Actor Class=Brush Name=RoomShell
+    CsgOper=CSG_Subtract
+    MainScale=(SheerAxis=SHEER_ZX)
+    PostScale=(SheerAxis=SHEER_ZX)
+    Tag="Brush"
+    Location=(Z=192.000000)
+    Begin Brush Name=ModelRoomShell
+       Begin PolyList
+          Begin Polygon
+             Origin   -00768.000000,-00768.000000,-00192.000000
+             Normal   -00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,+00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00768.000000,-00768.000000,-00192.000000
+             Vertex   -00768.000000,-00768.000000,+00192.000000
+             Vertex   -00768.000000,+00768.000000,+00192.000000
+             Vertex   -00768.000000,+00768.000000,-00192.000000
+          End Polygon
+          Begin Polygon
+             Origin   -00768.000000,+00768.000000,-00192.000000
+             Normal   +00000.000000,+00001.000000,+00000.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00768.000000,+00768.000000,-00192.000000
+             Vertex   -00768.000000,+00768.000000,+00192.000000
+             Vertex   +00768.000000,+00768.000000,+00192.000000
+             Vertex   +00768.000000,+00768.000000,-00192.000000
+          End Polygon
+          Begin Polygon
+             Origin   +00768.000000,+00768.000000,-00192.000000
+             Normal   +00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,-00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00768.000000,+00768.000000,-00192.000000
+             Vertex   +00768.000000,+00768.000000,+00192.000000
+             Vertex   +00768.000000,-00768.000000,+00192.000000
+             Vertex   +00768.000000,-00768.000000,-00192.000000
+          End Polygon
+          Begin Polygon
+             Origin   +00768.000000,-00768.000000,-00192.000000
+             Normal   +00000.000000,-00001.000000,+00000.000000
+             TextureU -00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00768.000000,-00768.000000,-00192.000000
+             Vertex   +00768.000000,-00768.000000,+00192.000000
+             Vertex   -00768.000000,-00768.000000,+00192.000000
+             Vertex   -00768.000000,-00768.000000,-00192.000000
+          End Polygon
+          Begin Polygon
+             Origin   -00768.000000,+00768.000000,+00192.000000
+             Normal   +00000.000000,+00000.000000,+00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00001.000000,+00000.000000
+             Vertex   -00768.000000,+00768.000000,+00192.000000
+             Vertex   -00768.000000,-00768.000000,+00192.000000
+             Vertex   +00768.000000,-00768.000000,+00192.000000
+             Vertex   +00768.000000,+00768.000000,+00192.000000
+          End Polygon
+          Begin Polygon
+             Origin   -00768.000000,-00768.000000,-00192.000000
+             Normal   +00000.000000,+00000.000000,-00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,-00001.000000,+00000.000000
+             Vertex   -00768.000000,-00768.000000,-00192.000000
+             Vertex   -00768.000000,+00768.000000,-00192.000000
+             Vertex   +00768.000000,+00768.000000,-00192.000000
+             Vertex   +00768.000000,-00768.000000,-00192.000000
+          End Polygon
+       End PolyList
+    End Brush
+    Brush=Model'MyLevel.ModelRoomShell'
+End Actor
+Begin Actor Class=Brush Name=CenterPlatform
+    CsgOper=CSG_Add
+    MainScale=(SheerAxis=SHEER_ZX)
+    PostScale=(SheerAxis=SHEER_ZX)
+    Tag="Brush"
+    Location=(Z=32.000000)
+    Begin Brush Name=ModelCenterPlatform
+       Begin PolyList
+          Begin Polygon
+             Origin   -00128.000000,-00128.000000,-00032.000000
+             Normal   -00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,+00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00128.000000,-00128.000000,-00032.000000
+             Vertex   -00128.000000,-00128.000000,+00032.000000
+             Vertex   -00128.000000,+00128.000000,+00032.000000
+             Vertex   -00128.000000,+00128.000000,-00032.000000
+          End Polygon
+          Begin Polygon
+             Origin   -00128.000000,+00128.000000,-00032.000000
+             Normal   +00000.000000,+00001.000000,+00000.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00128.000000,+00128.000000,-00032.000000
+             Vertex   -00128.000000,+00128.000000,+00032.000000
+             Vertex   +00128.000000,+00128.000000,+00032.000000
+             Vertex   +00128.000000,+00128.000000,-00032.000000
+          End Polygon
+          Begin Polygon
+             Origin   +00128.000000,+00128.000000,-00032.000000
+             Normal   +00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,-00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00128.000000,+00128.000000,-00032.000000
+             Vertex   +00128.000000,+00128.000000,+00032.000000
+             Vertex   +00128.000000,-00128.000000,+00032.000000
+             Vertex   +00128.000000,-00128.000000,-00032.000000
+          End Polygon
+          Begin Polygon
+             Origin   +00128.000000,-00128.000000,-00032.000000
+             Normal   +00000.000000,-00001.000000,+00000.000000
+             TextureU -00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00128.000000,-00128.000000,-00032.000000
+             Vertex   +00128.000000,-00128.000000,+00032.000000
+             Vertex   -00128.000000,-00128.000000,+00032.000000
+             Vertex   -00128.000000,-00128.000000,-00032.000000
+          End Polygon
+          Begin Polygon
+             Origin   -00128.000000,+00128.000000,+00032.000000
+             Normal   +00000.000000,+00000.000000,+00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00001.000000,+00000.000000
+             Vertex   -00128.000000,+00128.000000,+00032.000000
+             Vertex   -00128.000000,-00128.000000,+00032.000000
+             Vertex   +00128.000000,-00128.000000,+00032.000000
+             Vertex   +00128.000000,+00128.000000,+00032.000000
+          End Polygon
+          Begin Polygon
+             Origin   -00128.000000,-00128.000000,-00032.000000
+             Normal   +00000.000000,+00000.000000,-00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,-00001.000000,+00000.000000
+             Vertex   -00128.000000,-00128.000000,-00032.000000
+             Vertex   -00128.000000,+00128.000000,-00032.000000
+             Vertex   +00128.000000,+00128.000000,-00032.000000
+             Vertex   +00128.000000,-00128.000000,-00032.000000
+          End Polygon
+       End PolyList
+    End Brush
+    Brush=Model'MyLevel.ModelCenterPlatform'
+End Actor
+Begin Actor Class=Light Name=Light0
+    LightBrightness=64.000000
+    LightRadius=64
+    Tag="Light"
+    Location=(Z=350.000000)
+End Actor
+Begin Actor Class=Light Name=Light1
+    LightBrightness=64.000000
+    LightRadius=64
+    Tag="Light"
+    Location=(X=400.000000,Y=400.000000,Z=350.000000)
+End Actor
+Begin Actor Class=Light Name=Light2
+    LightBrightness=64.000000
+    LightRadius=64
+    Tag="Light"
+    Location=(X=-400.000000,Y=400.000000,Z=350.000000)
+End Actor
+Begin Actor Class=Light Name=Light3
+    LightBrightness=64.000000
+    LightRadius=64
+    Tag="Light"
+    Location=(X=400.000000,Y=-400.000000,Z=350.000000)
+End Actor
+Begin Actor Class=Light Name=Light4
+    LightBrightness=64.000000
+    LightRadius=64
+    Tag="Light"
+    Location=(X=-400.000000,Y=-400.000000,Z=350.000000)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart0
+    Tag="PlayerStart"
+    Location=(X=550.000000,Y=550.000000,Z=16.000000)
+    Rotation=(Yaw=-24576)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart1
+    Tag="PlayerStart"
+    Location=(X=-550.000000,Y=550.000000,Z=16.000000)
+    Rotation=(Yaw=-8192)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart2
+    Tag="PlayerStart"
+    Location=(X=-550.000000,Y=-550.000000,Z=16.000000)
+    Rotation=(Yaw=8192)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart3
+    Tag="PlayerStart"
+    Location=(X=550.000000,Y=-550.000000,Z=16.000000)
+    Rotation=(Yaw=24576)
+End Actor
+Begin Actor Class=PathNode Name=PathNode0
+    Tag="PathNode"
+    Location=(Y=650.000000,Z=16.000000)
+End Actor
+Begin Actor Class=PathNode Name=PathNode1
+    Tag="PathNode"
+    Location=(Y=-650.000000,Z=16.000000)
+End Actor
+Begin Actor Class=PathNode Name=PathNode2
+    Tag="PathNode"
+    Location=(X=650.000000,Z=16.000000)
+End Actor
+Begin Actor Class=PathNode Name=PathNode3
+    Tag="PathNode"
+    Location=(X=-650.000000,Z=16.000000)
+End Actor
+Begin Actor Class=MiniHealthPack Name=MiniHealthPack0
+    Tag="MiniHealthPack"
+    myMarker=InventorySpot'MyLevel.InventorySpot0'
+    Location=(Y=300.000000,Z=16.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot0
+    Tag="InventorySpot"
+    markedItem=MiniHealthPack'MyLevel.MiniHealthPack0'
+    Location=(Y=300.000000)
+End Actor
+Begin Actor Class=ShockAmmoPickup Name=ShockAmmoPickup0
+    Tag="ShockAmmoPickup"
+    myMarker=InventorySpot'MyLevel.InventorySpot1'
+    Location=(Y=-300.000000,Z=16.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot1
+    Tag="InventorySpot"
+    markedItem=ShockAmmoPickup'MyLevel.ShockAmmoPickup0'
+    Location=(Y=-300.000000)
+End Actor
+Begin Actor Class=AdrenalinePickup Name=AdrenalinePickup0
+    Tag="AdrenalinePickup"
+    myMarker=InventorySpot'MyLevel.InventorySpot2'
+    Location=(X=-300.000000,Z=16.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot2
+    Tag="InventorySpot"
+    markedItem=AdrenalinePickup'MyLevel.AdrenalinePickup0'
+    Location=(X=-300.000000)
+End Actor
+Begin Actor Class=ShockRifle Name=ShockRifle0
+    Tag="ShockRifle"
+    myMarker=InventorySpot'MyLevel.InventorySpot3'
+    Location=(X=300.000000,Z=16.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot3
+    Tag="InventorySpot"
+    markedItem=ShockRifle'MyLevel.ShockRifle0'
+    Location=(X=300.000000)
+End Actor
+End Map
