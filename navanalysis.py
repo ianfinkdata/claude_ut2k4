@@ -17,6 +17,7 @@ from __future__ import annotations
 import glob
 import math
 import os
+import statistics
 from collections import Counter, defaultdict
 
 import ut2parser as u
@@ -91,7 +92,11 @@ def analyze(path: str) -> dict:
             pl = props["PathList"].value if "PathList" in props else []
             refs = [el.ref for el in pl if isinstance(el, u.ObjectRef)] \
                 if isinstance(pl, list) else []
-            nodes[idx] = {"class": e.class_name, "loc": loc, "pathlist": refs}
+            node_data = {"class": e.class_name, "loc": loc, "pathlist": refs}
+            if e.class_name in ("LiftCenter", "LiftExit"):
+                lt = props.get("LiftTag")
+                node_data["lift_tag"] = lt.value if lt else None
+            nodes[idx] = node_data
             node_classes[e.class_name] += 1
 
     # ----- graph metrics -----
@@ -115,6 +120,32 @@ def analyze(path: str) -> dict:
         ys = [l[1] for l in locs]
         area = (max(xs) - min(xs)) * (max(ys) - min(ys))
 
+    # Walk-only edge distance distribution (flag bit 1 = walk)
+    walk_dists = sorted(rs["dist"] for rs in reachspecs if rs["flags"] & 1 and rs["dist"])
+    walk_dist_median = statistics.median(walk_dists) if walk_dists else 0
+    walk_dist_max = walk_dists[-1] if walk_dists else 0
+    walk_over_1200 = sum(1 for d in walk_dists if d > 1200)
+
+    # Verticality: Z range and estimated floor count (256uu buckets)
+    zs = [l[2] for l in locs if l and len(l) >= 3]
+    z_range = (max(zs) - min(zs)) if len(zs) > 1 else 0
+    floor_count = len(set(int(z // 256) for z in zs)) if zs else 0
+
+    # Lift network: group LiftCenter/LiftExit by LiftTag, compute height spans
+    lift_map: dict = defaultdict(lambda: {"czs": [], "ezs": []})
+    for n in nodes.values():
+        if n["class"] not in ("LiftCenter", "LiftExit") or not n["loc"]:
+            continue
+        tag = n.get("lift_tag") or "_untagged"
+        key = "czs" if n["class"] == "LiftCenter" else "ezs"
+        lift_map[tag][key].append(n["loc"][2])
+    lift_count = node_classes.get("LiftCenter", 0)
+    lift_exit_count = node_classes.get("LiftExit", 0)
+    lift_heights = [
+        max(d["czs"] + d["ezs"]) - min(d["czs"] + d["ezs"])
+        for d in lift_map.values() if d["czs"] and d["ezs"]
+    ]
+
     return {
         "map": os.path.basename(path),
         "nav_nodes": len(nodes),
@@ -135,6 +166,19 @@ def analyze(path: str) -> dict:
         "inventoryspots": node_classes.get("InventorySpot", 0),
         "pickup_total": sum(pickups.values()),
         "nav_area": area,
+        # walk-gap
+        "walk_edge_count": len(walk_dists),
+        "walk_dist_median": walk_dist_median,
+        "walk_dist_max": walk_dist_max,
+        "walk_over_1200": walk_over_1200,
+        # verticality
+        "z_range": z_range,
+        "floor_count": floor_count,
+        # lift network
+        "lift_count": lift_count,
+        "lift_exit_count": lift_exit_count,
+        "avg_lift_height": (sum(lift_heights) / len(lift_heights)) if lift_heights else 0,
+        "max_lift_height": max(lift_heights) if lift_heights else 0,
     }
 
 
@@ -158,6 +202,11 @@ def print_one(a: dict) -> None:
           f" height={a['common_height'][0]}")
     print(f"  spawns(PlayerStart): {a['playerstarts']}   InventorySpots:"
           f" {a['inventoryspots']}   pickups: {a['pickup_total']} {a['pickups']}")
+    print(f"  walk gaps: {a['walk_edge_count']} edges  median={a['walk_dist_median']:.0f}"
+          f"  max={a['walk_dist_max']:.0f}  over-1200uu: {a['walk_over_1200']}")
+    print(f"  verticality: Z-range={a['z_range']:.0f}  floors~{a['floor_count']}"
+          f"   lifts: {a['lift_count']} (exits={a['lift_exit_count']}"
+          f"  avg_h={a['avg_lift_height']:.0f}  max_h={a['max_lift_height']:.0f})")
 
 
 def print_summary(results: list) -> None:
@@ -208,6 +257,33 @@ def print_summary(results: list) -> None:
             pcat[k] += v
     print(f"\nPickup category totals: " + ", ".join(f"{k}={v}" for k, v in
           pcat.most_common()))
+
+    def _stats(key):
+        vs = sorted(r[key] for r in results)
+        return vs[0], statistics.median(vs), vs[-1]
+
+    # Walk-gap distribution
+    wmin, wmed, wmax = _stats("walk_dist_max")
+    over = sum(r["walk_over_1200"] for r in results)
+    total_walk = sum(r["walk_edge_count"] for r in results)
+    print(f"\nWalk-only edge max-gap  min={wmin:.0f}  median={wmed:.0f}  max={wmax:.0f} uu")
+    print(f"  walk edges over 1200uu: {over}/{total_walk} ({100*over//total_walk if total_walk else 0}%)")
+    wmed_med = statistics.median(r["walk_dist_median"] for r in results)
+    print(f"  median walk-gap (per-map median, then median across maps): {wmed_med:.0f} uu")
+
+    # Verticality
+    zmin, zmed, zmax = _stats("z_range")
+    fmin, fmed, fmax = _stats("floor_count")
+    print(f"\nVerticality  Z-range: min={zmin:.0f}  median={zmed:.0f}  max={zmax:.0f} uu")
+    print(f"  Floor count (256uu buckets): min={fmin}  median={fmed}  max={fmax}")
+
+    # Lift network
+    lmin, lmed, lmax = _stats("lift_count")
+    hmin, hmed, hmax = _stats("avg_lift_height")
+    maps_with_lifts = sum(1 for r in results if r["lift_count"] > 0)
+    print(f"\nLift network ({maps_with_lifts}/{len(results)} maps have lifts)")
+    print(f"  lift count: min={lmin}  median={lmed}  max={lmax}")
+    print(f"  avg lift height: min={hmin:.0f}  median={hmed:.0f}  max={hmax:.0f} uu")
 
 
 def main(argv):
