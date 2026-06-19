@@ -1,0 +1,672 @@
+Begin Map
+Begin Actor Class=LevelInfo Name=LevelInfo0
+    TimeSeconds=391.478210
+    bPathsRebuilt=True
+    bHasPathNodes=True
+    CameraLocationDynamic=(X=450.350098,Y=101.228104,Z=226.800171)
+    CameraLocationTop=(X=-603.999756,Y=-368.799988,Z=40000.000000)
+    CameraLocationFront=(X=-500.000000,Y=300.000000,Z=40000.000000)
+    CameraLocationSide=(X=-300.000000,Y=300.000000,Z=40000.000000)
+    CameraRotationDynamic=(Pitch=63572,Yaw=-32180)
+    NavigationPointList=InventorySpot'MyLevel.InventorySpot16'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="LevelInfo"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+End Actor
+Begin Actor Class=Brush Name=Brush0
+    MainScale=(SheerAxis=SHEER_ZX)
+    PostScale=(SheerAxis=SHEER_ZX)
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="Brush"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+End Actor
+Begin Actor Class=DefaultPhysicsVolume Name=DefaultPhysicsVolume0
+    Priority=-1000000
+    bNoDelete=True
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="DefaultPhysicsVolume"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+End Actor
+Begin Actor Class=Brush Name=RoomShell
+    CsgOper=CSG_Subtract
+    MainScale=(SheerAxis=SHEER_ZX)
+    PostScale=(SheerAxis=SHEER_ZX)
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="Brush"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=32.000000,Y=32.000000,Z=288.000000)
+    Begin Brush Name=ModelRoomShell
+       Begin PolyList
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb Link=0
+             Origin   -00032.000000,-00032.000000,-00288.000000
+             Normal   -00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,-00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -01024.000000,-00512.000000,-00256.000000
+             Vertex   -01024.000000,-00512.000000,+00256.000000
+             Vertex   -01024.000000,+00512.000000,+00256.000000
+             Vertex   -01024.000000,+00512.000000,-00256.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb Link=1
+             Origin   -00032.000000,-00032.000000,-00288.000000
+             Normal   +00000.000000,+00001.000000,+00000.000000
+             TextureU -00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -01024.000000,+00512.000000,-00256.000000
+             Vertex   -01024.000000,+00512.000000,+00256.000000
+             Vertex   +01024.000000,+00512.000000,+00256.000000
+             Vertex   +01024.000000,+00512.000000,-00256.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb Link=2
+             Origin   -00032.000000,-00032.000000,-00288.000000
+             Normal   +00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,+00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +01024.000000,+00512.000000,-00256.000000
+             Vertex   +01024.000000,+00512.000000,+00256.000000
+             Vertex   +01024.000000,-00512.000000,+00256.000000
+             Vertex   +01024.000000,-00512.000000,-00256.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb Link=3
+             Origin   -00032.000000,-00032.000000,-00288.000000
+             Normal   +00000.000000,-00001.000000,+00000.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +01024.000000,-00512.000000,-00256.000000
+             Vertex   +01024.000000,-00512.000000,+00256.000000
+             Vertex   -01024.000000,-00512.000000,+00256.000000
+             Vertex   -01024.000000,-00512.000000,-00256.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA Link=4
+             Origin   -00032.000000,-00032.000000,-00288.000000
+             Normal   +00000.000000,+00000.000000,+00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,-00001.000000,+00000.000000
+             Vertex   -01024.000000,+00512.000000,+00256.000000
+             Vertex   -01024.000000,-00512.000000,+00256.000000
+             Vertex   +01024.000000,-00512.000000,+00256.000000
+             Vertex   +01024.000000,+00512.000000,+00256.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA Link=5
+             Origin   -00032.000000,-00032.000000,-00288.000000
+             Normal   +00000.000000,+00000.000000,-00001.000000
+             TextureU -00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,-00001.000000,+00000.000000
+             Vertex   -01024.000000,-00512.000000,-00256.000000
+             Vertex   -01024.000000,+00512.000000,-00256.000000
+             Vertex   +01024.000000,+00512.000000,-00256.000000
+             Vertex   +01024.000000,-00512.000000,-00256.000000
+          End Polygon
+       End PolyList
+    End Brush
+    Brush=Model'MyLevel.ModelRoomShell'
+
+End Actor
+Begin Actor Class=Brush Name=WallLintel
+    CsgOper=CSG_Add
+    MainScale=(SheerAxis=SHEER_ZX)
+    PostScale=(SheerAxis=SHEER_ZX)
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="Brush"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=32.000000,Y=32.000000,Z=416.000000)
+    Begin Brush Name=ModelWallLintel
+       Begin PolyList
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb Link=0
+             Origin   -00032.000000,-00032.000000,-00416.000000
+             Normal   -00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,+00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00032.000000,-00512.000000,-00128.000000
+             Vertex   -00032.000000,-00512.000000,+00128.000000
+             Vertex   -00032.000000,+00512.000000,+00128.000000
+             Vertex   -00032.000000,+00512.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb Link=1
+             Origin   -00032.000000,+00512.000000,-00128.000000
+             Normal   +00000.000000,+00001.000000,+00000.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00032.000000,+00512.000000,-00128.000000
+             Vertex   -00032.000000,+00512.000000,+00128.000000
+             Vertex   +00032.000000,+00512.000000,+00128.000000
+             Vertex   +00032.000000,+00512.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb Link=2
+             Origin   -00032.000000,-00032.000000,-00416.000000
+             Normal   +00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,-00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00032.000000,+00512.000000,-00128.000000
+             Vertex   +00032.000000,+00512.000000,+00128.000000
+             Vertex   +00032.000000,-00512.000000,+00128.000000
+             Vertex   +00032.000000,-00512.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb Link=3
+             Origin   +00032.000000,-00512.000000,-00128.000000
+             Normal   +00000.000000,-00001.000000,+00000.000000
+             TextureU -00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00032.000000,-00512.000000,-00128.000000
+             Vertex   +00032.000000,-00512.000000,+00128.000000
+             Vertex   -00032.000000,-00512.000000,+00128.000000
+             Vertex   -00032.000000,-00512.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA Link=4
+             Origin   -00032.000000,+00512.000000,+00128.000000
+             Normal   +00000.000000,+00000.000000,+00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00001.000000,+00000.000000
+             Vertex   -00032.000000,+00512.000000,+00128.000000
+             Vertex   -00032.000000,-00512.000000,+00128.000000
+             Vertex   +00032.000000,-00512.000000,+00128.000000
+             Vertex   +00032.000000,+00512.000000,+00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA Link=5
+             Origin   -00032.000000,-00032.000000,-00416.000000
+             Normal   +00000.000000,+00000.000000,-00001.000000
+             TextureU +00000.000000,-00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00032.000000,-00512.000000,-00128.000000
+             Vertex   -00032.000000,+00512.000000,-00128.000000
+             Vertex   +00032.000000,+00512.000000,-00128.000000
+             Vertex   +00032.000000,-00512.000000,-00128.000000
+          End Polygon
+       End PolyList
+    End Brush
+    Brush=Model'MyLevel.ModelWallLintel'
+
+End Actor
+Begin Actor Class=Brush Name=WallJambPos
+    CsgOper=CSG_Add
+    MainScale=(SheerAxis=SHEER_ZX)
+    PostScale=(SheerAxis=SHEER_ZX)
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="Brush"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=32.000000,Y=336.000000,Z=160.000000)
+    Begin Brush Name=ModelWallJambPos
+       Begin PolyList
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb Link=0
+             Origin   -00032.000000,-00336.000000,-00160.000000
+             Normal   -00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,+00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00032.000000,-00208.000000,-00128.000000
+             Vertex   -00032.000000,-00208.000000,+00128.000000
+             Vertex   -00032.000000,+00208.000000,+00128.000000
+             Vertex   -00032.000000,+00208.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb Link=1
+             Origin   -00032.000000,+00208.000000,-00128.000000
+             Normal   +00000.000000,+00001.000000,+00000.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00032.000000,+00208.000000,-00128.000000
+             Vertex   -00032.000000,+00208.000000,+00128.000000
+             Vertex   +00032.000000,+00208.000000,+00128.000000
+             Vertex   +00032.000000,+00208.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb Link=2
+             Origin   -00032.000000,-00336.000000,-00160.000000
+             Normal   +00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,-00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00032.000000,+00208.000000,-00128.000000
+             Vertex   +00032.000000,+00208.000000,+00128.000000
+             Vertex   +00032.000000,-00208.000000,+00128.000000
+             Vertex   +00032.000000,-00208.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb Link=3
+             Origin   -00032.000000,-00336.000000,-00160.000000
+             Normal   +00000.000000,-00001.000000,+00000.000000
+             TextureU -00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00032.000000,-00208.000000,-00128.000000
+             Vertex   +00032.000000,-00208.000000,+00128.000000
+             Vertex   -00032.000000,-00208.000000,+00128.000000
+             Vertex   -00032.000000,-00208.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA Link=4
+             Origin   -00032.000000,+00208.000000,+00128.000000
+             Normal   +00000.000000,+00000.000000,+00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00001.000000,+00000.000000
+             Vertex   -00032.000000,+00208.000000,+00128.000000
+             Vertex   -00032.000000,-00208.000000,+00128.000000
+             Vertex   +00032.000000,-00208.000000,+00128.000000
+             Vertex   +00032.000000,+00208.000000,+00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA Link=5
+             Origin   -00032.000000,-00208.000000,-00128.000000
+             Normal   +00000.000000,+00000.000000,-00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,-00001.000000,+00000.000000
+             Vertex   -00032.000000,-00208.000000,-00128.000000
+             Vertex   -00032.000000,+00208.000000,-00128.000000
+             Vertex   +00032.000000,+00208.000000,-00128.000000
+             Vertex   +00032.000000,-00208.000000,-00128.000000
+          End Polygon
+       End PolyList
+    End Brush
+    Brush=Model'MyLevel.ModelWallJambPos'
+
+End Actor
+Begin Actor Class=Brush Name=WallJambNeg
+    CsgOper=CSG_Add
+    MainScale=(SheerAxis=SHEER_ZX)
+    PostScale=(SheerAxis=SHEER_ZX)
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="Brush"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=32.000000,Y=-272.000000,Z=160.000000)
+    Begin Brush Name=ModelWallJambNeg
+       Begin PolyList
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb Link=0
+             Origin   -00032.000000,+00272.000000,-00160.000000
+             Normal   -00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,+00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00032.000000,-00208.000000,-00128.000000
+             Vertex   -00032.000000,-00208.000000,+00128.000000
+             Vertex   -00032.000000,+00208.000000,+00128.000000
+             Vertex   -00032.000000,+00208.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb Link=1
+             Origin   -00032.000000,+00272.000000,-00160.000000
+             Normal   +00000.000000,+00001.000000,+00000.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00032.000000,+00208.000000,-00128.000000
+             Vertex   -00032.000000,+00208.000000,+00128.000000
+             Vertex   +00032.000000,+00208.000000,+00128.000000
+             Vertex   +00032.000000,+00208.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb Link=2
+             Origin   -00032.000000,+00272.000000,-00160.000000
+             Normal   +00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,-00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00032.000000,+00208.000000,-00128.000000
+             Vertex   +00032.000000,+00208.000000,+00128.000000
+             Vertex   +00032.000000,-00208.000000,+00128.000000
+             Vertex   +00032.000000,-00208.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb Link=3
+             Origin   +00032.000000,-00208.000000,-00128.000000
+             Normal   +00000.000000,-00001.000000,+00000.000000
+             TextureU -00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00032.000000,-00208.000000,-00128.000000
+             Vertex   +00032.000000,-00208.000000,+00128.000000
+             Vertex   -00032.000000,-00208.000000,+00128.000000
+             Vertex   -00032.000000,-00208.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA Link=4
+             Origin   -00032.000000,+00208.000000,+00128.000000
+             Normal   +00000.000000,+00000.000000,+00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00001.000000,+00000.000000
+             Vertex   -00032.000000,+00208.000000,+00128.000000
+             Vertex   -00032.000000,-00208.000000,+00128.000000
+             Vertex   +00032.000000,-00208.000000,+00128.000000
+             Vertex   +00032.000000,+00208.000000,+00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA Link=5
+             Origin   -00032.000000,-00208.000000,-00128.000000
+             Normal   +00000.000000,+00000.000000,-00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,-00001.000000,+00000.000000
+             Vertex   -00032.000000,-00208.000000,-00128.000000
+             Vertex   -00032.000000,+00208.000000,-00128.000000
+             Vertex   +00032.000000,+00208.000000,-00128.000000
+             Vertex   +00032.000000,-00208.000000,-00128.000000
+          End Polygon
+       End PolyList
+    End Brush
+    Brush=Model'MyLevel.ModelWallJambNeg'
+
+End Actor
+Begin Actor Class=Mover Name=VaultDoor
+    MoverEncroachType=ME_IgnoreWhenEncroach
+    MoveTime=2.000000
+    StayOpenTime=10000.000000
+    bTriggerOnceOnly=True
+    KeyPos(1)=(Z=290.000000)
+    BasePos=(X=32.000000,Y=32.000000,Z=32.000000)
+    SavedPos=(X=-12345.000000,Y=-12345.000000,Z=-12345.000000)
+    BaseRot=(Yaw=16384)
+    SavedRot=(Pitch=123,Yaw=456,Roll=789)
+    DrawType=DT_StaticMesh
+    StaticMesh=StaticMesh'CP_UT2K3_TechSetMesh1.Doors.cp_ut2k3_techdoor1'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="VaultDoorTag"
+    InitialState="TriggerOpenTimed"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=32.000000,Y=32.000000,Z=32.000000)
+    Rotation=(Yaw=16384)
+    DrawScale3D=(X=0.500000,Z=0.850000)
+    bBlockPlayers=True
+    ColLocation=(X=32.000000,Y=32.000000,Z=32.000000)
+End Actor
+Begin Actor Class=Counter Name=GateCounter
+    NumToCount=3
+    bShowMessage=True
+    CountMessage="The guardians fall... %i remain."
+    CompleteMessage="The vault is breached!"
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="MonsterKill"
+    Event="VaultDoorTag"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-224.000000,Y=32.000000,Z=64.000000)
+End Actor
+Begin Actor Class=WarLord Name=Guardian0
+    HeadVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="Guardian"
+    Event="MonsterKill"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-668.000000,Y=288.000000,Z=112.000000)
+    Rotation=(Yaw=32768)
+    ColLocation=(X=-668.000000,Y=288.000000,Z=112.000000)
+End Actor
+Begin Actor Class=WarLord Name=Guardian1
+    HeadVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="Guardian"
+    Event="MonsterKill"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-668.000000,Y=32.000000,Z=112.000000)
+    Rotation=(Yaw=32768)
+    ColLocation=(X=-668.000000,Y=32.000000,Z=112.000000)
+End Actor
+Begin Actor Class=WarLord Name=Guardian2
+    HeadVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="Guardian"
+    Event="MonsterKill"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-668.000000,Y=-224.000000,Z=112.000000)
+    Rotation=(Yaw=32768)
+    ColLocation=(X=-668.000000,Y=-224.000000,Z=112.000000)
+End Actor
+Begin Actor Class=Light Name=Light0
+    LightBrightness=128.000000
+    LightRadius=40.000000
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="Light"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-468.000000,Y=32.000000,Z=504.000000)
+End Actor
+Begin Actor Class=Light Name=Light1
+    LightHue=153
+    LightSaturation=204
+    LightBrightness=84.000000
+    LightRadius=40.000000
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="Light"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=532.000000,Y=32.000000,Z=240.000000)
+End Actor
+Begin Actor Class=Light Name=Light2
+    LightBrightness=128.000000
+    LightRadius=40.000000
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="Light"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-868.000000,Y=332.000000,Z=504.000000)
+End Actor
+Begin Actor Class=Light Name=Light3
+    LightBrightness=128.000000
+    LightRadius=40.000000
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="Light"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-868.000000,Y=-268.000000,Z=504.000000)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart0
+    Base=LevelInfo'MyLevel.LevelInfo0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="PlayerStart"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-868.000000,Y=432.000000,Z=79.000000)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart1
+    nextNavigationPoint=PlayerStart'MyLevel.PlayerStart0'
+    Base=LevelInfo'MyLevel.LevelInfo0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="PlayerStart"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-868.000000,Y=-368.000000,Z=79.000000)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart2
+    nextNavigationPoint=PlayerStart'MyLevel.PlayerStart1'
+    Base=LevelInfo'MyLevel.LevelInfo0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="PlayerStart"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-468.000000,Y=432.000000,Z=79.000000)
+End Actor
+Begin Actor Class=PlayerStart Name=PlayerStart3
+    nextNavigationPoint=PlayerStart'MyLevel.PlayerStart2'
+    Base=LevelInfo'MyLevel.LevelInfo0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="PlayerStart"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-468.000000,Y=-368.000000,Z=79.000000)
+End Actor
+Begin Actor Class=PathNode Name=PathNode0
+    nextNavigationPoint=PlayerStart'MyLevel.PlayerStart3'
+    Base=LevelInfo'MyLevel.LevelInfo0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="PathNode"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-668.000000,Y=32.000000,Z=79.000000)
+End Actor
+Begin Actor Class=PathNode Name=PathNode1
+    nextNavigationPoint=PathNode'MyLevel.PathNode0'
+    Base=LevelInfo'MyLevel.LevelInfo0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="PathNode"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-318.000000,Y=32.000000,Z=79.000000)
+End Actor
+Begin Actor Class=PathNode Name=PathNode2
+    nextNavigationPoint=PathNode'MyLevel.PathNode1'
+    Base=LevelInfo'MyLevel.LevelInfo0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="PathNode"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-668.000000,Y=382.000000,Z=79.000000)
+End Actor
+Begin Actor Class=PathNode Name=PathNode3
+    nextNavigationPoint=PathNode'MyLevel.PathNode2'
+    Base=LevelInfo'MyLevel.LevelInfo0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="PathNode"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-668.000000,Y=-318.000000,Z=79.000000)
+End Actor
+Begin Actor Class=PathNode Name=PathNode4
+    nextNavigationPoint=PathNode'MyLevel.PathNode3'
+    Base=LevelInfo'MyLevel.LevelInfo0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="PathNode"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=32.000000,Y=32.000000,Z=79.000000)
+End Actor
+Begin Actor Class=PathNode Name=PathNode5
+    nextNavigationPoint=PathNode'MyLevel.PathNode4'
+    Base=LevelInfo'MyLevel.LevelInfo0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="PathNode"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=382.000000,Y=32.000000,Z=79.000000)
+End Actor
+Begin Actor Class=PathNode Name=PathNode6
+    nextNavigationPoint=PathNode'MyLevel.PathNode5'
+    Base=LevelInfo'MyLevel.LevelInfo0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="PathNode"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=732.000000,Y=32.000000,Z=79.000000)
+End Actor
+Begin Actor Class=PathNode Name=PathNode7
+    nextNavigationPoint=PathNode'MyLevel.PathNode6'
+    Base=LevelInfo'MyLevel.LevelInfo0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="PathNode"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=732.000000,Y=332.000000,Z=79.000000)
+End Actor
+Begin Actor Class=PathNode Name=PathNode8
+    nextNavigationPoint=PathNode'MyLevel.PathNode7'
+    Base=LevelInfo'MyLevel.LevelInfo0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="PathNode"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=732.000000,Y=-268.000000,Z=79.000000)
+End Actor
+Begin Actor Class=xWeaponBase Name=xWeaponBase0
+    WeaponType=Class'XWeapons.Redeemer'
+    myMarker=InventorySpot'MyLevel.InventorySpot9'
+    StaticMesh=StaticMesh'2k4ChargerMeshes.ChargerMeshes.WeaponChargerMesh-DS'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="xWeaponBase"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=832.000000,Y=32.000000,Z=64.000000)
+    PrePivot=(Z=3.700000)
+End Actor
+Begin Actor Class=xWeaponBase Name=ArenaRocket
+    WeaponType=Class'XWeapons.RocketLauncher'
+    myMarker=InventorySpot'MyLevel.InventorySpot10'
+    StaticMesh=StaticMesh'2k4ChargerMeshes.ChargerMeshes.WeaponChargerMesh-DS'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="xWeaponBase"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-418.000000,Y=232.000000,Z=64.000000)
+    PrePivot=(Z=3.700000)
+End Actor
+Begin Actor Class=xWeaponBase Name=ArenaFlak
+    WeaponType=Class'XWeapons.FlakCannon'
+    myMarker=InventorySpot'MyLevel.InventorySpot11'
+    StaticMesh=StaticMesh'2k4ChargerMeshes.ChargerMeshes.WeaponChargerMesh-DS'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="xWeaponBase"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-418.000000,Y=-168.000000,Z=64.000000)
+    PrePivot=(Z=3.700000)
+End Actor
+Begin Actor Class=RocketAmmoPickup Name=ArenaRocketAmmo
+    myMarker=InventorySpot'MyLevel.InventorySpot12'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="AmmoPickup"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-548.000000,Y=282.000000,Z=56.000000)
+    ColLocation=(X=-548.000000,Y=282.000000,Z=56.000000)
+End Actor
+Begin Actor Class=FlakAmmoPickup Name=ArenaFlakAmmo
+    myMarker=InventorySpot'MyLevel.InventorySpot13'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="AmmoPickup"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-548.000000,Y=-218.000000,Z=56.000000)
+    ColLocation=(X=-548.000000,Y=-218.000000,Z=56.000000)
+End Actor
+Begin Actor Class=MiniHealthPack Name=ArenaHealth0
+    myMarker=InventorySpot'MyLevel.InventorySpot14'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="HealthPickup"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-808.000000,Y=182.000000,Z=56.000000)
+    ColLocation=(X=-808.000000,Y=182.000000,Z=56.000000)
+End Actor
+Begin Actor Class=MiniHealthPack Name=ArenaHealth1
+    myMarker=InventorySpot'MyLevel.InventorySpot15'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="HealthPickup"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-808.000000,Y=-118.000000,Z=56.000000)
+    ColLocation=(X=-808.000000,Y=-118.000000,Z=56.000000)
+End Actor
+Begin Actor Class=ShieldPack Name=ArenaShield
+    myMarker=InventorySpot'MyLevel.InventorySpot16'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="ArmorPickup"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-468.000000,Y=32.000000,Z=56.000000)
+    ColLocation=(X=-468.000000,Y=32.000000,Z=56.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot9
+    myPickupBase=xWeaponBase'MyLevel.xWeaponBase0'
+    nextNavigationPoint=PathNode'MyLevel.PathNode8'
+    Base=LevelInfo'MyLevel.LevelInfo0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="InventorySpot"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=832.000000,Y=32.000000,Z=79.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot10
+    myPickupBase=xWeaponBase'MyLevel.ArenaRocket'
+    nextNavigationPoint=InventorySpot'MyLevel.InventorySpot9'
+    Base=LevelInfo'MyLevel.LevelInfo0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="InventorySpot"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-418.000000,Y=232.000000,Z=79.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot11
+    myPickupBase=xWeaponBase'MyLevel.ArenaFlak'
+    nextNavigationPoint=InventorySpot'MyLevel.InventorySpot10'
+    Base=LevelInfo'MyLevel.LevelInfo0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="InventorySpot"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-418.000000,Y=-168.000000,Z=79.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot12
+    markedItem=RocketAmmoPickup'MyLevel.ArenaRocketAmmo'
+    nextNavigationPoint=InventorySpot'MyLevel.InventorySpot11'
+    Base=LevelInfo'MyLevel.LevelInfo0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="InventorySpot"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-548.000000,Y=282.000000,Z=79.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot13
+    markedItem=FlakAmmoPickup'MyLevel.ArenaFlakAmmo'
+    nextNavigationPoint=InventorySpot'MyLevel.InventorySpot12'
+    Base=LevelInfo'MyLevel.LevelInfo0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="InventorySpot"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-548.000000,Y=-218.000000,Z=79.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot14
+    markedItem=MiniHealthPack'MyLevel.ArenaHealth0'
+    nextNavigationPoint=InventorySpot'MyLevel.InventorySpot13'
+    Base=LevelInfo'MyLevel.LevelInfo0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="InventorySpot"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-808.000000,Y=182.000000,Z=79.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot15
+    markedItem=MiniHealthPack'MyLevel.ArenaHealth1'
+    nextNavigationPoint=InventorySpot'MyLevel.InventorySpot14'
+    Base=LevelInfo'MyLevel.LevelInfo0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="InventorySpot"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-808.000000,Y=-118.000000,Z=79.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot16
+    markedItem=ShieldPack'MyLevel.ArenaShield'
+    nextNavigationPoint=InventorySpot'MyLevel.InventorySpot15'
+    Base=LevelInfo'MyLevel.LevelInfo0'
+    Level=LevelInfo'MyLevel.LevelInfo0'
+    Tag="InventorySpot"
+    PhysicsVolume=DefaultPhysicsVolume'MyLevel.DefaultPhysicsVolume0'
+    Location=(X=-468.000000,Y=32.000000,Z=79.000000)
+End Actor
+End Map

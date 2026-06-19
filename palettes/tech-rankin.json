@@ -1,0 +1,26 @@
+{
+  "name": "tech-rankin",
+  "description": "Stock UT2004 tech/industrial palette centered on HumanoidArchitecture (the DM-Rankin look). The statistical center of stock-DM tech surfacing; textures assigned per face role.",
+  "source": "Derived via the texture-browser skill + TEXTURE_PATTERNS.md; grounded in usage across all 39 stock DM maps.",
+  "surfaces": {
+    "wall": "HumanoidArchitecture.Bases.bas02HAb",
+    "floor": "HumanoidArchitecture.Floors.flr03HA",
+    "ceiling": "HumanoidArchitecture.Floors.flr03HA",
+    "trim": "HumanoidArchitecture.Borders.bdr02HA"
+  },
+  "alternates": {
+    "wall": ["HumanoidArchitecture.Bases.bas02HA", "HumanoidArchitecture.Bases.bas03HA", "HumanoidArchitecture.Bases.bas05bHA"],
+    "floor": ["HumanoidArchitecture.Floors.flr02HA", "HumanoidArchitecture.Floors.flr08HA"]
+  },
+  "example_maps": {
+    "wall": "DM-Rankin",
+    "floor": "DM-1on1-Roughinery",
+    "trim": "DM-Corrugation"
+  },
+  "role_rule": {
+    "floor": "face normal Nz > 0.7",
+    "ceiling": "face normal Nz < -0.7",
+    "wall": "otherwise"
+  },
+  "package_dependencies": ["HumanoidArchitecture"]
+}
