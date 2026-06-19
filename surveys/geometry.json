@@ -1,0 +1,2559 @@
+{
+  "cross_map": {
+    "maps": 39,
+    "room_short": {
+      "n": 2982,
+      "min": 64.0,
+      "q1": 128.0,
+      "median": 256.0,
+      "q3": 400.0,
+      "max": 7680.0
+    },
+    "room_long": {
+      "n": 2982,
+      "min": 64.0,
+      "q1": 256.0,
+      "median": 512.0,
+      "q3": 896.0,
+      "max": 18296.0
+    },
+    "ceiling_height": {
+      "n": 2982,
+      "min": 64.0,
+      "q1": 204.0,
+      "median": 272.0,
+      "q3": 512.0,
+      "max": 7872.0
+    },
+    "corridor_width": {
+      "n": 1464,
+      "min": 64.0,
+      "q1": 84.0,
+      "median": 128.0,
+      "q3": 256.0,
+      "max": 7232.0
+    },
+    "opening_width": {
+      "n": 2442,
+      "min": 64.0,
+      "q1": 256.0,
+      "median": 336.0,
+      "q3": 512.0,
+      "max": 3340.0
+    },
+    "opening_height": {
+      "n": 2442,
+      "min": 64.0,
+      "q1": 240.0,
+      "median": 279.2,
+      "q3": 504.0,
+      "max": 5248.0
+    },
+    "rotated_subtracts": 0,
+    "grid_alignment": {
+      "128": 0.418,
+      "192": 0.191,
+      "256": 0.235,
+      "320": 0.127,
+      "512": 0.127
+    }
+  },
+  "maps": [
+    {
+      "map": "DM-1on1-Albatross.ut2",
+      "subtract_brushes": 41,
+      "add_brushes": 118,
+      "rotated_subtracts": 0,
+      "world_fills": 1,
+      "room_dim_short": {
+        "n": 41,
+        "min": 64.0,
+        "median": 144.0,
+        "mean": 283.1,
+        "max": 4096.0
+      },
+      "room_dim_long": {
+        "n": 41,
+        "min": 90.5,
+        "median": 256.0,
+        "mean": 345.5,
+        "max": 4096.0
+      },
+      "ceiling_height": {
+        "n": 41,
+        "min": 64.0,
+        "median": 256.0,
+        "mean": 258.7,
+        "max": 1280.0
+      },
+      "footprint_area": {
+        "n": 41,
+        "min": 8192.0,
+        "median": 36864.0,
+        "mean": 470815.2,
+        "max": 16777216.0
+      },
+      "corridor_width": {
+        "n": 8,
+        "min": 64.0,
+        "median": 128.0,
+        "mean": 148.0,
+        "max": 320.0
+      },
+      "opening_width": {
+        "n": 14,
+        "min": 90.5,
+        "median": 256.0,
+        "mean": 236.9,
+        "max": 320.0
+      },
+      "opening_height": {
+        "n": 14,
+        "min": 64.0,
+        "median": 208.0,
+        "mean": 187.4,
+        "max": 256.0
+      },
+      "opening_count": 14,
+      "grid_fit": {
+        "128": 0.232,
+        "192": 0.102,
+        "256": 0.106,
+        "320": 0.126,
+        "512": 0.065
+      }
+    },
+    {
+      "map": "DM-1on1-Crash.ut2",
+      "subtract_brushes": 78,
+      "add_brushes": 54,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 78,
+        "min": 64.0,
+        "median": 256.0,
+        "mean": 296.4,
+        "max": 1024.0
+      },
+      "room_dim_long": {
+        "n": 78,
+        "min": 144.0,
+        "median": 576.0,
+        "mean": 643.4,
+        "max": 1760.0
+      },
+      "ceiling_height": {
+        "n": 78,
+        "min": 64.0,
+        "median": 200.0,
+        "mean": 205.5,
+        "max": 576.0
+      },
+      "footprint_area": {
+        "n": 78,
+        "min": 9216.0,
+        "median": 114688.0,
+        "mean": 244721.2,
+        "max": 1441792.0
+      },
+      "corridor_width": {
+        "n": 37,
+        "min": 64.0,
+        "median": 192.0,
+        "mean": 209.7,
+        "max": 480.0
+      },
+      "opening_width": {
+        "n": 59,
+        "min": 176.0,
+        "median": 384.0,
+        "mean": 456.4,
+        "max": 1024.0
+      },
+      "opening_height": {
+        "n": 59,
+        "min": 80.0,
+        "median": 224.0,
+        "mean": 228.7,
+        "max": 512.0
+      },
+      "opening_count": 59,
+      "grid_fit": {
+        "128": 0.472,
+        "192": 0.19,
+        "256": 0.261,
+        "320": 0.113,
+        "512": 0.124
+      }
+    },
+    {
+      "map": "DM-1on1-Desolation.ut2",
+      "subtract_brushes": 181,
+      "add_brushes": 743,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 181,
+        "min": 64.0,
+        "median": 168.0,
+        "mean": 262.3,
+        "max": 4096.0
+      },
+      "room_dim_long": {
+        "n": 181,
+        "min": 64.0,
+        "median": 432.0,
+        "mean": 570.4,
+        "max": 4096.0
+      },
+      "ceiling_height": {
+        "n": 181,
+        "min": 64.0,
+        "median": 288.0,
+        "mean": 404.4,
+        "max": 2048.0
+      },
+      "footprint_area": {
+        "n": 181,
+        "min": 4096.0,
+        "median": 65536.0,
+        "mean": 276296.7,
+        "max": 16777216.0
+      },
+      "corridor_width": {
+        "n": 106,
+        "min": 64.0,
+        "median": 128.0,
+        "mean": 173.7,
+        "max": 640.0
+      },
+      "opening_width": {
+        "n": 144,
+        "min": 64.0,
+        "median": 384.0,
+        "mean": 430.5,
+        "max": 1280.0
+      },
+      "opening_height": {
+        "n": 144,
+        "min": 96.0,
+        "median": 264.0,
+        "mean": 297.3,
+        "max": 576.0
+      },
+      "opening_count": 144,
+      "grid_fit": {
+        "128": 0.464,
+        "192": 0.191,
+        "256": 0.273,
+        "320": 0.141,
+        "512": 0.099
+      }
+    },
+    {
+      "map": "DM-1on1-Idoma.ut2",
+      "subtract_brushes": 51,
+      "add_brushes": 70,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 51,
+        "min": 72.0,
+        "median": 352.0,
+        "mean": 430.7,
+        "max": 2048.0
+      },
+      "room_dim_long": {
+        "n": 51,
+        "min": 160.0,
+        "median": 768.0,
+        "mean": 1143.2,
+        "max": 3904.0
+      },
+      "ceiling_height": {
+        "n": 51,
+        "min": 96.0,
+        "median": 488.0,
+        "mean": 459.5,
+        "max": 1472.0
+      },
+      "footprint_area": {
+        "n": 51,
+        "min": 25600.0,
+        "median": 327680.0,
+        "mean": 614283.4,
+        "max": 4524031.3
+      },
+      "corridor_width": {
+        "n": 34,
+        "min": 72.0,
+        "median": 192.0,
+        "mean": 282.8,
+        "max": 704.0
+      },
+      "opening_width": {
+        "n": 44,
+        "min": 160.0,
+        "median": 480.0,
+        "mean": 615.3,
+        "max": 1792.0
+      },
+      "opening_height": {
+        "n": 44,
+        "min": 144.0,
+        "median": 448.0,
+        "mean": 424.7,
+        "max": 1408.0
+      },
+      "opening_count": 44,
+      "grid_fit": {
+        "128": 0.415,
+        "192": 0.317,
+        "256": 0.239,
+        "320": 0.137,
+        "512": 0.167
+      }
+    },
+    {
+      "map": "DM-1on1-Irondust.ut2",
+      "subtract_brushes": 184,
+      "add_brushes": 289,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 184,
+        "min": 64.0,
+        "median": 128.0,
+        "mean": 271.4,
+        "max": 2048.0
+      },
+      "room_dim_long": {
+        "n": 184,
+        "min": 64.0,
+        "median": 384.0,
+        "mean": 499.1,
+        "max": 2048.0
+      },
+      "ceiling_height": {
+        "n": 184,
+        "min": 64.0,
+        "median": 275.2,
+        "mean": 442.5,
+        "max": 2112.0
+      },
+      "footprint_area": {
+        "n": 184,
+        "min": 4096.0,
+        "median": 58368.0,
+        "mean": 212497.5,
+        "max": 4194304.0
+      },
+      "corridor_width": {
+        "n": 96,
+        "min": 64.0,
+        "median": 128.0,
+        "mean": 175.9,
+        "max": 512.0
+      },
+      "opening_width": {
+        "n": 129,
+        "min": 64.0,
+        "median": 320.0,
+        "mean": 343.7,
+        "max": 1024.0
+      },
+      "opening_height": {
+        "n": 129,
+        "min": 112.0,
+        "median": 384.0,
+        "mean": 473.6,
+        "max": 1728.0
+      },
+      "opening_count": 129,
+      "grid_fit": {
+        "128": 0.438,
+        "192": 0.196,
+        "256": 0.231,
+        "320": 0.084,
+        "512": 0.127
+      }
+    },
+    {
+      "map": "DM-1on1-Mixer.ut2",
+      "subtract_brushes": 199,
+      "add_brushes": 165,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 199,
+        "min": 64.0,
+        "median": 240.0,
+        "mean": 326.3,
+        "max": 2048.0
+      },
+      "room_dim_long": {
+        "n": 199,
+        "min": 64.0,
+        "median": 512.0,
+        "mean": 565.7,
+        "max": 2176.0
+      },
+      "ceiling_height": {
+        "n": 199,
+        "min": 64.0,
+        "median": 292.0,
+        "mean": 382.0,
+        "max": 2112.0
+      },
+      "footprint_area": {
+        "n": 199,
+        "min": 4096.0,
+        "median": 98304.0,
+        "mean": 266748.1,
+        "max": 4456448.0
+      },
+      "corridor_width": {
+        "n": 90,
+        "min": 64.0,
+        "median": 128.0,
+        "mean": 166.9,
+        "max": 608.0
+      },
+      "opening_width": {
+        "n": 136,
+        "min": 72.0,
+        "median": 384.0,
+        "mean": 413.5,
+        "max": 1280.0
+      },
+      "opening_height": {
+        "n": 136,
+        "min": 80.0,
+        "median": 384.0,
+        "mean": 405.8,
+        "max": 1152.0
+      },
+      "opening_count": 136,
+      "grid_fit": {
+        "128": 0.523,
+        "192": 0.299,
+        "256": 0.244,
+        "320": 0.121,
+        "512": 0.116
+      }
+    },
+    {
+      "map": "DM-1on1-Roughinery.ut2",
+      "subtract_brushes": 53,
+      "add_brushes": 525,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 53,
+        "min": 64.0,
+        "median": 176.0,
+        "mean": 321.2,
+        "max": 3968.0
+      },
+      "room_dim_long": {
+        "n": 53,
+        "min": 128.0,
+        "median": 512.0,
+        "mean": 882.7,
+        "max": 4480.0
+      },
+      "ceiling_height": {
+        "n": 53,
+        "min": 64.0,
+        "median": 160.0,
+        "mean": 240.6,
+        "max": 1536.0
+      },
+      "footprint_area": {
+        "n": 53,
+        "min": 8192.0,
+        "median": 82944.0,
+        "mean": 695431.2,
+        "max": 17776640.0
+      },
+      "corridor_width": {
+        "n": 36,
+        "min": 64.0,
+        "median": 96.0,
+        "mean": 133.3,
+        "max": 384.0
+      },
+      "opening_width": {
+        "n": 16,
+        "min": 128.0,
+        "median": 1024.0,
+        "mean": 1056.0,
+        "max": 2560.0
+      },
+      "opening_height": {
+        "n": 16,
+        "min": 160.0,
+        "median": 176.0,
+        "mean": 228.0,
+        "max": 752.0
+      },
+      "opening_count": 16,
+      "grid_fit": {
+        "128": 0.516,
+        "192": 0.264,
+        "256": 0.302,
+        "320": 0.176,
+        "512": 0.132
+      }
+    },
+    {
+      "map": "DM-1on1-Serpentine.ut2",
+      "subtract_brushes": 38,
+      "add_brushes": 90,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 38,
+        "min": 64.0,
+        "median": 74.0,
+        "mean": 309.0,
+        "max": 2890.7
+      },
+      "room_dim_long": {
+        "n": 38,
+        "min": 64.0,
+        "median": 128.0,
+        "mean": 373.1,
+        "max": 2890.7
+      },
+      "ceiling_height": {
+        "n": 38,
+        "min": 64.0,
+        "median": 256.0,
+        "mean": 387.3,
+        "max": 2304.0
+      },
+      "footprint_area": {
+        "n": 38,
+        "min": 4096.0,
+        "median": 8906.0,
+        "mean": 526214.6,
+        "max": 8355870.3
+      },
+      "corridor_width": {
+        "n": 6,
+        "min": 64.0,
+        "median": 128.0,
+        "mean": 106.7,
+        "max": 128.0
+      },
+      "opening_width": {
+        "n": 0,
+        "min": 0,
+        "median": 0,
+        "mean": 0,
+        "max": 0
+      },
+      "opening_height": {
+        "n": 0,
+        "min": 0,
+        "median": 0,
+        "mean": 0,
+        "max": 0
+      },
+      "opening_count": 0,
+      "grid_fit": {
+        "128": 0.579,
+        "192": 0.202,
+        "256": 0.202,
+        "320": 0.136,
+        "512": 0.14
+      }
+    },
+    {
+      "map": "DM-1on1-Spirit.ut2",
+      "subtract_brushes": 70,
+      "add_brushes": 322,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 70,
+        "min": 64.0,
+        "median": 128.0,
+        "mean": 233.1,
+        "max": 1024.0
+      },
+      "room_dim_long": {
+        "n": 70,
+        "min": 120.0,
+        "median": 512.0,
+        "mean": 522.7,
+        "max": 2048.0
+      },
+      "ceiling_height": {
+        "n": 70,
+        "min": 64.0,
+        "median": 192.0,
+        "mean": 290.2,
+        "max": 1024.0
+      },
+      "footprint_area": {
+        "n": 70,
+        "min": 7680.0,
+        "median": 65536.0,
+        "mean": 169559.8,
+        "max": 2097152.0
+      },
+      "corridor_width": {
+        "n": 45,
+        "min": 64.0,
+        "median": 128.0,
+        "mean": 182.0,
+        "max": 1024.0
+      },
+      "opening_width": {
+        "n": 63,
+        "min": 96.0,
+        "median": 320.0,
+        "mean": 399.0,
+        "max": 1344.0
+      },
+      "opening_height": {
+        "n": 63,
+        "min": 80.0,
+        "median": 192.0,
+        "mean": 271.1,
+        "max": 800.0
+      },
+      "opening_count": 63,
+      "grid_fit": {
+        "128": 0.617,
+        "192": 0.26,
+        "256": 0.479,
+        "320": 0.155,
+        "512": 0.288
+      }
+    },
+    {
+      "map": "DM-1on1-Squader.ut2",
+      "subtract_brushes": 94,
+      "add_brushes": 97,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 94,
+        "min": 64.0,
+        "median": 256.0,
+        "mean": 336.0,
+        "max": 2944.0
+      },
+      "room_dim_long": {
+        "n": 94,
+        "min": 128.0,
+        "median": 768.0,
+        "mean": 875.9,
+        "max": 4096.0
+      },
+      "ceiling_height": {
+        "n": 94,
+        "min": 64.0,
+        "median": 256.0,
+        "mean": 781.9,
+        "max": 5760.0
+      },
+      "footprint_area": {
+        "n": 94,
+        "min": 12288.0,
+        "median": 172032.0,
+        "mean": 503519.4,
+        "max": 12058624.0
+      },
+      "corridor_width": {
+        "n": 69,
+        "min": 64.0,
+        "median": 256.0,
+        "mean": 224.0,
+        "max": 736.0
+      },
+      "opening_width": {
+        "n": 119,
+        "min": 128.0,
+        "median": 256.0,
+        "mean": 476.2,
+        "max": 2928.0
+      },
+      "opening_height": {
+        "n": 119,
+        "min": 64.0,
+        "median": 256.0,
+        "mean": 380.2,
+        "max": 5248.0
+      },
+      "opening_count": 119,
+      "grid_fit": {
+        "128": 0.897,
+        "192": 0.342,
+        "256": 0.631,
+        "320": 0.232,
+        "512": 0.323
+      }
+    },
+    {
+      "map": "DM-1on1-Trite.ut2",
+      "subtract_brushes": 54,
+      "add_brushes": 166,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 54,
+        "min": 64.0,
+        "median": 256.0,
+        "mean": 338.1,
+        "max": 4096.0
+      },
+      "room_dim_long": {
+        "n": 54,
+        "min": 256.0,
+        "median": 576.0,
+        "mean": 719.4,
+        "max": 4096.0
+      },
+      "ceiling_height": {
+        "n": 54,
+        "min": 64.0,
+        "median": 256.0,
+        "mean": 317.3,
+        "max": 1024.0
+      },
+      "footprint_area": {
+        "n": 54,
+        "min": 16384.0,
+        "median": 98304.0,
+        "mean": 527644.5,
+        "max": 16777216.0
+      },
+      "corridor_width": {
+        "n": 33,
+        "min": 64.0,
+        "median": 128.0,
+        "mean": 157.1,
+        "max": 512.0
+      },
+      "opening_width": {
+        "n": 62,
+        "min": 64.0,
+        "median": 384.0,
+        "mean": 431.5,
+        "max": 1536.0
+      },
+      "opening_height": {
+        "n": 62,
+        "min": 160.0,
+        "median": 224.0,
+        "mean": 246.7,
+        "max": 768.0
+      },
+      "opening_count": 62,
+      "grid_fit": {
+        "128": 0.627,
+        "192": 0.278,
+        "256": 0.46,
+        "320": 0.157,
+        "512": 0.204
+      }
+    },
+    {
+      "map": "DM-Antalus.ut2",
+      "subtract_brushes": 17,
+      "add_brushes": 17,
+      "rotated_subtracts": 0,
+      "world_fills": 1,
+      "room_dim_short": {
+        "n": 17,
+        "min": 304.0,
+        "median": 543.1,
+        "mean": 528.0,
+        "max": 1131.4
+      },
+      "room_dim_long": {
+        "n": 17,
+        "min": 316.8,
+        "median": 543.1,
+        "mean": 542.3,
+        "max": 1131.4
+      },
+      "ceiling_height": {
+        "n": 17,
+        "min": 96.0,
+        "median": 128.0,
+        "mean": 224.9,
+        "max": 512.0
+      },
+      "footprint_area": {
+        "n": 17,
+        "min": 97280.0,
+        "median": 294911.6,
+        "mean": 346303.2,
+        "max": 1279999.9
+      },
+      "corridor_width": {
+        "n": 0,
+        "min": 0,
+        "median": 0,
+        "mean": 0,
+        "max": 0
+      },
+      "opening_width": {
+        "n": 1,
+        "min": 226.3,
+        "median": 226.3,
+        "mean": 226.3,
+        "max": 226.3
+      },
+      "opening_height": {
+        "n": 1,
+        "min": 320.0,
+        "median": 320.0,
+        "mean": 320.0,
+        "max": 320.0
+      },
+      "opening_count": 1,
+      "grid_fit": {
+        "128": 0.137,
+        "192": 0.049,
+        "256": 0.157,
+        "320": 0.049,
+        "512": 0.167
+      }
+    },
+    {
+      "map": "DM-Asbestos.ut2",
+      "subtract_brushes": 112,
+      "add_brushes": 512,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 112,
+        "min": 64.0,
+        "median": 240.0,
+        "mean": 339.9,
+        "max": 2184.0
+      },
+      "room_dim_long": {
+        "n": 112,
+        "min": 128.0,
+        "median": 328.0,
+        "mean": 628.7,
+        "max": 2684.0
+      },
+      "ceiling_height": {
+        "n": 112,
+        "min": 64.0,
+        "median": 236.0,
+        "mean": 312.8,
+        "max": 1312.0
+      },
+      "footprint_area": {
+        "n": 112,
+        "min": 11264.0,
+        "median": 82656.0,
+        "mean": 417161.9,
+        "max": 5521152.0
+      },
+      "corridor_width": {
+        "n": 49,
+        "min": 64.0,
+        "median": 104.0,
+        "mean": 162.4,
+        "max": 384.0
+      },
+      "opening_width": {
+        "n": 92,
+        "min": 80.0,
+        "median": 328.0,
+        "mean": 431.4,
+        "max": 1952.0
+      },
+      "opening_height": {
+        "n": 92,
+        "min": 80.0,
+        "median": 204.0,
+        "mean": 253.3,
+        "max": 912.0
+      },
+      "opening_count": 92,
+      "grid_fit": {
+        "128": 0.03,
+        "192": 0.025,
+        "256": 0.016,
+        "320": 0.045,
+        "512": 0.03
+      }
+    },
+    {
+      "map": "DM-Compressed.ut2",
+      "subtract_brushes": 89,
+      "add_brushes": 96,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 89,
+        "min": 81.0,
+        "median": 496.0,
+        "mean": 446.4,
+        "max": 1536.0
+      },
+      "room_dim_long": {
+        "n": 89,
+        "min": 117.4,
+        "median": 640.0,
+        "mean": 535.6,
+        "max": 1536.0
+      },
+      "ceiling_height": {
+        "n": 89,
+        "min": 76.0,
+        "median": 256.0,
+        "mean": 363.5,
+        "max": 2928.0
+      },
+      "footprint_area": {
+        "n": 89,
+        "min": 13778.0,
+        "median": 249984.0,
+        "mean": 319569.5,
+        "max": 2359296.0
+      },
+      "corridor_width": {
+        "n": 10,
+        "min": 81.0,
+        "median": 104.0,
+        "mean": 125.2,
+        "max": 256.0
+      },
+      "opening_width": {
+        "n": 30,
+        "min": 148.0,
+        "median": 256.0,
+        "mean": 350.9,
+        "max": 896.0
+      },
+      "opening_height": {
+        "n": 30,
+        "min": 134.0,
+        "median": 256.0,
+        "mean": 244.9,
+        "max": 320.0
+      },
+      "opening_count": 30,
+      "grid_fit": {
+        "128": 0.444,
+        "192": 0.219,
+        "256": 0.155,
+        "320": 0.107,
+        "512": 0.097
+      }
+    },
+    {
+      "map": "DM-Corrugation.ut2",
+      "subtract_brushes": 86,
+      "add_brushes": 441,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 86,
+        "min": 80.0,
+        "median": 304.0,
+        "mean": 463.2,
+        "max": 1856.0
+      },
+      "room_dim_long": {
+        "n": 86,
+        "min": 232.0,
+        "median": 644.0,
+        "mean": 814.3,
+        "max": 1920.0
+      },
+      "ceiling_height": {
+        "n": 86,
+        "min": 64.0,
+        "median": 288.0,
+        "mean": 394.8,
+        "max": 2688.0
+      },
+      "footprint_area": {
+        "n": 86,
+        "min": 40960.0,
+        "median": 172032.0,
+        "mean": 483194.8,
+        "max": 3563520.1
+      },
+      "corridor_width": {
+        "n": 35,
+        "min": 80.0,
+        "median": 192.0,
+        "mean": 252.1,
+        "max": 544.0
+      },
+      "opening_width": {
+        "n": 66,
+        "min": 96.0,
+        "median": 512.0,
+        "mean": 526.5,
+        "max": 1152.0
+      },
+      "opening_height": {
+        "n": 66,
+        "min": 160.0,
+        "median": 288.0,
+        "mean": 321.5,
+        "max": 640.0
+      },
+      "opening_count": 66,
+      "grid_fit": {
+        "128": 0.213,
+        "192": 0.157,
+        "256": 0.13,
+        "320": 0.118,
+        "512": 0.035
+      }
+    },
+    {
+      "map": "DM-Curse4.ut2",
+      "subtract_brushes": 2,
+      "add_brushes": 5,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 2,
+        "min": 2817.0,
+        "median": 3465.5,
+        "mean": 3465.5,
+        "max": 4114.0
+      },
+      "room_dim_long": {
+        "n": 2,
+        "min": 4219.8,
+        "median": 4432.9,
+        "mean": 4432.9,
+        "max": 4646.0
+      },
+      "ceiling_height": {
+        "n": 2,
+        "min": 847.0,
+        "median": 1483.5,
+        "mean": 1483.5,
+        "max": 2120.0
+      },
+      "footprint_area": {
+        "n": 2,
+        "min": 13087782.0,
+        "median": 15224018.2,
+        "mean": 15224018.2,
+        "max": 17360254.4
+      },
+      "corridor_width": {
+        "n": 0,
+        "min": 0,
+        "median": 0,
+        "mean": 0,
+        "max": 0
+      },
+      "opening_width": {
+        "n": 0,
+        "min": 0,
+        "median": 0,
+        "mean": 0,
+        "max": 0
+      },
+      "opening_height": {
+        "n": 0,
+        "min": 0,
+        "median": 0,
+        "mean": 0,
+        "max": 0
+      },
+      "opening_count": 0,
+      "grid_fit": {
+        "128": 0.083,
+        "192": 0.0,
+        "256": 0.083,
+        "320": 0.167,
+        "512": 0.0
+      }
+    },
+    {
+      "map": "DM-DE-Grendelkeep.ut2",
+      "subtract_brushes": 148,
+      "add_brushes": 247,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 148,
+        "min": 64.0,
+        "median": 256.0,
+        "mean": 394.2,
+        "max": 3136.0
+      },
+      "room_dim_long": {
+        "n": 148,
+        "min": 64.0,
+        "median": 512.0,
+        "mean": 597.9,
+        "max": 4096.0
+      },
+      "ceiling_height": {
+        "n": 148,
+        "min": 64.0,
+        "median": 320.0,
+        "mean": 377.8,
+        "max": 1664.0
+      },
+      "footprint_area": {
+        "n": 148,
+        "min": 4096.0,
+        "median": 110592.0,
+        "mean": 448844.0,
+        "max": 12845056.0
+      },
+      "corridor_width": {
+        "n": 28,
+        "min": 64.0,
+        "median": 272.0,
+        "mean": 309.4,
+        "max": 1600.0
+      },
+      "opening_width": {
+        "n": 161,
+        "min": 64.0,
+        "median": 346.0,
+        "mean": 372.5,
+        "max": 1280.0
+      },
+      "opening_height": {
+        "n": 161,
+        "min": 70.0,
+        "median": 320.0,
+        "mean": 380.7,
+        "max": 1664.0
+      },
+      "opening_count": 161,
+      "grid_fit": {
+        "128": 0.151,
+        "192": 0.108,
+        "256": 0.086,
+        "320": 0.07,
+        "512": 0.051
+      }
+    },
+    {
+      "map": "DM-DE-Ironic.ut2",
+      "subtract_brushes": 81,
+      "add_brushes": 327,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 81,
+        "min": 64.0,
+        "median": 256.0,
+        "mean": 358.2,
+        "max": 1792.0
+      },
+      "room_dim_long": {
+        "n": 81,
+        "min": 80.0,
+        "median": 448.0,
+        "mean": 639.6,
+        "max": 3072.0
+      },
+      "ceiling_height": {
+        "n": 81,
+        "min": 168.0,
+        "median": 376.0,
+        "mean": 432.1,
+        "max": 2592.0
+      },
+      "footprint_area": {
+        "n": 81,
+        "min": 5120.0,
+        "median": 141056.0,
+        "mean": 333640.6,
+        "max": 3440640.0
+      },
+      "corridor_width": {
+        "n": 25,
+        "min": 64.0,
+        "median": 232.0,
+        "mean": 255.7,
+        "max": 512.0
+      },
+      "opening_width": {
+        "n": 58,
+        "min": 80.0,
+        "median": 384.0,
+        "mean": 438.5,
+        "max": 1416.0
+      },
+      "opening_height": {
+        "n": 58,
+        "min": 96.0,
+        "median": 320.0,
+        "mean": 311.9,
+        "max": 480.0
+      },
+      "opening_count": 58,
+      "grid_fit": {
+        "128": 0.475,
+        "192": 0.216,
+        "256": 0.278,
+        "320": 0.117,
+        "512": 0.173
+      }
+    },
+    {
+      "map": "DM-DE-Osiris2.ut2",
+      "subtract_brushes": 178,
+      "add_brushes": 135,
+      "rotated_subtracts": 0,
+      "world_fills": 1,
+      "room_dim_short": {
+        "n": 178,
+        "min": 64.0,
+        "median": 256.0,
+        "mean": 300.9,
+        "max": 2112.0
+      },
+      "room_dim_long": {
+        "n": 178,
+        "min": 128.0,
+        "median": 512.0,
+        "mean": 818.3,
+        "max": 4032.0
+      },
+      "ceiling_height": {
+        "n": 178,
+        "min": 64.0,
+        "median": 320.0,
+        "mean": 458.3,
+        "max": 1152.0
+      },
+      "footprint_area": {
+        "n": 178,
+        "min": 8192.0,
+        "median": 146432.0,
+        "mean": 352808.3,
+        "max": 8515584.0
+      },
+      "corridor_width": {
+        "n": 115,
+        "min": 64.0,
+        "median": 256.0,
+        "mean": 232.6,
+        "max": 896.0
+      },
+      "opening_width": {
+        "n": 187,
+        "min": 64.0,
+        "median": 256.0,
+        "mean": 475.0,
+        "max": 2560.0
+      },
+      "opening_height": {
+        "n": 187,
+        "min": 80.0,
+        "median": 256.0,
+        "mean": 385.9,
+        "max": 1152.0
+      },
+      "opening_count": 187,
+      "grid_fit": {
+        "128": 0.741,
+        "192": 0.231,
+        "256": 0.334,
+        "320": 0.178,
+        "512": 0.21
+      }
+    },
+    {
+      "map": "DM-Deck17.ut2",
+      "subtract_brushes": 96,
+      "add_brushes": 302,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 96,
+        "min": 74.3,
+        "median": 320.0,
+        "mean": 418.3,
+        "max": 1280.0
+      },
+      "room_dim_long": {
+        "n": 96,
+        "min": 120.0,
+        "median": 640.0,
+        "mean": 844.4,
+        "max": 2560.0
+      },
+      "ceiling_height": {
+        "n": 96,
+        "min": 80.0,
+        "median": 320.0,
+        "mean": 410.3,
+        "max": 2560.0
+      },
+      "footprint_area": {
+        "n": 96,
+        "min": 12000.0,
+        "median": 204928.1,
+        "mean": 485656.5,
+        "max": 3276800.5
+      },
+      "corridor_width": {
+        "n": 51,
+        "min": 74.3,
+        "median": 220.0,
+        "mean": 293.7,
+        "max": 1280.0
+      },
+      "opening_width": {
+        "n": 78,
+        "min": 100.0,
+        "median": 568.0,
+        "mean": 617.7,
+        "max": 2560.0
+      },
+      "opening_height": {
+        "n": 78,
+        "min": 80.0,
+        "median": 320.0,
+        "mean": 317.5,
+        "max": 1040.0
+      },
+      "opening_count": 78,
+      "grid_fit": {
+        "128": 0.229,
+        "192": 0.099,
+        "256": 0.102,
+        "320": 0.22,
+        "512": 0.085
+      }
+    },
+    {
+      "map": "DM-DesertIsle.ut2",
+      "subtract_brushes": 1,
+      "add_brushes": 3,
+      "rotated_subtracts": 0,
+      "world_fills": 1,
+      "room_dim_short": {
+        "n": 1,
+        "min": 2048.0,
+        "median": 2048.0,
+        "mean": 2048.0,
+        "max": 2048.0
+      },
+      "room_dim_long": {
+        "n": 1,
+        "min": 2048.0,
+        "median": 2048.0,
+        "mean": 2048.0,
+        "max": 2048.0
+      },
+      "ceiling_height": {
+        "n": 1,
+        "min": 512.0,
+        "median": 512.0,
+        "mean": 512.0,
+        "max": 512.0
+      },
+      "footprint_area": {
+        "n": 1,
+        "min": 4194301.1,
+        "median": 4194301.1,
+        "mean": 4194301.1,
+        "max": 4194301.1
+      },
+      "corridor_width": {
+        "n": 0,
+        "min": 0,
+        "median": 0,
+        "mean": 0,
+        "max": 0
+      },
+      "opening_width": {
+        "n": 0,
+        "min": 0,
+        "median": 0,
+        "mean": 0,
+        "max": 0
+      },
+      "opening_height": {
+        "n": 0,
+        "min": 0,
+        "median": 0,
+        "mean": 0,
+        "max": 0
+      },
+      "opening_count": 0,
+      "grid_fit": {
+        "128": 1.0,
+        "192": 0.167,
+        "256": 1.0,
+        "320": 0.0,
+        "512": 0.667
+      }
+    },
+    {
+      "map": "DM-Flux2.ut2",
+      "subtract_brushes": 13,
+      "add_brushes": 32,
+      "rotated_subtracts": 0,
+      "world_fills": 1,
+      "room_dim_short": {
+        "n": 13,
+        "min": 328.0,
+        "median": 1466.0,
+        "mean": 1116.8,
+        "max": 1808.0
+      },
+      "room_dim_long": {
+        "n": 13,
+        "min": 448.0,
+        "median": 2054.0,
+        "mean": 1971.2,
+        "max": 3516.0
+      },
+      "ceiling_height": {
+        "n": 13,
+        "min": 290.0,
+        "median": 554.0,
+        "mean": 1300.9,
+        "max": 3094.0
+      },
+      "footprint_area": {
+        "n": 13,
+        "min": 167936.1,
+        "median": 3097432.3,
+        "mean": 2599711.9,
+        "max": 5484960.4
+      },
+      "corridor_width": {
+        "n": 5,
+        "min": 394.0,
+        "median": 1466.0,
+        "mean": 1206.8,
+        "max": 1560.0
+      },
+      "opening_width": {
+        "n": 11,
+        "min": 384.0,
+        "median": 868.0,
+        "mean": 965.1,
+        "max": 2050.0
+      },
+      "opening_height": {
+        "n": 11,
+        "min": 290.0,
+        "median": 554.0,
+        "mean": 1180.0,
+        "max": 3094.0
+      },
+      "opening_count": 11,
+      "grid_fit": {
+        "128": 0.256,
+        "192": 0.141,
+        "256": 0.154,
+        "320": 0.192,
+        "512": 0.128
+      }
+    },
+    {
+      "map": "DM-Gael.ut2",
+      "subtract_brushes": 16,
+      "add_brushes": 42,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 16,
+        "min": 64.0,
+        "median": 448.0,
+        "mean": 552.0,
+        "max": 2048.0
+      },
+      "room_dim_long": {
+        "n": 16,
+        "min": 256.0,
+        "median": 768.0,
+        "mean": 1228.0,
+        "max": 3072.0
+      },
+      "ceiling_height": {
+        "n": 16,
+        "min": 256.0,
+        "median": 704.0,
+        "mean": 829.0,
+        "max": 3920.0
+      },
+      "footprint_area": {
+        "n": 16,
+        "min": 30720.0,
+        "median": 344064.0,
+        "mean": 909056.0,
+        "max": 6291456.0
+      },
+      "corridor_width": {
+        "n": 9,
+        "min": 64.0,
+        "median": 384.0,
+        "mean": 284.4,
+        "max": 512.0
+      },
+      "opening_width": {
+        "n": 4,
+        "min": 256.0,
+        "median": 480.0,
+        "mean": 432.0,
+        "max": 512.0
+      },
+      "opening_height": {
+        "n": 4,
+        "min": 256.0,
+        "median": 768.0,
+        "mean": 640.0,
+        "max": 768.0
+      },
+      "opening_count": 4,
+      "grid_fit": {
+        "128": 0.469,
+        "192": 0.365,
+        "256": 0.354,
+        "320": 0.146,
+        "512": 0.177
+      }
+    },
+    {
+      "map": "DM-Gestalt.ut2",
+      "subtract_brushes": 2,
+      "add_brushes": 4,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 2,
+        "min": 1024.0,
+        "median": 4352.0,
+        "mean": 4352.0,
+        "max": 7680.0
+      },
+      "room_dim_long": {
+        "n": 2,
+        "min": 1024.0,
+        "median": 4672.0,
+        "mean": 4672.0,
+        "max": 8320.0
+      },
+      "ceiling_height": {
+        "n": 2,
+        "min": 1024.0,
+        "median": 3712.0,
+        "mean": 3712.0,
+        "max": 6400.0
+      },
+      "footprint_area": {
+        "n": 2,
+        "min": 1048576.0,
+        "median": 32473088.0,
+        "mean": 32473088.0,
+        "max": 63897600.0
+      },
+      "corridor_width": {
+        "n": 0,
+        "min": 0,
+        "median": 0,
+        "mean": 0,
+        "max": 0
+      },
+      "opening_width": {
+        "n": 0,
+        "min": 0,
+        "median": 0,
+        "mean": 0,
+        "max": 0
+      },
+      "opening_height": {
+        "n": 0,
+        "min": 0,
+        "median": 0,
+        "mean": 0,
+        "max": 0
+      },
+      "opening_count": 0,
+      "grid_fit": {
+        "128": 0.833,
+        "192": 0.333,
+        "256": 0.583,
+        "320": 0.667,
+        "512": 0.0
+      }
+    },
+    {
+      "map": "DM-Goliath.ut2",
+      "subtract_brushes": 178,
+      "add_brushes": 125,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 178,
+        "min": 64.0,
+        "median": 256.0,
+        "mean": 346.4,
+        "max": 7680.0
+      },
+      "room_dim_long": {
+        "n": 178,
+        "min": 64.0,
+        "median": 608.0,
+        "mean": 790.1,
+        "max": 10240.0
+      },
+      "ceiling_height": {
+        "n": 178,
+        "min": 64.0,
+        "median": 384.0,
+        "mean": 665.4,
+        "max": 4096.0
+      },
+      "footprint_area": {
+        "n": 178,
+        "min": 4096.0,
+        "median": 131072.0,
+        "mean": 747459.6,
+        "max": 78643200.0
+      },
+      "corridor_width": {
+        "n": 118,
+        "min": 64.0,
+        "median": 128.0,
+        "mean": 216.7,
+        "max": 1024.0
+      },
+      "opening_width": {
+        "n": 211,
+        "min": 64.0,
+        "median": 384.0,
+        "mean": 450.4,
+        "max": 1920.0
+      },
+      "opening_height": {
+        "n": 211,
+        "min": 128.0,
+        "median": 384.0,
+        "mean": 615.6,
+        "max": 1536.0
+      },
+      "opening_count": 211,
+      "grid_fit": {
+        "128": 0.78,
+        "192": 0.275,
+        "256": 0.454,
+        "320": 0.16,
+        "512": 0.222
+      }
+    },
+    {
+      "map": "DM-HyperBlast2.ut2",
+      "subtract_brushes": 86,
+      "add_brushes": 197,
+      "rotated_subtracts": 0,
+      "world_fills": 1,
+      "room_dim_short": {
+        "n": 86,
+        "min": 64.0,
+        "median": 224.0,
+        "mean": 319.9,
+        "max": 1472.0
+      },
+      "room_dim_long": {
+        "n": 86,
+        "min": 96.0,
+        "median": 568.0,
+        "mean": 706.4,
+        "max": 2732.0
+      },
+      "ceiling_height": {
+        "n": 86,
+        "min": 64.0,
+        "median": 512.0,
+        "mean": 474.9,
+        "max": 1024.0
+      },
+      "footprint_area": {
+        "n": 86,
+        "min": 9216.0,
+        "median": 114176.0,
+        "mean": 330844.2,
+        "max": 2826240.4
+      },
+      "corridor_width": {
+        "n": 43,
+        "min": 64.0,
+        "median": 128.0,
+        "mean": 225.6,
+        "max": 1024.0
+      },
+      "opening_width": {
+        "n": 73,
+        "min": 64.0,
+        "median": 416.0,
+        "mean": 449.5,
+        "max": 1216.0
+      },
+      "opening_height": {
+        "n": 73,
+        "min": 152.0,
+        "median": 512.0,
+        "mean": 504.8,
+        "max": 896.0
+      },
+      "opening_count": 73,
+      "grid_fit": {
+        "128": 0.378,
+        "192": 0.161,
+        "256": 0.256,
+        "320": 0.132,
+        "512": 0.047
+      }
+    },
+    {
+      "map": "DM-Icetomb.ut2",
+      "subtract_brushes": 82,
+      "add_brushes": 119,
+      "rotated_subtracts": 0,
+      "world_fills": 1,
+      "room_dim_short": {
+        "n": 82,
+        "min": 64.0,
+        "median": 307.2,
+        "mean": 380.0,
+        "max": 2457.6
+      },
+      "room_dim_long": {
+        "n": 82,
+        "min": 256.0,
+        "median": 615.2,
+        "mean": 901.5,
+        "max": 3532.0
+      },
+      "ceiling_height": {
+        "n": 82,
+        "min": 67.2,
+        "median": 819.2,
+        "mean": 1015.9,
+        "max": 6528.0
+      },
+      "footprint_area": {
+        "n": 82,
+        "min": 19660.8,
+        "median": 155560.5,
+        "mean": 507846.5,
+        "max": 6039799.1
+      },
+      "corridor_width": {
+        "n": 52,
+        "min": 64.0,
+        "median": 153.6,
+        "mean": 237.2,
+        "max": 819.2
+      },
+      "opening_width": {
+        "n": 88,
+        "min": 76.8,
+        "median": 308.0,
+        "mean": 465.6,
+        "max": 3340.0
+      },
+      "opening_height": {
+        "n": 88,
+        "min": 67.2,
+        "median": 696.0,
+        "mean": 788.1,
+        "max": 1510.4
+      },
+      "opening_count": 88,
+      "grid_fit": {
+        "128": 0.203,
+        "192": 0.136,
+        "256": 0.118,
+        "320": 0.049,
+        "512": 0.104
+      }
+    },
+    {
+      "map": "DM-Inferno.ut2",
+      "subtract_brushes": 43,
+      "add_brushes": 332,
+      "rotated_subtracts": 0,
+      "world_fills": 1,
+      "room_dim_short": {
+        "n": 43,
+        "min": 64.0,
+        "median": 160.0,
+        "mean": 206.1,
+        "max": 1024.0
+      },
+      "room_dim_long": {
+        "n": 43,
+        "min": 160.0,
+        "median": 448.0,
+        "mean": 482.6,
+        "max": 1264.0
+      },
+      "ceiling_height": {
+        "n": 43,
+        "min": 128.0,
+        "median": 400.0,
+        "mean": 422.3,
+        "max": 1200.0
+      },
+      "footprint_area": {
+        "n": 43,
+        "min": 10240.0,
+        "median": 71680.0,
+        "mean": 134868.5,
+        "max": 1048576.0
+      },
+      "corridor_width": {
+        "n": 35,
+        "min": 64.0,
+        "median": 160.0,
+        "mean": 138.9,
+        "max": 192.0
+      },
+      "opening_width": {
+        "n": 34,
+        "min": 159.7,
+        "median": 160.0,
+        "mean": 241.8,
+        "max": 1264.0
+      },
+      "opening_height": {
+        "n": 34,
+        "min": 80.0,
+        "median": 240.0,
+        "mean": 258.4,
+        "max": 432.0
+      },
+      "opening_count": 34,
+      "grid_fit": {
+        "128": 0.151,
+        "192": 0.101,
+        "256": 0.078,
+        "320": 0.05,
+        "512": 0.047
+      }
+    },
+    {
+      "map": "DM-Injector.ut2",
+      "subtract_brushes": 0,
+      "add_brushes": 360,
+      "rotated_subtracts": 0,
+      "world_fills": 1,
+      "room_dim_short": {
+        "n": 0,
+        "min": 0,
+        "median": 0,
+        "mean": 0,
+        "max": 0
+      },
+      "room_dim_long": {
+        "n": 0,
+        "min": 0,
+        "median": 0,
+        "mean": 0,
+        "max": 0
+      },
+      "ceiling_height": {
+        "n": 0,
+        "min": 0,
+        "median": 0,
+        "mean": 0,
+        "max": 0
+      },
+      "footprint_area": {
+        "n": 0,
+        "min": 0,
+        "median": 0,
+        "mean": 0,
+        "max": 0
+      },
+      "corridor_width": {
+        "n": 0,
+        "min": 0,
+        "median": 0,
+        "mean": 0,
+        "max": 0
+      },
+      "opening_width": {
+        "n": 0,
+        "min": 0,
+        "median": 0,
+        "mean": 0,
+        "max": 0
+      },
+      "opening_height": {
+        "n": 0,
+        "min": 0,
+        "median": 0,
+        "mean": 0,
+        "max": 0
+      },
+      "opening_count": 0,
+      "grid_fit": {
+        "128": 0.0,
+        "192": 0.0,
+        "256": 0.0,
+        "320": 0.0,
+        "512": 0.0
+      }
+    },
+    {
+      "map": "DM-Insidious.ut2",
+      "subtract_brushes": 37,
+      "add_brushes": 117,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 37,
+        "min": 128.0,
+        "median": 256.0,
+        "mean": 410.4,
+        "max": 1024.0
+      },
+      "room_dim_long": {
+        "n": 37,
+        "min": 128.0,
+        "median": 416.0,
+        "mean": 703.8,
+        "max": 1668.0
+      },
+      "ceiling_height": {
+        "n": 37,
+        "min": 64.0,
+        "median": 256.0,
+        "mean": 391.6,
+        "max": 4648.0
+      },
+      "footprint_area": {
+        "n": 37,
+        "min": 16384.0,
+        "median": 93184.0,
+        "mean": 394145.8,
+        "max": 1194289.0
+      },
+      "corridor_width": {
+        "n": 11,
+        "min": 128.0,
+        "median": 516.0,
+        "mean": 528.0,
+        "max": 716.0
+      },
+      "opening_width": {
+        "n": 22,
+        "min": 128.0,
+        "median": 624.0,
+        "mean": 551.1,
+        "max": 1084.0
+      },
+      "opening_height": {
+        "n": 22,
+        "min": 64.0,
+        "median": 288.0,
+        "mean": 270.2,
+        "max": 440.0
+      },
+      "opening_count": 22,
+      "grid_fit": {
+        "128": 0.059,
+        "192": 0.041,
+        "256": 0.036,
+        "320": 0.032,
+        "512": 0.036
+      }
+    },
+    {
+      "map": "DM-IronDeity.ut2",
+      "subtract_brushes": 106,
+      "add_brushes": 79,
+      "rotated_subtracts": 0,
+      "world_fills": 1,
+      "room_dim_short": {
+        "n": 106,
+        "min": 64.0,
+        "median": 160.0,
+        "mean": 275.3,
+        "max": 1088.0
+      },
+      "room_dim_long": {
+        "n": 106,
+        "min": 90.5,
+        "median": 528.0,
+        "mean": 760.1,
+        "max": 2688.0
+      },
+      "ceiling_height": {
+        "n": 106,
+        "min": 64.0,
+        "median": 376.0,
+        "mean": 461.5,
+        "max": 1572.0
+      },
+      "footprint_area": {
+        "n": 106,
+        "min": 8192.0,
+        "median": 87968.2,
+        "mean": 291874.2,
+        "max": 2334720.0
+      },
+      "corridor_width": {
+        "n": 67,
+        "min": 64.0,
+        "median": 120.0,
+        "mean": 233.9,
+        "max": 960.0
+      },
+      "opening_width": {
+        "n": 136,
+        "min": 64.0,
+        "median": 268.0,
+        "mean": 401.5,
+        "max": 2112.0
+      },
+      "opening_height": {
+        "n": 136,
+        "min": 96.0,
+        "median": 428.0,
+        "mean": 437.5,
+        "max": 1556.0
+      },
+      "opening_count": 136,
+      "grid_fit": {
+        "128": 0.244,
+        "192": 0.143,
+        "256": 0.138,
+        "320": 0.096,
+        "512": 0.072
+      }
+    },
+    {
+      "map": "DM-Junkyard.ut2",
+      "subtract_brushes": 2,
+      "add_brushes": 19,
+      "rotated_subtracts": 0,
+      "world_fills": 2,
+      "room_dim_short": {
+        "n": 2,
+        "min": 256.0,
+        "median": 605.5,
+        "mean": 605.5,
+        "max": 955.0
+      },
+      "room_dim_long": {
+        "n": 2,
+        "min": 256.0,
+        "median": 697.4,
+        "mean": 697.4,
+        "max": 1138.8
+      },
+      "ceiling_height": {
+        "n": 2,
+        "min": 256.0,
+        "median": 352.0,
+        "mean": 352.0,
+        "max": 448.0
+      },
+      "footprint_area": {
+        "n": 2,
+        "min": 65536.0,
+        "median": 576528.9,
+        "mean": 576528.9,
+        "max": 1087521.7
+      },
+      "corridor_width": {
+        "n": 0,
+        "min": 0,
+        "median": 0,
+        "mean": 0,
+        "max": 0
+      },
+      "opening_width": {
+        "n": 0,
+        "min": 0,
+        "median": 0,
+        "mean": 0,
+        "max": 0
+      },
+      "opening_height": {
+        "n": 0,
+        "min": 0,
+        "median": 0,
+        "mean": 0,
+        "max": 0
+      },
+      "opening_count": 0,
+      "grid_fit": {
+        "128": 0.167,
+        "192": 0.083,
+        "256": 0.0,
+        "320": 0.083,
+        "512": 0.0
+      }
+    },
+    {
+      "map": "DM-Leviathan.ut2",
+      "subtract_brushes": 60,
+      "add_brushes": 21,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 60,
+        "min": 93.7,
+        "median": 256.0,
+        "mean": 255.8,
+        "max": 1024.0
+      },
+      "room_dim_long": {
+        "n": 60,
+        "min": 110.0,
+        "median": 766.9,
+        "mean": 727.8,
+        "max": 2048.0
+      },
+      "ceiling_height": {
+        "n": 60,
+        "min": 128.0,
+        "median": 272.5,
+        "mean": 410.1,
+        "max": 1024.0
+      },
+      "footprint_area": {
+        "n": 60,
+        "min": 10306.1,
+        "median": 163840.0,
+        "mean": 232057.2,
+        "max": 2097152.0
+      },
+      "corridor_width": {
+        "n": 32,
+        "min": 128.0,
+        "median": 256.0,
+        "mean": 294.1,
+        "max": 1024.0
+      },
+      "opening_width": {
+        "n": 34,
+        "min": 124.0,
+        "median": 384.0,
+        "mean": 558.4,
+        "max": 2048.0
+      },
+      "opening_height": {
+        "n": 34,
+        "min": 122.1,
+        "median": 492.0,
+        "mean": 380.3,
+        "max": 512.0
+      },
+      "opening_count": 34,
+      "grid_fit": {
+        "128": 0.183,
+        "192": 0.078,
+        "256": 0.194,
+        "320": 0.103,
+        "512": 0.122
+      }
+    },
+    {
+      "map": "DM-Metallurgy.ut2",
+      "subtract_brushes": 75,
+      "add_brushes": 82,
+      "rotated_subtracts": 0,
+      "world_fills": 1,
+      "room_dim_short": {
+        "n": 75,
+        "min": 64.0,
+        "median": 128.0,
+        "mean": 321.2,
+        "max": 5120.0
+      },
+      "room_dim_long": {
+        "n": 75,
+        "min": 96.0,
+        "median": 320.0,
+        "mean": 507.6,
+        "max": 5120.0
+      },
+      "ceiling_height": {
+        "n": 75,
+        "min": 64.0,
+        "median": 208.0,
+        "mean": 271.3,
+        "max": 1152.0
+      },
+      "footprint_area": {
+        "n": 75,
+        "min": 7680.0,
+        "median": 40960.0,
+        "mean": 557849.6,
+        "max": 26214400.0
+      },
+      "corridor_width": {
+        "n": 30,
+        "min": 64.0,
+        "median": 128.0,
+        "mean": 142.9,
+        "max": 384.0
+      },
+      "opening_width": {
+        "n": 27,
+        "min": 240.0,
+        "median": 320.0,
+        "mean": 472.6,
+        "max": 1184.0
+      },
+      "opening_height": {
+        "n": 27,
+        "min": 208.0,
+        "median": 256.0,
+        "mean": 392.0,
+        "max": 1024.0
+      },
+      "opening_count": 27,
+      "grid_fit": {
+        "128": 0.42,
+        "192": 0.2,
+        "256": 0.236,
+        "320": 0.084,
+        "512": 0.151
+      }
+    },
+    {
+      "map": "DM-Morpheus3.ut2",
+      "subtract_brushes": 41,
+      "add_brushes": 146,
+      "rotated_subtracts": 0,
+      "world_fills": 1,
+      "room_dim_short": {
+        "n": 41,
+        "min": 128.0,
+        "median": 452.5,
+        "mean": 497.1,
+        "max": 3648.0
+      },
+      "room_dim_long": {
+        "n": 41,
+        "min": 256.0,
+        "median": 512.0,
+        "mean": 695.4,
+        "max": 4960.0
+      },
+      "ceiling_height": {
+        "n": 41,
+        "min": 64.0,
+        "median": 384.0,
+        "mean": 423.2,
+        "max": 4184.0
+      },
+      "footprint_area": {
+        "n": 41,
+        "min": 43008.0,
+        "median": 204799.9,
+        "mean": 732266.2,
+        "max": 18094080.0
+      },
+      "corridor_width": {
+        "n": 9,
+        "min": 128.0,
+        "median": 128.0,
+        "mean": 149.3,
+        "max": 192.0
+      },
+      "opening_width": {
+        "n": 18,
+        "min": 336.0,
+        "median": 336.0,
+        "mean": 469.3,
+        "max": 960.0
+      },
+      "opening_height": {
+        "n": 18,
+        "min": 216.0,
+        "median": 216.0,
+        "mean": 293.3,
+        "max": 512.0
+      },
+      "opening_count": 18,
+      "grid_fit": {
+        "128": 0.496,
+        "192": 0.252,
+        "256": 0.22,
+        "320": 0.163,
+        "512": 0.138
+      }
+    },
+    {
+      "map": "DM-Oceanic.ut2",
+      "subtract_brushes": 75,
+      "add_brushes": 53,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 75,
+        "min": 64.0,
+        "median": 320.0,
+        "mean": 375.3,
+        "max": 1503.0
+      },
+      "room_dim_long": {
+        "n": 75,
+        "min": 144.0,
+        "median": 640.0,
+        "mean": 695.2,
+        "max": 2239.0
+      },
+      "ceiling_height": {
+        "n": 75,
+        "min": 64.0,
+        "median": 346.0,
+        "mean": 414.1,
+        "max": 1743.0
+      },
+      "footprint_area": {
+        "n": 75,
+        "min": 20735.9,
+        "median": 204800.0,
+        "mean": 337984.5,
+        "max": 3365217.0
+      },
+      "corridor_width": {
+        "n": 28,
+        "min": 64.0,
+        "median": 240.0,
+        "mean": 247.0,
+        "max": 576.0
+      },
+      "opening_width": {
+        "n": 57,
+        "min": 128.0,
+        "median": 320.0,
+        "mean": 367.7,
+        "max": 1304.0
+      },
+      "opening_height": {
+        "n": 57,
+        "min": 128.0,
+        "median": 256.0,
+        "mean": 326.6,
+        "max": 768.0
+      },
+      "opening_count": 57,
+      "grid_fit": {
+        "128": 0.393,
+        "192": 0.191,
+        "256": 0.193,
+        "320": 0.104,
+        "512": 0.12
+      }
+    },
+    {
+      "map": "DM-Phobos2.ut2",
+      "subtract_brushes": 148,
+      "add_brushes": 296,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 148,
+        "min": 64.0,
+        "median": 242.0,
+        "mean": 334.9,
+        "max": 7232.0
+      },
+      "room_dim_long": {
+        "n": 148,
+        "min": 64.0,
+        "median": 384.0,
+        "mean": 737.0,
+        "max": 18296.0
+      },
+      "ceiling_height": {
+        "n": 148,
+        "min": 64.0,
+        "median": 288.0,
+        "mean": 452.3,
+        "max": 7872.0
+      },
+      "footprint_area": {
+        "n": 148,
+        "min": 4096.0,
+        "median": 76760.0,
+        "mean": 1269324.3,
+        "max": 132316672.0
+      },
+      "corridor_width": {
+        "n": 65,
+        "min": 64.0,
+        "median": 96.0,
+        "mean": 306.1,
+        "max": 7232.0
+      },
+      "opening_width": {
+        "n": 135,
+        "min": 64.0,
+        "median": 256.0,
+        "mean": 315.7,
+        "max": 3072.0
+      },
+      "opening_height": {
+        "n": 135,
+        "min": 72.0,
+        "median": 272.0,
+        "mean": 302.0,
+        "max": 1024.0
+      },
+      "opening_count": 135,
+      "grid_fit": {
+        "128": 0.33,
+        "192": 0.16,
+        "256": 0.184,
+        "320": 0.146,
+        "512": 0.109
+      }
+    },
+    {
+      "map": "DM-Plunge.ut2",
+      "subtract_brushes": 38,
+      "add_brushes": 150,
+      "rotated_subtracts": 0,
+      "world_fills": 1,
+      "room_dim_short": {
+        "n": 38,
+        "min": 64.0,
+        "median": 288.0,
+        "mean": 398.8,
+        "max": 2890.7
+      },
+      "room_dim_long": {
+        "n": 38,
+        "min": 146.0,
+        "median": 512.0,
+        "mean": 625.0,
+        "max": 2890.7
+      },
+      "ceiling_height": {
+        "n": 38,
+        "min": 72.0,
+        "median": 256.0,
+        "mean": 235.7,
+        "max": 644.0
+      },
+      "footprint_area": {
+        "n": 38,
+        "min": 12288.0,
+        "median": 146944.1,
+        "mean": 506817.7,
+        "max": 8355869.6
+      },
+      "corridor_width": {
+        "n": 11,
+        "min": 64.0,
+        "median": 64.0,
+        "mean": 93.1,
+        "max": 256.0
+      },
+      "opening_width": {
+        "n": 26,
+        "min": 192.0,
+        "median": 288.0,
+        "mean": 406.2,
+        "max": 1216.0
+      },
+      "opening_height": {
+        "n": 26,
+        "min": 80.0,
+        "median": 256.0,
+        "mean": 230.8,
+        "max": 256.0
+      },
+      "opening_count": 26,
+      "grid_fit": {
+        "128": 0.048,
+        "192": 0.039,
+        "256": 0.026,
+        "320": 0.013,
+        "512": 0.048
+      }
+    },
+    {
+      "map": "DM-Rankin.ut2",
+      "subtract_brushes": 127,
+      "add_brushes": 361,
+      "rotated_subtracts": 0,
+      "world_fills": 0,
+      "room_dim_short": {
+        "n": 127,
+        "min": 64.0,
+        "median": 304.0,
+        "mean": 357.8,
+        "max": 3328.0
+      },
+      "room_dim_long": {
+        "n": 127,
+        "min": 160.0,
+        "median": 512.0,
+        "mean": 788.9,
+        "max": 4608.0
+      },
+      "ceiling_height": {
+        "n": 127,
+        "min": 64.0,
+        "median": 288.0,
+        "mean": 360.1,
+        "max": 2112.0
+      },
+      "footprint_area": {
+        "n": 127,
+        "min": 12288.0,
+        "median": 135680.0,
+        "mean": 459037.7,
+        "max": 11927552.0
+      },
+      "corridor_width": {
+        "n": 76,
+        "min": 64.0,
+        "median": 140.0,
+        "mean": 242.2,
+        "max": 1312.0
+      },
+      "opening_width": {
+        "n": 107,
+        "min": 128.0,
+        "median": 384.0,
+        "mean": 487.4,
+        "max": 1600.0
+      },
+      "opening_height": {
+        "n": 107,
+        "min": 80.0,
+        "median": 296.0,
+        "mean": 337.7,
+        "max": 2112.0
+      },
+      "opening_count": 107,
+      "grid_fit": {
+        "128": 0.34,
+        "192": 0.192,
+        "256": 0.19,
+        "320": 0.205,
+        "512": 0.117
+      }
+    }
+  ]
+}

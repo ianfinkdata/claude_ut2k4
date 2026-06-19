@@ -1,0 +1,1426 @@
+Begin Map
+Begin Actor Class=Brush Name=Hub
+    CsgOper=CSG_Subtract
+    MainScale=(SheerAxis=SHEER_ZX)
+    PostScale=(SheerAxis=SHEER_ZX)
+    Tag="Brush"
+    Location=(Z=192.000000)
+    Begin Brush Name=ModelHub
+       Begin PolyList
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00768.000000,-00768.000000,-00192.000000
+             Normal   -00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,+00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00768.000000,-00768.000000,-00192.000000
+             Vertex   -00768.000000,-00768.000000,+00192.000000
+             Vertex   -00768.000000,+00768.000000,+00192.000000
+             Vertex   -00768.000000,+00768.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00768.000000,+00768.000000,-00192.000000
+             Normal   +00000.000000,+00001.000000,+00000.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00768.000000,+00768.000000,-00192.000000
+             Vertex   -00768.000000,+00768.000000,+00192.000000
+             Vertex   +00768.000000,+00768.000000,+00192.000000
+             Vertex   +00768.000000,+00768.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00768.000000,+00768.000000,-00192.000000
+             Normal   +00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,-00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00768.000000,+00768.000000,-00192.000000
+             Vertex   +00768.000000,+00768.000000,+00192.000000
+             Vertex   +00768.000000,-00768.000000,+00192.000000
+             Vertex   +00768.000000,-00768.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00768.000000,-00768.000000,-00192.000000
+             Normal   +00000.000000,-00001.000000,+00000.000000
+             TextureU -00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00768.000000,-00768.000000,-00192.000000
+             Vertex   +00768.000000,-00768.000000,+00192.000000
+             Vertex   -00768.000000,-00768.000000,+00192.000000
+             Vertex   -00768.000000,-00768.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00768.000000,+00768.000000,+00192.000000
+             Normal   +00000.000000,+00000.000000,+00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00001.000000,+00000.000000
+             Vertex   -00768.000000,+00768.000000,+00192.000000
+             Vertex   -00768.000000,-00768.000000,+00192.000000
+             Vertex   +00768.000000,-00768.000000,+00192.000000
+             Vertex   +00768.000000,+00768.000000,+00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00768.000000,-00768.000000,-00192.000000
+             Normal   +00000.000000,+00000.000000,-00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,-00001.000000,+00000.000000
+             Vertex   -00768.000000,-00768.000000,-00192.000000
+             Vertex   -00768.000000,+00768.000000,-00192.000000
+             Vertex   +00768.000000,+00768.000000,-00192.000000
+             Vertex   +00768.000000,-00768.000000,-00192.000000
+          End Polygon
+       End PolyList
+    End Brush
+    Brush=Model'MyLevel.ModelHub'
+End Actor
+Begin Actor Class=Light Name=HubLight0
+    LightBrightness=120.000000
+    LightRadius=28
+    Tag="Light"
+    Location=(Z=344.000000)
+End Actor
+Begin Actor Class=Light Name=HubLight1
+    LightBrightness=120.000000
+    LightRadius=28
+    Tag="Light"
+    Location=(X=380.000000,Y=380.000000,Z=344.000000)
+End Actor
+Begin Actor Class=Light Name=HubLight2
+    LightBrightness=120.000000
+    LightRadius=28
+    Tag="Light"
+    Location=(X=-380.000000,Y=380.000000,Z=344.000000)
+End Actor
+Begin Actor Class=Light Name=HubLight3
+    LightBrightness=120.000000
+    LightRadius=28
+    Tag="Light"
+    Location=(X=380.000000,Y=-380.000000,Z=344.000000)
+End Actor
+Begin Actor Class=Light Name=HubLight4
+    LightBrightness=120.000000
+    LightRadius=28
+    Tag="Light"
+    Location=(X=-380.000000,Y=-380.000000,Z=344.000000)
+End Actor
+Begin Actor Class=PlayerStart Name=HubStart0
+    Tag="PlayerStart"
+    Location=(X=560.000000,Z=16.000000)
+    Rotation=(Yaw=32768)
+End Actor
+Begin Actor Class=PlayerStart Name=HubStart1
+    Tag="PlayerStart"
+    Location=(X=395.979797,Y=395.979797,Z=16.000000)
+    Rotation=(Yaw=40960)
+End Actor
+Begin Actor Class=PlayerStart Name=HubStart2
+    Tag="PlayerStart"
+    Location=(X=0.000000,Y=560.000000,Z=16.000000)
+    Rotation=(Yaw=49152)
+End Actor
+Begin Actor Class=PlayerStart Name=HubStart3
+    Tag="PlayerStart"
+    Location=(X=-395.979797,Y=395.979797,Z=16.000000)
+    Rotation=(Yaw=57344)
+End Actor
+Begin Actor Class=PlayerStart Name=HubStart4
+    Tag="PlayerStart"
+    Location=(X=-560.000000,Y=0.000000,Z=16.000000)
+End Actor
+Begin Actor Class=PlayerStart Name=HubStart5
+    Tag="PlayerStart"
+    Location=(X=-395.979797,Y=-395.979797,Z=16.000000)
+    Rotation=(Yaw=8192)
+End Actor
+Begin Actor Class=PlayerStart Name=HubStart6
+    Tag="PlayerStart"
+    Location=(X=-0.000000,Y=-560.000000,Z=16.000000)
+    Rotation=(Yaw=16384)
+End Actor
+Begin Actor Class=PlayerStart Name=HubStart7
+    Tag="PlayerStart"
+    Location=(X=395.979797,Y=-395.979797,Z=16.000000)
+    Rotation=(Yaw=24576)
+End Actor
+Begin Actor Class=PathNode Name=HubPNC
+    Tag="PathNode"
+    Location=(Z=16.000000)
+End Actor
+Begin Actor Class=PathNode Name=HubPN0
+    Tag="PathNode"
+    Location=(X=360.000000,Z=16.000000)
+End Actor
+Begin Actor Class=PathNode Name=HubPN1
+    Tag="PathNode"
+    Location=(X=-360.000000,Z=16.000000)
+End Actor
+Begin Actor Class=PathNode Name=HubPN2
+    Tag="PathNode"
+    Location=(Y=360.000000,Z=16.000000)
+End Actor
+Begin Actor Class=PathNode Name=HubPN3
+    Tag="PathNode"
+    Location=(Y=-360.000000,Z=16.000000)
+End Actor
+Begin Actor Class=xWeaponBase Name=HubShock
+    WeaponType=Class'XWeapons.ShockRifle'
+    myMarker=InventorySpot'MyLevel.InventorySpot0'
+    StaticMesh=StaticMesh'2k4ChargerMeshes.ChargerMeshes.WeaponChargerMesh-DS'
+    Tag="xWeaponBase"
+    Location=(X=300.000000,Y=300.000000,Z=16.000000)
+    PrePivot=(Z=3.700000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot0
+    Tag="InventorySpot"
+    myPickupBase=xWeaponBase'MyLevel.HubShock'
+    Location=(X=300.000000,Y=300.000000)
+End Actor
+Begin Actor Class=xWeaponBase Name=HubLink
+    WeaponType=Class'XWeapons.LinkGun'
+    myMarker=InventorySpot'MyLevel.InventorySpot1'
+    StaticMesh=StaticMesh'2k4ChargerMeshes.ChargerMeshes.WeaponChargerMesh-DS'
+    Tag="xWeaponBase"
+    Location=(X=-300.000000,Y=-300.000000,Z=16.000000)
+    PrePivot=(Z=3.700000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot1
+    Tag="InventorySpot"
+    myPickupBase=xWeaponBase'MyLevel.HubLink'
+    Location=(X=-300.000000,Y=-300.000000)
+End Actor
+Begin Actor Class=ShockAmmoPickup Name=HubAmmo
+    Tag="ShockAmmoPickup"
+    myMarker=InventorySpot'MyLevel.InventorySpot2'
+    Location=(X=300.000000,Y=-300.000000,Z=16.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot2
+    Tag="InventorySpot"
+    markedItem=ShockAmmoPickup'MyLevel.HubAmmo'
+    Location=(X=300.000000,Y=-300.000000)
+End Actor
+Begin Actor Class=MiniHealthPack Name=HubHealth
+    Tag="MiniHealthPack"
+    myMarker=InventorySpot'MyLevel.InventorySpot3'
+    Location=(X=-300.000000,Y=300.000000,Z=16.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot3
+    Tag="InventorySpot"
+    markedItem=MiniHealthPack'MyLevel.HubHealth'
+    Location=(X=-300.000000,Y=300.000000)
+End Actor
+Begin Actor Class=AdrenalinePickup Name=HubAdren
+    Tag="AdrenalinePickup"
+    myMarker=InventorySpot'MyLevel.InventorySpot4'
+    Location=(Y=420.000000,Z=16.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot4
+    Tag="InventorySpot"
+    markedItem=AdrenalinePickup'MyLevel.HubAdren'
+    Location=(Y=420.000000)
+End Actor
+Begin Actor Class=Brush Name=NAnte
+    CsgOper=CSG_Subtract
+    MainScale=(SheerAxis=SHEER_ZX)
+    PostScale=(SheerAxis=SHEER_ZX)
+    Tag="Brush"
+    Location=(Y=1280.000000,Z=192.000000)
+    Begin Brush Name=ModelNAnte
+       Begin PolyList
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00512.000000,-00320.000000,-00192.000000
+             Normal   -00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,+00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00512.000000,-00320.000000,-00192.000000
+             Vertex   -00512.000000,-00320.000000,+00192.000000
+             Vertex   -00512.000000,+00320.000000,+00192.000000
+             Vertex   -00512.000000,+00320.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00512.000000,+00320.000000,-00192.000000
+             Normal   +00000.000000,+00001.000000,+00000.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00512.000000,+00320.000000,-00192.000000
+             Vertex   -00512.000000,+00320.000000,+00192.000000
+             Vertex   +00512.000000,+00320.000000,+00192.000000
+             Vertex   +00512.000000,+00320.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00512.000000,+00320.000000,-00192.000000
+             Normal   +00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,-00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00512.000000,+00320.000000,-00192.000000
+             Vertex   +00512.000000,+00320.000000,+00192.000000
+             Vertex   +00512.000000,-00320.000000,+00192.000000
+             Vertex   +00512.000000,-00320.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00512.000000,-00320.000000,-00192.000000
+             Normal   +00000.000000,-00001.000000,+00000.000000
+             TextureU -00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00512.000000,-00320.000000,-00192.000000
+             Vertex   +00512.000000,-00320.000000,+00192.000000
+             Vertex   -00512.000000,-00320.000000,+00192.000000
+             Vertex   -00512.000000,-00320.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00512.000000,+00320.000000,+00192.000000
+             Normal   +00000.000000,+00000.000000,+00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00001.000000,+00000.000000
+             Vertex   -00512.000000,+00320.000000,+00192.000000
+             Vertex   -00512.000000,-00320.000000,+00192.000000
+             Vertex   +00512.000000,-00320.000000,+00192.000000
+             Vertex   +00512.000000,+00320.000000,+00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00512.000000,-00320.000000,-00192.000000
+             Normal   +00000.000000,+00000.000000,-00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,-00001.000000,+00000.000000
+             Vertex   -00512.000000,-00320.000000,-00192.000000
+             Vertex   -00512.000000,+00320.000000,-00192.000000
+             Vertex   +00512.000000,+00320.000000,-00192.000000
+             Vertex   +00512.000000,-00320.000000,-00192.000000
+          End Polygon
+       End PolyList
+    End Brush
+    Brush=Model'MyLevel.ModelNAnte'
+End Actor
+Begin Actor Class=Brush Name=NVault
+    CsgOper=CSG_Subtract
+    MainScale=(SheerAxis=SHEER_ZX)
+    PostScale=(SheerAxis=SHEER_ZX)
+    Tag="Brush"
+    Location=(Y=2112.000000,Z=192.000000)
+    Begin Brush Name=ModelNVault
+       Begin PolyList
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00512.000000,-00320.000000,-00192.000000
+             Normal   -00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,+00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00512.000000,-00320.000000,-00192.000000
+             Vertex   -00512.000000,-00320.000000,+00192.000000
+             Vertex   -00512.000000,+00320.000000,+00192.000000
+             Vertex   -00512.000000,+00320.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00512.000000,+00320.000000,-00192.000000
+             Normal   +00000.000000,+00001.000000,+00000.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00512.000000,+00320.000000,-00192.000000
+             Vertex   -00512.000000,+00320.000000,+00192.000000
+             Vertex   +00512.000000,+00320.000000,+00192.000000
+             Vertex   +00512.000000,+00320.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00512.000000,+00320.000000,-00192.000000
+             Normal   +00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,-00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00512.000000,+00320.000000,-00192.000000
+             Vertex   +00512.000000,+00320.000000,+00192.000000
+             Vertex   +00512.000000,-00320.000000,+00192.000000
+             Vertex   +00512.000000,-00320.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00512.000000,-00320.000000,-00192.000000
+             Normal   +00000.000000,-00001.000000,+00000.000000
+             TextureU -00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00512.000000,-00320.000000,-00192.000000
+             Vertex   +00512.000000,-00320.000000,+00192.000000
+             Vertex   -00512.000000,-00320.000000,+00192.000000
+             Vertex   -00512.000000,-00320.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00512.000000,+00320.000000,+00192.000000
+             Normal   +00000.000000,+00000.000000,+00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00001.000000,+00000.000000
+             Vertex   -00512.000000,+00320.000000,+00192.000000
+             Vertex   -00512.000000,-00320.000000,+00192.000000
+             Vertex   +00512.000000,-00320.000000,+00192.000000
+             Vertex   +00512.000000,+00320.000000,+00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00512.000000,-00320.000000,-00192.000000
+             Normal   +00000.000000,+00000.000000,-00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,-00001.000000,+00000.000000
+             Vertex   -00512.000000,-00320.000000,-00192.000000
+             Vertex   -00512.000000,+00320.000000,-00192.000000
+             Vertex   +00512.000000,+00320.000000,-00192.000000
+             Vertex   +00512.000000,-00320.000000,-00192.000000
+          End Polygon
+       End PolyList
+    End Brush
+    Brush=Model'MyLevel.ModelNVault'
+End Actor
+Begin Actor Class=Brush Name=NHubDoor
+    CsgOper=CSG_Subtract
+    MainScale=(SheerAxis=SHEER_ZX)
+    PostScale=(SheerAxis=SHEER_ZX)
+    Tag="Brush"
+    Location=(Y=864.000000,Z=128.000000)
+    Begin Brush Name=ModelNHubDoor
+       Begin PolyList
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00096.000000,-00096.000000,-00128.000000
+             Normal   -00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,+00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00096.000000,-00096.000000,-00128.000000
+             Vertex   -00096.000000,-00096.000000,+00128.000000
+             Vertex   -00096.000000,+00096.000000,+00128.000000
+             Vertex   -00096.000000,+00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00096.000000,+00096.000000,-00128.000000
+             Normal   +00000.000000,+00001.000000,+00000.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00096.000000,+00096.000000,-00128.000000
+             Vertex   -00096.000000,+00096.000000,+00128.000000
+             Vertex   +00096.000000,+00096.000000,+00128.000000
+             Vertex   +00096.000000,+00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00096.000000,+00096.000000,-00128.000000
+             Normal   +00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,-00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00096.000000,+00096.000000,-00128.000000
+             Vertex   +00096.000000,+00096.000000,+00128.000000
+             Vertex   +00096.000000,-00096.000000,+00128.000000
+             Vertex   +00096.000000,-00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00096.000000,-00096.000000,-00128.000000
+             Normal   +00000.000000,-00001.000000,+00000.000000
+             TextureU -00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00096.000000,-00096.000000,-00128.000000
+             Vertex   +00096.000000,-00096.000000,+00128.000000
+             Vertex   -00096.000000,-00096.000000,+00128.000000
+             Vertex   -00096.000000,-00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00096.000000,+00096.000000,+00128.000000
+             Normal   +00000.000000,+00000.000000,+00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00001.000000,+00000.000000
+             Vertex   -00096.000000,+00096.000000,+00128.000000
+             Vertex   -00096.000000,-00096.000000,+00128.000000
+             Vertex   +00096.000000,-00096.000000,+00128.000000
+             Vertex   +00096.000000,+00096.000000,+00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00096.000000,-00096.000000,-00128.000000
+             Normal   +00000.000000,+00000.000000,-00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,-00001.000000,+00000.000000
+             Vertex   -00096.000000,-00096.000000,-00128.000000
+             Vertex   -00096.000000,+00096.000000,-00128.000000
+             Vertex   +00096.000000,+00096.000000,-00128.000000
+             Vertex   +00096.000000,-00096.000000,-00128.000000
+          End Polygon
+       End PolyList
+    End Brush
+    Brush=Model'MyLevel.ModelNHubDoor'
+End Actor
+Begin Actor Class=Brush Name=NGateDoor
+    CsgOper=CSG_Subtract
+    MainScale=(SheerAxis=SHEER_ZX)
+    PostScale=(SheerAxis=SHEER_ZX)
+    Tag="Brush"
+    Location=(Y=1696.000000,Z=128.000000)
+    Begin Brush Name=ModelNGateDoor
+       Begin PolyList
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00096.000000,-00096.000000,-00128.000000
+             Normal   -00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,+00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00096.000000,-00096.000000,-00128.000000
+             Vertex   -00096.000000,-00096.000000,+00128.000000
+             Vertex   -00096.000000,+00096.000000,+00128.000000
+             Vertex   -00096.000000,+00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00096.000000,+00096.000000,-00128.000000
+             Normal   +00000.000000,+00001.000000,+00000.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00096.000000,+00096.000000,-00128.000000
+             Vertex   -00096.000000,+00096.000000,+00128.000000
+             Vertex   +00096.000000,+00096.000000,+00128.000000
+             Vertex   +00096.000000,+00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00096.000000,+00096.000000,-00128.000000
+             Normal   +00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,-00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00096.000000,+00096.000000,-00128.000000
+             Vertex   +00096.000000,+00096.000000,+00128.000000
+             Vertex   +00096.000000,-00096.000000,+00128.000000
+             Vertex   +00096.000000,-00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00096.000000,-00096.000000,-00128.000000
+             Normal   +00000.000000,-00001.000000,+00000.000000
+             TextureU -00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00096.000000,-00096.000000,-00128.000000
+             Vertex   +00096.000000,-00096.000000,+00128.000000
+             Vertex   -00096.000000,-00096.000000,+00128.000000
+             Vertex   -00096.000000,-00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00096.000000,+00096.000000,+00128.000000
+             Normal   +00000.000000,+00000.000000,+00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00001.000000,+00000.000000
+             Vertex   -00096.000000,+00096.000000,+00128.000000
+             Vertex   -00096.000000,-00096.000000,+00128.000000
+             Vertex   +00096.000000,-00096.000000,+00128.000000
+             Vertex   +00096.000000,+00096.000000,+00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00096.000000,-00096.000000,-00128.000000
+             Normal   +00000.000000,+00000.000000,-00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,-00001.000000,+00000.000000
+             Vertex   -00096.000000,-00096.000000,-00128.000000
+             Vertex   -00096.000000,+00096.000000,-00128.000000
+             Vertex   +00096.000000,+00096.000000,-00128.000000
+             Vertex   +00096.000000,-00096.000000,-00128.000000
+          End Polygon
+       End PolyList
+    End Brush
+    Brush=Model'MyLevel.ModelNGateDoor'
+End Actor
+Begin Actor Class=Mover Name=NDoor
+    InitialState="TriggerOpenTimed"
+    bTriggerOnceOnly=True
+    MoverEncroachType=ME_IgnoreWhenEncroach
+    MoverGlideType=MV_GlideByTime
+    MoveTime=2.000000
+    StayOpenTime=10000.000000
+    KeyNum=0
+    NumKeys=2
+    KeyPos(0)=(X=0.000000)
+    KeyPos(1)=(Z=290.000000)
+    DrawType=DT_StaticMesh
+    StaticMesh=StaticMesh'HumanoidHardware.Miscellaneous.MDoor01HA'
+    bBlockActors=True
+    bBlockPlayers=True
+    Tag="NGate"
+    Location=(Y=1696.000000)
+    Rotation=(Yaw=16384)
+    DrawScale3D=(X=0.500000,Y=1.000000,Z=0.850000)
+End Actor
+Begin Actor Class=Counter Name=NCounter
+    NumToCount=2
+    bShowMessage=True
+    CountMessage="Guardian down... %i remain."
+    CompleteMessage="The north vault opens."
+    Event="NGate"
+    Tag="NKill"
+    Location=(Y=1280.000000)
+End Actor
+Begin Actor Class=Gasbag Name=NGuardian0
+    Event="NKill"
+    Tag="Gasbag"
+    Location=(X=-100.000000,Y=1280.000000,Z=24.000000)
+    Rotation=(Yaw=49152)
+End Actor
+Begin Actor Class=Gasbag Name=NGuardian1
+    Event="NKill"
+    Tag="Gasbag"
+    Location=(X=100.000000,Y=1280.000000,Z=24.000000)
+    Rotation=(Yaw=49152)
+End Actor
+Begin Actor Class=xWeaponBase Name=NReward
+    WeaponType=Class'XWeapons.FlakCannon'
+    myMarker=InventorySpot'MyLevel.InventorySpot5'
+    StaticMesh=StaticMesh'2k4ChargerMeshes.ChargerMeshes.WeaponChargerMesh-DS'
+    Tag="xWeaponBase"
+    Location=(Y=2272.000000,Z=16.000000)
+    PrePivot=(Z=3.700000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot5
+    Tag="InventorySpot"
+    myPickupBase=xWeaponBase'MyLevel.NReward'
+    Location=(Y=2272.000000)
+End Actor
+Begin Actor Class=FlakAmmoPickup Name=NAmmo
+    Tag="FlakAmmoPickup"
+    myMarker=InventorySpot'MyLevel.InventorySpot6'
+    Location=(X=-260.000000,Y=1120.000000,Z=16.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot6
+    Tag="InventorySpot"
+    markedItem=FlakAmmoPickup'MyLevel.NAmmo'
+    Location=(X=-260.000000,Y=1120.000000)
+End Actor
+Begin Actor Class=MiniHealthPack Name=NHealth
+    Tag="MiniHealthPack"
+    myMarker=InventorySpot'MyLevel.InventorySpot7'
+    Location=(X=260.000000,Y=1120.000000,Z=16.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot7
+    Tag="InventorySpot"
+    markedItem=MiniHealthPack'MyLevel.NHealth'
+    Location=(X=260.000000,Y=1120.000000)
+End Actor
+Begin Actor Class=Light Name=NAnteL
+    LightBrightness=110.000000
+    LightRadius=24
+    Tag="Light"
+    Location=(Y=1280.000000,Z=344.000000)
+End Actor
+Begin Actor Class=Light Name=NVaultL
+    LightBrightness=110.000000
+    LightRadius=24
+    Tag="Light"
+    Location=(Y=2112.000000,Z=344.000000)
+End Actor
+Begin Actor Class=PathNode Name=NPNHub
+    Tag="PathNode"
+    Location=(Y=864.000000,Z=16.000000)
+End Actor
+Begin Actor Class=PathNode Name=NPNAnte
+    Tag="PathNode"
+    Location=(Y=1280.000000,Z=16.000000)
+End Actor
+Begin Actor Class=PathNode Name=NPNGate
+    Tag="PathNode"
+    Location=(Y=1696.000000,Z=16.000000)
+End Actor
+Begin Actor Class=PathNode Name=NPNVault
+    Tag="PathNode"
+    Location=(Y=2112.000000,Z=16.000000)
+End Actor
+Begin Actor Class=Brush Name=EAnte
+    CsgOper=CSG_Subtract
+    MainScale=(SheerAxis=SHEER_ZX)
+    PostScale=(SheerAxis=SHEER_ZX)
+    Tag="Brush"
+    Location=(X=1280.000000,Z=192.000000)
+    Begin Brush Name=ModelEAnte
+       Begin PolyList
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00320.000000,-00512.000000,-00192.000000
+             Normal   -00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,+00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00320.000000,-00512.000000,-00192.000000
+             Vertex   -00320.000000,-00512.000000,+00192.000000
+             Vertex   -00320.000000,+00512.000000,+00192.000000
+             Vertex   -00320.000000,+00512.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00320.000000,+00512.000000,-00192.000000
+             Normal   +00000.000000,+00001.000000,+00000.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00320.000000,+00512.000000,-00192.000000
+             Vertex   -00320.000000,+00512.000000,+00192.000000
+             Vertex   +00320.000000,+00512.000000,+00192.000000
+             Vertex   +00320.000000,+00512.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00320.000000,+00512.000000,-00192.000000
+             Normal   +00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,-00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00320.000000,+00512.000000,-00192.000000
+             Vertex   +00320.000000,+00512.000000,+00192.000000
+             Vertex   +00320.000000,-00512.000000,+00192.000000
+             Vertex   +00320.000000,-00512.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00320.000000,-00512.000000,-00192.000000
+             Normal   +00000.000000,-00001.000000,+00000.000000
+             TextureU -00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00320.000000,-00512.000000,-00192.000000
+             Vertex   +00320.000000,-00512.000000,+00192.000000
+             Vertex   -00320.000000,-00512.000000,+00192.000000
+             Vertex   -00320.000000,-00512.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00320.000000,+00512.000000,+00192.000000
+             Normal   +00000.000000,+00000.000000,+00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00001.000000,+00000.000000
+             Vertex   -00320.000000,+00512.000000,+00192.000000
+             Vertex   -00320.000000,-00512.000000,+00192.000000
+             Vertex   +00320.000000,-00512.000000,+00192.000000
+             Vertex   +00320.000000,+00512.000000,+00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00320.000000,-00512.000000,-00192.000000
+             Normal   +00000.000000,+00000.000000,-00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,-00001.000000,+00000.000000
+             Vertex   -00320.000000,-00512.000000,-00192.000000
+             Vertex   -00320.000000,+00512.000000,-00192.000000
+             Vertex   +00320.000000,+00512.000000,-00192.000000
+             Vertex   +00320.000000,-00512.000000,-00192.000000
+          End Polygon
+       End PolyList
+    End Brush
+    Brush=Model'MyLevel.ModelEAnte'
+End Actor
+Begin Actor Class=Brush Name=EVault
+    CsgOper=CSG_Subtract
+    MainScale=(SheerAxis=SHEER_ZX)
+    PostScale=(SheerAxis=SHEER_ZX)
+    Tag="Brush"
+    Location=(X=2112.000000,Z=192.000000)
+    Begin Brush Name=ModelEVault
+       Begin PolyList
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00320.000000,-00512.000000,-00192.000000
+             Normal   -00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,+00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00320.000000,-00512.000000,-00192.000000
+             Vertex   -00320.000000,-00512.000000,+00192.000000
+             Vertex   -00320.000000,+00512.000000,+00192.000000
+             Vertex   -00320.000000,+00512.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00320.000000,+00512.000000,-00192.000000
+             Normal   +00000.000000,+00001.000000,+00000.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00320.000000,+00512.000000,-00192.000000
+             Vertex   -00320.000000,+00512.000000,+00192.000000
+             Vertex   +00320.000000,+00512.000000,+00192.000000
+             Vertex   +00320.000000,+00512.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00320.000000,+00512.000000,-00192.000000
+             Normal   +00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,-00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00320.000000,+00512.000000,-00192.000000
+             Vertex   +00320.000000,+00512.000000,+00192.000000
+             Vertex   +00320.000000,-00512.000000,+00192.000000
+             Vertex   +00320.000000,-00512.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00320.000000,-00512.000000,-00192.000000
+             Normal   +00000.000000,-00001.000000,+00000.000000
+             TextureU -00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00320.000000,-00512.000000,-00192.000000
+             Vertex   +00320.000000,-00512.000000,+00192.000000
+             Vertex   -00320.000000,-00512.000000,+00192.000000
+             Vertex   -00320.000000,-00512.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00320.000000,+00512.000000,+00192.000000
+             Normal   +00000.000000,+00000.000000,+00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00001.000000,+00000.000000
+             Vertex   -00320.000000,+00512.000000,+00192.000000
+             Vertex   -00320.000000,-00512.000000,+00192.000000
+             Vertex   +00320.000000,-00512.000000,+00192.000000
+             Vertex   +00320.000000,+00512.000000,+00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00320.000000,-00512.000000,-00192.000000
+             Normal   +00000.000000,+00000.000000,-00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,-00001.000000,+00000.000000
+             Vertex   -00320.000000,-00512.000000,-00192.000000
+             Vertex   -00320.000000,+00512.000000,-00192.000000
+             Vertex   +00320.000000,+00512.000000,-00192.000000
+             Vertex   +00320.000000,-00512.000000,-00192.000000
+          End Polygon
+       End PolyList
+    End Brush
+    Brush=Model'MyLevel.ModelEVault'
+End Actor
+Begin Actor Class=Brush Name=EHubDoor
+    CsgOper=CSG_Subtract
+    MainScale=(SheerAxis=SHEER_ZX)
+    PostScale=(SheerAxis=SHEER_ZX)
+    Tag="Brush"
+    Location=(X=864.000000,Z=128.000000)
+    Begin Brush Name=ModelEHubDoor
+       Begin PolyList
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00096.000000,-00096.000000,-00128.000000
+             Normal   -00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,+00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00096.000000,-00096.000000,-00128.000000
+             Vertex   -00096.000000,-00096.000000,+00128.000000
+             Vertex   -00096.000000,+00096.000000,+00128.000000
+             Vertex   -00096.000000,+00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00096.000000,+00096.000000,-00128.000000
+             Normal   +00000.000000,+00001.000000,+00000.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00096.000000,+00096.000000,-00128.000000
+             Vertex   -00096.000000,+00096.000000,+00128.000000
+             Vertex   +00096.000000,+00096.000000,+00128.000000
+             Vertex   +00096.000000,+00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00096.000000,+00096.000000,-00128.000000
+             Normal   +00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,-00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00096.000000,+00096.000000,-00128.000000
+             Vertex   +00096.000000,+00096.000000,+00128.000000
+             Vertex   +00096.000000,-00096.000000,+00128.000000
+             Vertex   +00096.000000,-00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00096.000000,-00096.000000,-00128.000000
+             Normal   +00000.000000,-00001.000000,+00000.000000
+             TextureU -00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00096.000000,-00096.000000,-00128.000000
+             Vertex   +00096.000000,-00096.000000,+00128.000000
+             Vertex   -00096.000000,-00096.000000,+00128.000000
+             Vertex   -00096.000000,-00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00096.000000,+00096.000000,+00128.000000
+             Normal   +00000.000000,+00000.000000,+00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00001.000000,+00000.000000
+             Vertex   -00096.000000,+00096.000000,+00128.000000
+             Vertex   -00096.000000,-00096.000000,+00128.000000
+             Vertex   +00096.000000,-00096.000000,+00128.000000
+             Vertex   +00096.000000,+00096.000000,+00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00096.000000,-00096.000000,-00128.000000
+             Normal   +00000.000000,+00000.000000,-00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,-00001.000000,+00000.000000
+             Vertex   -00096.000000,-00096.000000,-00128.000000
+             Vertex   -00096.000000,+00096.000000,-00128.000000
+             Vertex   +00096.000000,+00096.000000,-00128.000000
+             Vertex   +00096.000000,-00096.000000,-00128.000000
+          End Polygon
+       End PolyList
+    End Brush
+    Brush=Model'MyLevel.ModelEHubDoor'
+End Actor
+Begin Actor Class=Brush Name=EGateDoor
+    CsgOper=CSG_Subtract
+    MainScale=(SheerAxis=SHEER_ZX)
+    PostScale=(SheerAxis=SHEER_ZX)
+    Tag="Brush"
+    Location=(X=1696.000000,Z=128.000000)
+    Begin Brush Name=ModelEGateDoor
+       Begin PolyList
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00096.000000,-00096.000000,-00128.000000
+             Normal   -00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,+00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00096.000000,-00096.000000,-00128.000000
+             Vertex   -00096.000000,-00096.000000,+00128.000000
+             Vertex   -00096.000000,+00096.000000,+00128.000000
+             Vertex   -00096.000000,+00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00096.000000,+00096.000000,-00128.000000
+             Normal   +00000.000000,+00001.000000,+00000.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00096.000000,+00096.000000,-00128.000000
+             Vertex   -00096.000000,+00096.000000,+00128.000000
+             Vertex   +00096.000000,+00096.000000,+00128.000000
+             Vertex   +00096.000000,+00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00096.000000,+00096.000000,-00128.000000
+             Normal   +00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,-00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00096.000000,+00096.000000,-00128.000000
+             Vertex   +00096.000000,+00096.000000,+00128.000000
+             Vertex   +00096.000000,-00096.000000,+00128.000000
+             Vertex   +00096.000000,-00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00096.000000,-00096.000000,-00128.000000
+             Normal   +00000.000000,-00001.000000,+00000.000000
+             TextureU -00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00096.000000,-00096.000000,-00128.000000
+             Vertex   +00096.000000,-00096.000000,+00128.000000
+             Vertex   -00096.000000,-00096.000000,+00128.000000
+             Vertex   -00096.000000,-00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00096.000000,+00096.000000,+00128.000000
+             Normal   +00000.000000,+00000.000000,+00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00001.000000,+00000.000000
+             Vertex   -00096.000000,+00096.000000,+00128.000000
+             Vertex   -00096.000000,-00096.000000,+00128.000000
+             Vertex   +00096.000000,-00096.000000,+00128.000000
+             Vertex   +00096.000000,+00096.000000,+00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00096.000000,-00096.000000,-00128.000000
+             Normal   +00000.000000,+00000.000000,-00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,-00001.000000,+00000.000000
+             Vertex   -00096.000000,-00096.000000,-00128.000000
+             Vertex   -00096.000000,+00096.000000,-00128.000000
+             Vertex   +00096.000000,+00096.000000,-00128.000000
+             Vertex   +00096.000000,-00096.000000,-00128.000000
+          End Polygon
+       End PolyList
+    End Brush
+    Brush=Model'MyLevel.ModelEGateDoor'
+End Actor
+Begin Actor Class=Mover Name=EDoor
+    InitialState="TriggerOpenTimed"
+    bTriggerOnceOnly=True
+    MoverEncroachType=ME_IgnoreWhenEncroach
+    MoverGlideType=MV_GlideByTime
+    MoveTime=2.000000
+    StayOpenTime=10000.000000
+    KeyNum=0
+    NumKeys=2
+    KeyPos(0)=(X=0.000000)
+    KeyPos(1)=(Z=290.000000)
+    DrawType=DT_StaticMesh
+    StaticMesh=StaticMesh'HumanoidHardware.Miscellaneous.MDoor01HA'
+    bBlockActors=True
+    bBlockPlayers=True
+    Tag="EGate"
+    Location=(X=1696.000000)
+    DrawScale3D=(X=0.500000,Y=1.000000,Z=0.850000)
+End Actor
+Begin Actor Class=Counter Name=ECounter
+    NumToCount=3
+    bShowMessage=True
+    CountMessage="Guardian down... %i remain."
+    CompleteMessage="The east vault opens."
+    Event="EGate"
+    Tag="EKill"
+    Location=(X=1280.000000)
+End Actor
+Begin Actor Class=Skaarj Name=EGuardian0
+    Event="EKill"
+    Tag="Skaarj"
+    Location=(X=1280.000000,Y=-200.000000,Z=24.000000)
+    Rotation=(Yaw=32768)
+End Actor
+Begin Actor Class=Skaarj Name=EGuardian1
+    Event="EKill"
+    Tag="Skaarj"
+    Location=(X=1280.000000,Z=24.000000)
+    Rotation=(Yaw=32768)
+End Actor
+Begin Actor Class=Skaarj Name=EGuardian2
+    Event="EKill"
+    Tag="Skaarj"
+    Location=(X=1280.000000,Y=200.000000,Z=24.000000)
+    Rotation=(Yaw=32768)
+End Actor
+Begin Actor Class=xWeaponBase Name=EReward
+    WeaponType=Class'XWeapons.RocketLauncher'
+    myMarker=InventorySpot'MyLevel.InventorySpot8'
+    StaticMesh=StaticMesh'2k4ChargerMeshes.ChargerMeshes.WeaponChargerMesh-DS'
+    Tag="xWeaponBase"
+    Location=(X=2272.000000,Z=16.000000)
+    PrePivot=(Z=3.700000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot8
+    Tag="InventorySpot"
+    myPickupBase=xWeaponBase'MyLevel.EReward'
+    Location=(X=2272.000000)
+End Actor
+Begin Actor Class=RocketAmmoPickup Name=EAmmo
+    Tag="RocketAmmoPickup"
+    myMarker=InventorySpot'MyLevel.InventorySpot9'
+    Location=(X=1120.000000,Y=-260.000000,Z=16.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot9
+    Tag="InventorySpot"
+    markedItem=RocketAmmoPickup'MyLevel.EAmmo'
+    Location=(X=1120.000000,Y=-260.000000)
+End Actor
+Begin Actor Class=MiniHealthPack Name=EHealth
+    Tag="MiniHealthPack"
+    myMarker=InventorySpot'MyLevel.InventorySpot10'
+    Location=(X=1120.000000,Y=260.000000,Z=16.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot10
+    Tag="InventorySpot"
+    markedItem=MiniHealthPack'MyLevel.EHealth'
+    Location=(X=1120.000000,Y=260.000000)
+End Actor
+Begin Actor Class=ShieldPack Name=EExtra0
+    Tag="ShieldPack"
+    myMarker=InventorySpot'MyLevel.InventorySpot11'
+    Location=(X=1932.000000,Z=16.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot11
+    Tag="InventorySpot"
+    markedItem=ShieldPack'MyLevel.EExtra0'
+    Location=(X=1932.000000)
+End Actor
+Begin Actor Class=Light Name=EAnteL
+    LightBrightness=110.000000
+    LightRadius=24
+    Tag="Light"
+    Location=(X=1280.000000,Z=344.000000)
+End Actor
+Begin Actor Class=Light Name=EVaultL
+    LightBrightness=110.000000
+    LightRadius=24
+    Tag="Light"
+    Location=(X=2112.000000,Z=344.000000)
+End Actor
+Begin Actor Class=PathNode Name=EPNHub
+    Tag="PathNode"
+    Location=(X=864.000000,Z=16.000000)
+End Actor
+Begin Actor Class=PathNode Name=EPNAnte
+    Tag="PathNode"
+    Location=(X=1280.000000,Z=16.000000)
+End Actor
+Begin Actor Class=PathNode Name=EPNGate
+    Tag="PathNode"
+    Location=(X=1696.000000,Z=16.000000)
+End Actor
+Begin Actor Class=PathNode Name=EPNVault
+    Tag="PathNode"
+    Location=(X=2112.000000,Z=16.000000)
+End Actor
+Begin Actor Class=Brush Name=WAnte
+    CsgOper=CSG_Subtract
+    MainScale=(SheerAxis=SHEER_ZX)
+    PostScale=(SheerAxis=SHEER_ZX)
+    Tag="Brush"
+    Location=(X=-1280.000000,Z=192.000000)
+    Begin Brush Name=ModelWAnte
+       Begin PolyList
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00320.000000,-00512.000000,-00192.000000
+             Normal   -00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,+00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00320.000000,-00512.000000,-00192.000000
+             Vertex   -00320.000000,-00512.000000,+00192.000000
+             Vertex   -00320.000000,+00512.000000,+00192.000000
+             Vertex   -00320.000000,+00512.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00320.000000,+00512.000000,-00192.000000
+             Normal   +00000.000000,+00001.000000,+00000.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00320.000000,+00512.000000,-00192.000000
+             Vertex   -00320.000000,+00512.000000,+00192.000000
+             Vertex   +00320.000000,+00512.000000,+00192.000000
+             Vertex   +00320.000000,+00512.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00320.000000,+00512.000000,-00192.000000
+             Normal   +00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,-00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00320.000000,+00512.000000,-00192.000000
+             Vertex   +00320.000000,+00512.000000,+00192.000000
+             Vertex   +00320.000000,-00512.000000,+00192.000000
+             Vertex   +00320.000000,-00512.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00320.000000,-00512.000000,-00192.000000
+             Normal   +00000.000000,-00001.000000,+00000.000000
+             TextureU -00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00320.000000,-00512.000000,-00192.000000
+             Vertex   +00320.000000,-00512.000000,+00192.000000
+             Vertex   -00320.000000,-00512.000000,+00192.000000
+             Vertex   -00320.000000,-00512.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00320.000000,+00512.000000,+00192.000000
+             Normal   +00000.000000,+00000.000000,+00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00001.000000,+00000.000000
+             Vertex   -00320.000000,+00512.000000,+00192.000000
+             Vertex   -00320.000000,-00512.000000,+00192.000000
+             Vertex   +00320.000000,-00512.000000,+00192.000000
+             Vertex   +00320.000000,+00512.000000,+00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00320.000000,-00512.000000,-00192.000000
+             Normal   +00000.000000,+00000.000000,-00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,-00001.000000,+00000.000000
+             Vertex   -00320.000000,-00512.000000,-00192.000000
+             Vertex   -00320.000000,+00512.000000,-00192.000000
+             Vertex   +00320.000000,+00512.000000,-00192.000000
+             Vertex   +00320.000000,-00512.000000,-00192.000000
+          End Polygon
+       End PolyList
+    End Brush
+    Brush=Model'MyLevel.ModelWAnte'
+End Actor
+Begin Actor Class=Brush Name=WVault
+    CsgOper=CSG_Subtract
+    MainScale=(SheerAxis=SHEER_ZX)
+    PostScale=(SheerAxis=SHEER_ZX)
+    Tag="Brush"
+    Location=(X=-2112.000000,Z=192.000000)
+    Begin Brush Name=ModelWVault
+       Begin PolyList
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00320.000000,-00512.000000,-00192.000000
+             Normal   -00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,+00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00320.000000,-00512.000000,-00192.000000
+             Vertex   -00320.000000,-00512.000000,+00192.000000
+             Vertex   -00320.000000,+00512.000000,+00192.000000
+             Vertex   -00320.000000,+00512.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00320.000000,+00512.000000,-00192.000000
+             Normal   +00000.000000,+00001.000000,+00000.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00320.000000,+00512.000000,-00192.000000
+             Vertex   -00320.000000,+00512.000000,+00192.000000
+             Vertex   +00320.000000,+00512.000000,+00192.000000
+             Vertex   +00320.000000,+00512.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00320.000000,+00512.000000,-00192.000000
+             Normal   +00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,-00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00320.000000,+00512.000000,-00192.000000
+             Vertex   +00320.000000,+00512.000000,+00192.000000
+             Vertex   +00320.000000,-00512.000000,+00192.000000
+             Vertex   +00320.000000,-00512.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00320.000000,-00512.000000,-00192.000000
+             Normal   +00000.000000,-00001.000000,+00000.000000
+             TextureU -00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00320.000000,-00512.000000,-00192.000000
+             Vertex   +00320.000000,-00512.000000,+00192.000000
+             Vertex   -00320.000000,-00512.000000,+00192.000000
+             Vertex   -00320.000000,-00512.000000,-00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00320.000000,+00512.000000,+00192.000000
+             Normal   +00000.000000,+00000.000000,+00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00001.000000,+00000.000000
+             Vertex   -00320.000000,+00512.000000,+00192.000000
+             Vertex   -00320.000000,-00512.000000,+00192.000000
+             Vertex   +00320.000000,-00512.000000,+00192.000000
+             Vertex   +00320.000000,+00512.000000,+00192.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00320.000000,-00512.000000,-00192.000000
+             Normal   +00000.000000,+00000.000000,-00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,-00001.000000,+00000.000000
+             Vertex   -00320.000000,-00512.000000,-00192.000000
+             Vertex   -00320.000000,+00512.000000,-00192.000000
+             Vertex   +00320.000000,+00512.000000,-00192.000000
+             Vertex   +00320.000000,-00512.000000,-00192.000000
+          End Polygon
+       End PolyList
+    End Brush
+    Brush=Model'MyLevel.ModelWVault'
+End Actor
+Begin Actor Class=Brush Name=WHubDoor
+    CsgOper=CSG_Subtract
+    MainScale=(SheerAxis=SHEER_ZX)
+    PostScale=(SheerAxis=SHEER_ZX)
+    Tag="Brush"
+    Location=(X=-864.000000,Z=128.000000)
+    Begin Brush Name=ModelWHubDoor
+       Begin PolyList
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00096.000000,-00096.000000,-00128.000000
+             Normal   -00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,+00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00096.000000,-00096.000000,-00128.000000
+             Vertex   -00096.000000,-00096.000000,+00128.000000
+             Vertex   -00096.000000,+00096.000000,+00128.000000
+             Vertex   -00096.000000,+00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00096.000000,+00096.000000,-00128.000000
+             Normal   +00000.000000,+00001.000000,+00000.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00096.000000,+00096.000000,-00128.000000
+             Vertex   -00096.000000,+00096.000000,+00128.000000
+             Vertex   +00096.000000,+00096.000000,+00128.000000
+             Vertex   +00096.000000,+00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00096.000000,+00096.000000,-00128.000000
+             Normal   +00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,-00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00096.000000,+00096.000000,-00128.000000
+             Vertex   +00096.000000,+00096.000000,+00128.000000
+             Vertex   +00096.000000,-00096.000000,+00128.000000
+             Vertex   +00096.000000,-00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00096.000000,-00096.000000,-00128.000000
+             Normal   +00000.000000,-00001.000000,+00000.000000
+             TextureU -00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00096.000000,-00096.000000,-00128.000000
+             Vertex   +00096.000000,-00096.000000,+00128.000000
+             Vertex   -00096.000000,-00096.000000,+00128.000000
+             Vertex   -00096.000000,-00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00096.000000,+00096.000000,+00128.000000
+             Normal   +00000.000000,+00000.000000,+00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00001.000000,+00000.000000
+             Vertex   -00096.000000,+00096.000000,+00128.000000
+             Vertex   -00096.000000,-00096.000000,+00128.000000
+             Vertex   +00096.000000,-00096.000000,+00128.000000
+             Vertex   +00096.000000,+00096.000000,+00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00096.000000,-00096.000000,-00128.000000
+             Normal   +00000.000000,+00000.000000,-00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,-00001.000000,+00000.000000
+             Vertex   -00096.000000,-00096.000000,-00128.000000
+             Vertex   -00096.000000,+00096.000000,-00128.000000
+             Vertex   +00096.000000,+00096.000000,-00128.000000
+             Vertex   +00096.000000,-00096.000000,-00128.000000
+          End Polygon
+       End PolyList
+    End Brush
+    Brush=Model'MyLevel.ModelWHubDoor'
+End Actor
+Begin Actor Class=Brush Name=WGateDoor
+    CsgOper=CSG_Subtract
+    MainScale=(SheerAxis=SHEER_ZX)
+    PostScale=(SheerAxis=SHEER_ZX)
+    Tag="Brush"
+    Location=(X=-1696.000000,Z=128.000000)
+    Begin Brush Name=ModelWGateDoor
+       Begin PolyList
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00096.000000,-00096.000000,-00128.000000
+             Normal   -00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,+00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00096.000000,-00096.000000,-00128.000000
+             Vertex   -00096.000000,-00096.000000,+00128.000000
+             Vertex   -00096.000000,+00096.000000,+00128.000000
+             Vertex   -00096.000000,+00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   -00096.000000,+00096.000000,-00128.000000
+             Normal   +00000.000000,+00001.000000,+00000.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   -00096.000000,+00096.000000,-00128.000000
+             Vertex   -00096.000000,+00096.000000,+00128.000000
+             Vertex   +00096.000000,+00096.000000,+00128.000000
+             Vertex   +00096.000000,+00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00096.000000,+00096.000000,-00128.000000
+             Normal   +00001.000000,+00000.000000,+00000.000000
+             TextureU +00000.000000,-00001.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00096.000000,+00096.000000,-00128.000000
+             Vertex   +00096.000000,+00096.000000,+00128.000000
+             Vertex   +00096.000000,-00096.000000,+00128.000000
+             Vertex   +00096.000000,-00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Bases.bas02HAb
+             Origin   +00096.000000,-00096.000000,-00128.000000
+             Normal   +00000.000000,-00001.000000,+00000.000000
+             TextureU -00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00000.000000,-00001.000000
+             Vertex   +00096.000000,-00096.000000,-00128.000000
+             Vertex   +00096.000000,-00096.000000,+00128.000000
+             Vertex   -00096.000000,-00096.000000,+00128.000000
+             Vertex   -00096.000000,-00096.000000,-00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00096.000000,+00096.000000,+00128.000000
+             Normal   +00000.000000,+00000.000000,+00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,+00001.000000,+00000.000000
+             Vertex   -00096.000000,+00096.000000,+00128.000000
+             Vertex   -00096.000000,-00096.000000,+00128.000000
+             Vertex   +00096.000000,-00096.000000,+00128.000000
+             Vertex   +00096.000000,+00096.000000,+00128.000000
+          End Polygon
+          Begin Polygon Texture=HumanoidArchitecture.Floors.flr03HA
+             Origin   -00096.000000,-00096.000000,-00128.000000
+             Normal   +00000.000000,+00000.000000,-00001.000000
+             TextureU +00001.000000,+00000.000000,+00000.000000
+             TextureV +00000.000000,-00001.000000,+00000.000000
+             Vertex   -00096.000000,-00096.000000,-00128.000000
+             Vertex   -00096.000000,+00096.000000,-00128.000000
+             Vertex   +00096.000000,+00096.000000,-00128.000000
+             Vertex   +00096.000000,-00096.000000,-00128.000000
+          End Polygon
+       End PolyList
+    End Brush
+    Brush=Model'MyLevel.ModelWGateDoor'
+End Actor
+Begin Actor Class=Mover Name=WDoor
+    InitialState="TriggerOpenTimed"
+    bTriggerOnceOnly=True
+    MoverEncroachType=ME_IgnoreWhenEncroach
+    MoverGlideType=MV_GlideByTime
+    MoveTime=2.000000
+    StayOpenTime=10000.000000
+    KeyNum=0
+    NumKeys=2
+    KeyPos(0)=(X=0.000000)
+    KeyPos(1)=(Z=290.000000)
+    DrawType=DT_StaticMesh
+    StaticMesh=StaticMesh'HumanoidHardware.Miscellaneous.MDoor01HA'
+    bBlockActors=True
+    bBlockPlayers=True
+    Tag="WGate"
+    Location=(X=-1696.000000)
+    DrawScale3D=(X=0.500000,Y=1.000000,Z=0.850000)
+End Actor
+Begin Actor Class=Counter Name=WCounter
+    NumToCount=5
+    bShowMessage=True
+    CountMessage="Guardian down... %i remain."
+    CompleteMessage="The Redeemer is yours... if you survive."
+    Event="WGate"
+    Tag="WKill"
+    Location=(X=-1280.000000)
+End Actor
+Begin Actor Class=WarLord Name=WGuardian0
+    Event="WKill"
+    Tag="WarLord"
+    Location=(X=-1280.000000,Y=-400.000000,Z=80.000000)
+End Actor
+Begin Actor Class=WarLord Name=WGuardian1
+    Event="WKill"
+    Tag="WarLord"
+    Location=(X=-1280.000000,Y=-200.000000,Z=80.000000)
+End Actor
+Begin Actor Class=WarLord Name=WGuardian2
+    Event="WKill"
+    Tag="WarLord"
+    Location=(X=-1280.000000,Z=80.000000)
+End Actor
+Begin Actor Class=WarLord Name=WGuardian3
+    Event="WKill"
+    Tag="WarLord"
+    Location=(X=-1280.000000,Y=200.000000,Z=80.000000)
+End Actor
+Begin Actor Class=WarLord Name=WGuardian4
+    Event="WKill"
+    Tag="WarLord"
+    Location=(X=-1280.000000,Y=400.000000,Z=80.000000)
+End Actor
+Begin Actor Class=xWeaponBase Name=WReward
+    WeaponType=Class'XWeapons.Redeemer'
+    myMarker=InventorySpot'MyLevel.InventorySpot12'
+    StaticMesh=StaticMesh'2k4ChargerMeshes.ChargerMeshes.WeaponChargerMesh-DS'
+    Tag="xWeaponBase"
+    Location=(X=-2272.000000,Z=16.000000)
+    PrePivot=(Z=3.700000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot12
+    Tag="InventorySpot"
+    myPickupBase=xWeaponBase'MyLevel.WReward'
+    Location=(X=-2272.000000)
+End Actor
+Begin Actor Class=RocketAmmoPickup Name=WAmmo
+    Tag="RocketAmmoPickup"
+    myMarker=InventorySpot'MyLevel.InventorySpot13'
+    Location=(X=-1120.000000,Y=-260.000000,Z=16.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot13
+    Tag="InventorySpot"
+    markedItem=RocketAmmoPickup'MyLevel.WAmmo'
+    Location=(X=-1120.000000,Y=-260.000000)
+End Actor
+Begin Actor Class=MiniHealthPack Name=WHealth
+    Tag="MiniHealthPack"
+    myMarker=InventorySpot'MyLevel.InventorySpot14'
+    Location=(X=-1120.000000,Y=260.000000,Z=16.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot14
+    Tag="InventorySpot"
+    markedItem=MiniHealthPack'MyLevel.WHealth'
+    Location=(X=-1120.000000,Y=260.000000)
+End Actor
+Begin Actor Class=ShieldPack Name=WExtra0
+    Tag="ShieldPack"
+    myMarker=InventorySpot'MyLevel.InventorySpot15'
+    Location=(X=-1932.000000,Z=16.000000)
+End Actor
+Begin Actor Class=InventorySpot Name=InventorySpot15
+    Tag="InventorySpot"
+    markedItem=ShieldPack'MyLevel.WExtra0'
+    Location=(X=-1932.000000)
+End Actor
+Begin Actor Class=Light Name=WAnteL
+    LightBrightness=110.000000
+    LightRadius=24
+    Tag="Light"
+    Location=(X=-1280.000000,Z=344.000000)
+End Actor
+Begin Actor Class=Light Name=WVaultL
+    LightBrightness=110.000000
+    LightRadius=24
+    Tag="Light"
+    Location=(X=-2112.000000,Z=344.000000)
+End Actor
+Begin Actor Class=PathNode Name=WPNHub
+    Tag="PathNode"
+    Location=(X=-864.000000,Z=16.000000)
+End Actor
+Begin Actor Class=PathNode Name=WPNAnte
+    Tag="PathNode"
+    Location=(X=-1280.000000,Z=16.000000)
+End Actor
+Begin Actor Class=PathNode Name=WPNGate
+    Tag="PathNode"
+    Location=(X=-1696.000000,Z=16.000000)
+End Actor
+Begin Actor Class=PathNode Name=WPNVault
+    Tag="PathNode"
+    Location=(X=-2112.000000,Z=16.000000)
+End Actor
+End Map
